@@ -1,0 +1,42 @@
+// Copyright (c) 2016 VMware, Inc. All Rights Reserved.
+// This software is released under MIT license.
+// The full license information can be found in LICENSE in the root directory of this project.
+.clr-icon {
+  &.clr-clarity-logo {
+      background-image: url(../images/clarity_logo.svg);
+      height: 36px;
+      width: 36px;
+      margin-right: 11px;
+  }
+}
+
+
+.main-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: white;
+}
+.nav {
+  text-align: left;
+  background:#0a8cce;
+  color: white;
+  height: 60px;
+  /* padding-left: 20px; */
+}
+.subnav-status {
+  width: 100%;
+  padding: 0 12px;
+}
+
+.content-container {
+  height: 100%;
+  overflow: hidden;
+}
+/* .header header-6 {
+  background: #0a8cce;
+} */
+.title {
+  padding-top: 10px;
+  font-size: 1.666667rem;;
+}
