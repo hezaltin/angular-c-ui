@@ -8,13 +8,15 @@ import { AppComponent } from './app.component';
 import { ROUTING } from "./app.routing";
 import { HomeComponent } from "./home/home.component";
 import { AboutComponent } from "./about/about.component";
-import {SmartComplainceService} from "./services/smart-complaince.service"
+import {SmartComplainceService} from "./services/smart-complaince.service";
+import { TechComplaintFlowComponent } from './tech-complaint-flow/tech-complaint-flow.component'
 
 @NgModule({
     declarations: [
         AppComponent,
         AboutComponent,
         HomeComponent,
+        TechComplaintFlowComponent,
         
     ],
     imports: [
