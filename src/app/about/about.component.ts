@@ -216,6 +216,7 @@ export class AboutComponent implements OnInit {
   }
 
   complianceOnSubmit(productForm) {
+    this.formSubmit = false;
       let productFormRequest = Object.keys(this.productForm.value).reduce(this.submitRequestBuild.bind(this),<Product>{});
       console.log(productFormRequest)
       console.log(this.productForm.value)
