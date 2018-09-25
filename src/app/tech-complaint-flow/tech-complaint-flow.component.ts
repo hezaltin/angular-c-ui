@@ -1,4 +1,4 @@
-import { Component, OnInit,Input} from '@angular/core';
+import { Component, OnInit,Input,AfterViewInit} from '@angular/core';
 import * as d3Graphviz from 'd3-graphviz'
 import * as d3 from 'd3v4'
 
@@ -8,13 +8,16 @@ import * as d3 from 'd3v4'
   styleUrls: ['./tech-complaint-flow.component.scss']
 })
 export class TechComplaintFlowComponent implements OnInit {
-
+  opened:boolean;
   public dots:any=[];
   public dotIndex:number=0;
   @Input() techComplaintNodes;
   constructor() { }
 
   ngOnInit() {
+    this.opened=true
+  }
+  ngAfterViewInit(){
     let sample = this.sample()
     this.flowInit();
     this.getTextgraphvizData(this.techComplaintNodes);
@@ -32,7 +35,6 @@ export class TechComplaintFlowComponent implements OnInit {
     .logEvents(true)
     .on("initEnd", render.bind(self));
     console.log( d3Graphviz)
-    
 
 function render() {
     let dotLines = this.dots[this.dotIndex];

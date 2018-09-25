@@ -27,6 +27,7 @@ export class AboutComponent implements OnInit {
   productionStrainOptionsGe: any[] = Object.assign([],productionStrainOptionsGe);
   filteredUsers:Observable<any>;
   filterProductSub:any;
+  opendValue:boolean= false;
 
   productForm:any;
  
@@ -74,17 +75,19 @@ export class AboutComponent implements OnInit {
   }
 
   formBindingMapping(formBind){
-    this.productForm.controls.formbinding.controls['strainGicc'].setValue(formBind.productionStrains[0].gicc)
-    this.productForm.controls.formbinding.controls['strainGe'].setValue(formBind.productionStrains[0].geneticallyEngineered);
-    this.productForm.controls.formbinding.controls['enzymename'].setValue(formBind.enzymeActivity[0].name);
-    this.productForm.controls.formbinding.controls['enzymeec'].setValue(formBind.enzymeActivity[0].ec);
-    this.productForm.controls.formbinding.controls['rawChem'].setValue(formBind.rawMaterials[0].name);
-    this.productForm.controls.formbinding.controls['rawSup'].setValue(10);
-    this.productForm.controls.formbinding.controls['ingred'].setValue(formBind.ingredients[0].name);
-    this.productForm.controls.formbinding.controls['ingredPct'].setValue(formBind.ingredients[0].concentration);
-    this.productForm.controls.formbinding.controls['ingredFunc'].setValue(formBind.ingredients[0].ingredientFunction);
-    this.productForm.controls.formbinding.controls['siteIndex'].setValue(formBind.manufacturingSites[0].name);
-    this.productForm.controls.formbinding.controls['siteStep'].setValue(formBind.manufacturingSites[0].process);
+    this.productForm.controls.formbinding.setValue({
+      'strainGicc':formBind.productionStrains[0].gicc,
+      'strainGe': formBind.productionStrains[0].geneticallyEngineered,
+      'enzymename': formBind.enzymeActivity[0].name,
+      'enzymeec': formBind.enzymeActivity[0].ec,
+      'rawChem':  formBind.rawMaterials[0].name,
+      'rawSup': 10,
+      'ingred': formBind.ingredients[0].name,
+      'ingredPct':  formBind.ingredients[0].concentration,
+      'ingredFunc': formBind.ingredients[0].ingredientFunction,
+      'siteIndex':  formBind.manufacturingSites[0].name,
+      'siteStep': formBind.manufacturingSites[0].process
+    });
   }
 
   mappedValue(array,key){
@@ -223,6 +226,7 @@ export class AboutComponent implements OnInit {
     this.smartService.getSmartCompliance(productFormRequest).subscribe((smartres)=>{
       console.log(smartres);
        this.formSubmit = true;
+       this.opendValue= true;
       this.productAssesment=smartres['assessment'];
     })
   }
