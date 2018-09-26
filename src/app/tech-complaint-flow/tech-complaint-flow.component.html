@@ -1,3 +1,16 @@
-<div id="graph" style="text-align: center;">
-  
-</div>
+
+<clr-modal [(clrModalOpen)]="opened" [clrModalStaticBackdrop]="true" [clrModalSize]="'xl'">
+    <h3 class="modal-title">Complaint Flow</h3>
+    <!-- <div class="modal-body"> -->
+            <div id="graph" class="modal-body" style="text-align: center"></div>   
+    <!-- </div> -->
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline" (click)="opened = false">Cancel</button>
+        <button type="button" class="btn btn-primary" (click)="opened = false">Ok</button>
+    </div>
+</clr-modal>
+
+
+
+
+
