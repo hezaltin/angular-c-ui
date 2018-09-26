@@ -1,6 +1,4 @@
-![Clarity](logo.png)
 
-# The Clarity Seed is deprecated
 We highly recommend that all Angular projects use the CLI, because we'll also work on supporting migration features which will make it easier to keep Clarity and Angular up to date.
 
 To integrate Clarity in a new app follow these steps:
@@ -14,7 +12,7 @@ To integrate Clarity in a new app follow these steps:
 If you already have an angular application and want to add Clarity to it there is only one thing to do: 
 - ```ng add @clr/angular```
 
-Clarity Seed
+Seed
 ============
 This is a seed project for Angular 2 applications using [Clarity](https://github.com/vmware/clarity). For more information on the Clarity Design System, visit the [Clarity website](https://vmware.github.io/clarity/).
 
@@ -23,8 +21,6 @@ We offer this seed project in three different build systems:
 1. **Angular-CLI version (branch: master)**
 
 2. Webpack 2 version (branch: webpack)
-
-3. SystemJS version (branch: systemjs)
 
 Getting started
 ----------------------------------
@@ -122,11 +118,6 @@ For documentation on the Clarity Design System, including a list of components a
 ```
 
 
-## Contributing
-
-The Clarity project team welcomes contributions from the community. For more detailed information, see [CONTRIBUTING.md](CONTRIBUTING.md).
-
-## License
 
 The clarity-seed project is licensed under the MIT license.
 
