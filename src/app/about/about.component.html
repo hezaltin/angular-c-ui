@@ -1,17 +1,11 @@
-<form [formGroup]="productForm" class="clr-form  clr-form-horizontal">
+<form [formGroup]="productForm" class="clr-form  clr-form-horizontal" autocomplete="off">
     <div class="form-group">
         <label for="example">Product</label>
         <div>
             <div class="clr-input-wrapper flex-box-class">
                 <input   id="product" formControlName="bulkCode" placeholder="Search by Product Bulk Code..." class="clr-input"
                     name="product"  >
-                    <div id="productCodes" [style.border]="(filteredUsers | async)?.terms.length >0 ? '1px solid #999' : ''"  class="autocomplete-suggestions">
-                            <ul *ngFor="let user of (filteredUsers | async)?.terms" style="list-style-type:none" >
-                                    <li (click)="bulkIdEntry(user)">
-                                        <a >{{user.bulkCode}}</a>
-                                    </li>
-                                </ul>
-                        </div>
+                    <app-auto-complete [formField]="'bulkCode'" (formUpdateEvent)="formUpdate($event)"  [filteredUsersTerms]="(filteredUsers | async)?.terms"></app-auto-complete>
             </div>
         </div>
     </div>
@@ -207,3 +201,6 @@
 
 <app-tech-complaint-flow [techComplaintNodes]="productAssesment" *ngIf="formSubmit" style="float: right; width:270px; margin-top: -665px">
 </app-tech-complaint-flow>
+
+
+

@@ -9,7 +9,8 @@ import { ROUTING } from "./app.routing";
 import { HomeComponent } from "./home/home.component";
 import { AboutComponent } from "./about/about.component";
 import {SmartComplainceService} from "./services/smart-complaince.service";
-import { TechComplaintFlowComponent } from './tech-complaint-flow/tech-complaint-flow.component'
+import { TechComplaintFlowComponent } from './tech-complaint-flow/tech-complaint-flow.component';
+import { AutoCompleteComponent } from './auto-complete/auto-complete.component'
 
 @NgModule({
     declarations: [
@@ -17,6 +18,7 @@ import { TechComplaintFlowComponent } from './tech-complaint-flow/tech-complaint
         AboutComponent,
         HomeComponent,
         TechComplaintFlowComponent,
+        AutoCompleteComponent,
         
     ],
     imports: [

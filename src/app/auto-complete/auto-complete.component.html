@@ -1,0 +1,7 @@
+<div id="productCodes"  class="autocomplete-items">
+    <ul *ngFor="let user of filteredUsersTerms" (click)="selectedId(user)" style="list-style-type:none" >
+        <li>
+            <a>{{user.bulkCode}}</a>
+        </li>
+    </ul>   
+</div>
