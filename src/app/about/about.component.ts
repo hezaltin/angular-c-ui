@@ -248,11 +248,11 @@ export class AboutComponent implements OnInit {
     return responseBuild;
 }
 
-bulkIdEntry(bulkId){
-        this.productForm.get('bulkCode').setValue(bulkId.bulkCode);
-        this.filteredUsers= this.filteredUsers.do((val)=>val)
-        console.log(this.filteredUsers)
-        
+formUpdate(event){
+      console.log(event)
+      this.productForm.get(event.fieldName).setValue(event.select.bulkCode);
+      this.filteredUsers= this.filteredUsers.do((val)=>val)
+      console.log(this.filteredUsers)
   }
 
   complianceOnReset(product) {

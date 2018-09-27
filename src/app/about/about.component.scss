@@ -103,15 +103,9 @@
 }
 
 
-.autocomplete-suggestions {border-radius: 5px; background: #fff; cursor: pointer; overflow: auto; }
-.autocomplete-suggestion { padding: 10px 5px; font-size: 1.2em; white-space: nowrap; overflow: hidden; }
-.autocomplete-selected { background: #f0f0f0; }
-.autocomplete-suggestions ul li { font-weight: normal; color: black; padding:5px;}
-.autocomplete-suggestions ul li:hover{
-    background: #999
-}
 
 .flex-box-class{
     display: flex;
     flex-direction: column;
+    position: relative;
 }
