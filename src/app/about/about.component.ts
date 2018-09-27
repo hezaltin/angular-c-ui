@@ -53,7 +53,7 @@ export class AboutComponent implements OnInit {
             }
             else{
                 console.log(this.productForm.get('bulkCode'))
-                return this.smartService.getSearchProduct({name: value})
+                return this.smartService.getSearchProduct({name: value['bulkCode']})
             }   
            
     })
@@ -61,13 +61,23 @@ export class AboutComponent implements OnInit {
    
    this.filterProductSub=this.filteredUsers.subscribe((nextVal)=>{
       console.log(nextVal)
+      let getTerm = nextVal.terms.filter(term=>term.bulkCode===this.productForm
+        .get('bulkCode').value);
+        console.log(getTerm)
+        let {0:getinternalProductName}= getTerm;
+        console.log(getinternalProductName)
+        if(!getinternalProductName){
+          return
+        }
       let self =this
       this.smartService.getProductDetails({name:self.productForm
-        .get('bulkCode').value}).subscribe((next)=>{
+        .get('bulkCode').value,internalProductName:getinternalProductName.internalProductName}).subscribe((next)=>{
             if(next.bulkCode){
-                let {bulkCode,country,uri,endUses, ...property} = next;
+              console.log(next)
+                let {bulkCode,country,uri,endUses,externalProductName, internalProductName,...property} = next;
+                console.log(property)
                 Object.keys(property).map(item=> this.mappedValue(property[item],item));
-                
+               
                 this.formBindingMapping(next);
             }
         })
@@ -239,7 +249,7 @@ export class AboutComponent implements OnInit {
 }
 
 bulkIdEntry(bulkId){
-        this.productForm.get('bulkCode').setValue(bulkId);
+        this.productForm.get('bulkCode').setValue(bulkId.bulkCode);
         this.filteredUsers= this.filteredUsers.do((val)=>val)
         console.log(this.filteredUsers)
         

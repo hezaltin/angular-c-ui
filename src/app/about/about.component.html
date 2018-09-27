@@ -3,12 +3,12 @@
         <label for="example">Product</label>
         <div>
             <div class="clr-input-wrapper flex-box-class">
-                <input  list="productCodes" id="product" formControlName="bulkCode" placeholder="Search by Product Bulk Code..." class="clr-input"
+                <input   id="product" formControlName="bulkCode" placeholder="Search by Product Bulk Code..." class="clr-input"
                     name="product"  >
                     <div id="productCodes" [style.border]="(filteredUsers | async)?.terms.length >0 ? '1px solid #999' : ''"  class="autocomplete-suggestions">
-                            <ul *ngFor="let user of (filteredUsers | async)?.terms"style="list-style-type:none" >
+                            <ul *ngFor="let user of (filteredUsers | async)?.terms" style="list-style-type:none" >
                                     <li (click)="bulkIdEntry(user)">
-                                        <a >{{user}}</a>
+                                        <a >{{user.bulkCode}}</a>
                                     </li>
                                 </ul>
                         </div>

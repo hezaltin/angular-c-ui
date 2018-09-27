@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient,HttpHeaders } from '@angular/common/http';
-import { mapTo, delay } from 'rxjs/operators';
+import { mapTo, delay,map } from 'rxjs/operators';
 
 import { catchError } from 'rxjs/operators';
 import { Observable } from 'rxjs';
@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 import 'rxjs/add/observable/of';
 import { Product } from '../about/about-class';
 import { SubmitResponse } from '../about/smart-submit-response'
-import { bulkCodeResponse } from '../about/bulk-code-response'
+import { bulkCodeResponse,productBulkSearchResponse } from '../about/bulk-code-response'
 
 const smartSubmitResponse= Object.assign({},SubmitResponse)
 const bulkResponse = Object.assign([],bulkCodeResponse)
@@ -31,13 +31,8 @@ export class SmartComplainceService {
 
   getSearchProduct(productValue){
     console.log(productValue);
-    const res={
-      "type": "Product",
-      "terms": [
-          "T00002_FRED",
-          "T00001_SLAPQ"
-      ]
-  }
+    const res=Object.assign({},productBulkSearchResponse)
+    console.log(res)
   
     let headers = new HttpHeaders().set('Content-Type', 'application/json');
         
@@ -57,7 +52,7 @@ export class SmartComplainceService {
    let bulkResponeData=res.length>0?res[0]:[];
         
       console.log(productValue)
-    let url ='http://esanalyticsdv.es.dupont.com:7070/product/'+productValue.name;
+    let url ='http://esanalyticsdv.es.dupont.com:7070/product/'+productValue.name +'/'+ productValue.internalProductName;
     console.log(url)
   //  return this.http.get(url);
    return Observable.of(bulkResponeData).pipe(delay(0));
