@@ -41,18 +41,15 @@ export class AboutComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    console.log(this.productForm)
     this.productForm=this.createProductForm()
     this.formCountryName = ['United States', 'Canada'];
     this.filteredUsers = this.productForm.controls['bulkCode'].valueChanges.pipe(
     debounceTime(100),
     switchMap(value =>{
-            console.log(value)
             if(value===this.productForm.get('bulkCode')){
                 return Observable.empty();
             }
             else{
-                console.log(this.productForm.get('bulkCode'))
                 return this.smartService.getSearchProduct({name: value['bulkCode']})
             }   
            
@@ -60,12 +57,9 @@ export class AboutComponent implements OnInit {
    )
    
    this.filterProductSub=this.filteredUsers.subscribe((nextVal)=>{
-      console.log(nextVal)
       let getTerm = nextVal.terms.filter(term=>term.bulkCode===this.productForm
         .get('bulkCode').value);
-        console.log(getTerm)
         let {0:getinternalProductName}= getTerm;
-        console.log(getinternalProductName)
         if(!getinternalProductName){
           return
         }
@@ -73,9 +67,7 @@ export class AboutComponent implements OnInit {
       this.smartService.getProductDetails({name:self.productForm
         .get('bulkCode').value,internalProductName:getinternalProductName.internalProductName}).subscribe((next)=>{
             if(next.bulkCode){
-              console.log(next)
                 let {bulkCode,country,uri,endUses,externalProductName, internalProductName,...property} = next;
-                console.log(property)
                 Object.keys(property).map(item=> this.mappedValue(property[item],item));
                
                 this.formBindingMapping(next);
@@ -119,7 +111,6 @@ export class AboutComponent implements OnInit {
   }
 
   addProductionStrain(strain) {
-    console.log(strain)
     this.productionStrains.push(this.fb.control({
       uri: "http://www.dupont.com/ontology/ontoPSR-product/GICCTEST6_in_T00006_FRED",
       //productBulkCode: this.productForm.get('bulkCode').value,
@@ -137,7 +128,6 @@ export class AboutComponent implements OnInit {
   }
 
   addEnzyme(enzymename){
-    console.log(enzymename)
     this.enzymeActivity.push(this.fb.control({
       uri: "http://www.dupont.com/ontology/ontoPSR-product/EndUse_Grain_Processing_Product",
       name: enzymename.name,
@@ -154,13 +144,9 @@ export class AboutComponent implements OnInit {
   }
 
   addRawMaterial(rawIndex) {
-    console.log(rawIndex)
     let rawChem = rawIndex.rawChem;
-    console.log(rawChem)
     let getRawSupplier= this.rawSupplier.filter(supplier=> supplier.value== parseInt(rawIndex.rawSup));
-    console.log(getRawSupplier)
     let rawSup = getRawSupplier.length===0 ? [] : Object.assign({},getRawSupplier[0]);
-    console.log(rawSup)
     this.rawMaterials.push(this.fb.control({
       name: rawChem,
       //productBulkCode: this.productForm.get('bulkCode').value,
@@ -182,7 +168,6 @@ export class AboutComponent implements OnInit {
   }
 
   removeIngredients(index) {
-    console.log(this.ingredients)
     this.ingredients.removeAt(index)
   }
 
@@ -214,7 +199,6 @@ export class AboutComponent implements OnInit {
   }
 
   addManufacturingSite(siteIndex) {
-    console.log(siteIndex)
     this.manufacturingSites.push(this.fb.control({
       uri: "http://www.dupont.com/ontology/ontoPSR-product/Site_Beloit",
       name: siteIndex.siteIndex,
@@ -231,10 +215,7 @@ export class AboutComponent implements OnInit {
   complianceOnSubmit(productForm) {
     this.formSubmit = false;
       let productFormRequest = Object.keys(this.productForm.value).reduce(this.submitRequestBuild.bind(this),<Product>{});
-      console.log(productFormRequest)
-      console.log(this.productForm.value)
     this.smartService.getSmartCompliance(productFormRequest).subscribe((smartres)=>{
-      console.log(smartres);
        this.formSubmit = true;
        this.opendValue= true;
       this.productAssesment=smartres['assessment'];
@@ -249,14 +230,11 @@ export class AboutComponent implements OnInit {
 }
 
 formUpdate(event){
-      console.log(event)
       this.productForm.get(event.fieldName).setValue(event.select.bulkCode);
       this.filteredUsers= this.filteredUsers.do((val)=>val)
-      console.log(this.filteredUsers)
   }
 
   complianceOnReset(product) {
-    console.log(product);
     let {bulkCode,country,uri,endUses, ...property} = product.controls;
     Object.keys(property).map(item=> this.resetValue(item));
     // this.productForm = this.fb.group({
