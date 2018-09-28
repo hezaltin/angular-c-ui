@@ -6,7 +6,7 @@ import { SmartComplainceClass, Product, ProductionStrain } from './about-class';
 import { Router } from '@angular/router';
 import { SmartComplainceService } from '../services/smart-complaince.service';
 import { Observable } from 'rxjs';
-import { debounceTime, map,switchMap } from 'rxjs/operators';
+import { debounceTime, map,switchMap,take  } from 'rxjs/operators';
 import "rxjs/add/operator/do";
 import {productionStrainOptionsGe,enzymeActivity,rawSupplier,formPercentage,formFunction,formManufactureStep,resetSmartCompliance} from './smart-complaince.config'
 //import { shouldCallLifecycleInitHook } from '@angular/core/src/view';
@@ -33,6 +33,7 @@ export class AboutComponent implements OnInit {
  
   formSubmit: boolean = false;
   productAssesment:any;
+  productRes:any;
 
   constructor(
     public router: Router,
@@ -43,33 +44,27 @@ export class AboutComponent implements OnInit {
   ngOnInit() {
     this.productForm=this.createProductForm()
     this.formCountryName = ['United States', 'Canada'];
-    this.filteredUsers = this.productForm.controls['bulkCode'].valueChanges.pipe(
-    debounceTime(100),
-    switchMap(value =>{
-            if(value===this.productForm.get('bulkCode')){
-                return Observable.empty();
-            }
-            else{
-                return this.smartService.getSearchProduct({name: value['bulkCode']})
-            }   
-           
-    })
-   )
+    console.log(this.productForm)
    
-   this.filterProductSub=this.filteredUsers.subscribe((nextVal)=>{
+
+    this.filteredUsers =  this.productCodeList;
+   
+    console.log(this.productCodeList)
+   this.filteredUsers.subscribe((nextVal)=>{
+     console.log('filterProductChangd===>',nextVal)
       let getTerm = nextVal.terms.filter(term=>term.bulkCode===this.productForm
         .get('bulkCode').value);
         let {0:getinternalProductName}= getTerm;
         if(!getinternalProductName){
-          return
+          return;
         }
       let self =this
+      console.log(self)
       this.smartService.getProductDetails({name:self.productForm
         .get('bulkCode').value,internalProductName:getinternalProductName.internalProductName}).subscribe((next)=>{
             if(next.bulkCode){
                 let {bulkCode,country,uri,endUses,externalProductName, internalProductName,...property} = next;
                 Object.keys(property).map(item=> this.mappedValue(property[item],item));
-               
                 this.formBindingMapping(next);
             }
         })
@@ -104,6 +99,17 @@ export class AboutComponent implements OnInit {
     for(let i = control.length-1; i >= 0; i--) {
       control.removeAt(i)
     }
+  }
+
+  get productCode(){
+    return this.productForm.get('bulkCode') as FormControl
+  }
+
+  get productCodeList(){
+      return this.productCode.valueChanges.pipe(
+        debounceTime(100),
+        switchMap(value =>  this.smartService.getSearchProduct({name: value}))
+        )
   }
 
   get productionStrains() {

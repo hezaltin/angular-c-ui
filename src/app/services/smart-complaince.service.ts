@@ -21,8 +21,6 @@ export class SmartComplainceService {
   getSmartCompliance(product: Product){
     console.log(product);
     let headers = new HttpHeaders().set('Content-Type', 'application/json');
-        
-      console.log(product)
     let url ='http://esanalyticsdv.es.dupont.com:7070/assess';
    // return this.http.post(url,JSON.stringify(product),{ headers: headers });
    return Observable.of(smartSubmitResponse).pipe(delay(1000));
@@ -35,8 +33,6 @@ export class SmartComplainceService {
     console.log(res)
   
     let headers = new HttpHeaders().set('Content-Type', 'application/json');
-        
-      console.log(productValue)
    // let url ='http://esanalyticsdv.es.dupont.com:7070/suggest/product?query='+productValue.name;
     //console.log(url)
    // return this.http.get(url);
@@ -48,12 +44,10 @@ export class SmartComplainceService {
   getProductDetails(productValue){
     console.log(productValue);
    const res=bulkResponse.filter((value)=>value.bulkCode===productValue.name);
-
+    console.log(res)
    let bulkResponeData=res.length>0?res[0]:[];
-        
-      console.log(productValue)
     let url ='http://esanalyticsdv.es.dupont.com:7070/product/'+productValue.name +'/'+ productValue.internalProductName;
-    console.log(url)
+   
   //  return this.http.get(url);
    return Observable.of(bulkResponeData).pipe(delay(0));
      

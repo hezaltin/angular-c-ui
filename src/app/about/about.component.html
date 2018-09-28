@@ -5,7 +5,7 @@
             <div class="clr-input-wrapper flex-box-class">
                 <input   id="product" formControlName="bulkCode" placeholder="Search by Product Bulk Code..." class="clr-input"
                     name="product"  >
-                    <app-auto-complete [formField]="'bulkCode'" (formUpdateEvent)="formUpdate($event)"  [filteredUsersTerms]="(filteredUsers | async)?.terms"></app-auto-complete>
+                    <app-auto-complete [formField]="'bulkCode'" (formUpdateEvent)="formUpdate($event)"  [filteredUsersTerms]="( filteredUsers | async)?.terms"></app-auto-complete>
             </div>
         </div>
     </div>
