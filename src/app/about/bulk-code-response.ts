@@ -206,3 +206,28 @@ export const productBulkSearchResponse =  {
       }
   ]
 }
+
+
+export const responseRawmaterialsIngeridents    =   {
+    "type": "Chemical Name",
+    "terms": [
+        {
+            "fragment": "Benzoate",
+            "term": "Sodium Benzoate",
+            "prefLabel": "Sodium Benzoate",
+            "cas": "532-32-1"
+        },
+        {
+            "fragment": "Benzoic Acid",
+            "term": "Benzoic Acid",
+            "prefLabel": "Benzoic Acid",
+            "cas": "65-85-0"
+        },
+        {
+            "fragment": "Benzotron",
+            "term": "Benzotron",
+            "prefLabel": "Sodium Benzoate",
+            "cas": "532-32-1"
+        }
+    ]
+}
