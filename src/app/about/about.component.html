@@ -4,8 +4,8 @@
         <div>
             <div class="clr-input-wrapper flex-box-class">
                 <input   id="product" formControlName="bulkCode" placeholder="Search by Product Bulk Code..." class="clr-input"
-                    name="product"  >
-                    <app-auto-complete [formField]="'bulkCode'" (formUpdateEvent)="formUpdate($event)"  [filteredUsersTerms]="( filteredUsers | async)?.terms"></app-auto-complete>
+                    name="product"  (focus)="focusField('bulkCode')" >
+                    <app-auto-complete *ngIf="focusedControl=='bulkCode' && !blurControl" [formField]="'bulkCode'" (formUpdateEvent)="formUpdate($event)"  [filteredUsersTerms]="( productCodeList$ | async ) ?.terms"></app-auto-complete>
             </div>
         </div>
     </div>
@@ -70,9 +70,10 @@
     <!-- Raw Materials -->
     <div formGroupName="formbinding" class="form-group ">
         <label for="selects_1">Raw Materials</label>
-        <div class="clr-input-wrapper">
+        <div class="clr-input-wrapper form-position-set">
             <input #rawChem type="tel" id="enzyme" class="clr-input" size="35" style="width:250px"
-             placeholder="Search by Chemical name" formControlName='rawChem'>
+             placeholder="Search by Chemical name" formControlName='rawChem' (focus)="focusField('rawMaterials')" >
+             <app-auto-complete  *ngIf="focusedControl=='rawMaterials' && !blurControl" [formField]="'rawMaterials'"  (formUpdateEvent)="formUpdate($event)"  [filteredUsersTerms]="( rawMaterialList$ | async ) ?.terms"></app-auto-complete>
         </div>
 
         <div class="select">
@@ -102,9 +103,10 @@
 
     <div formGroupName="formbinding" class="form-group ">
         <label for="selects_1">Ingredients</label>
-        <div class="clr-input-wrapper">
+        <div class="clr-input-wrapper form-position-set">
             <input #ingred type="tel" id="enzyme" class="clr-input" size="35" style="width:200px"
-             placeholder="Search by Ingredient" formControlName='ingred'>
+             placeholder="Search by Ingredient" formControlName='ingred'  (focus)="focusField('ingred')" >
+             <app-auto-complete  *ngIf="focusedControl=='ingred' && !blurControl" [formField]="'ingred'"  (formUpdateEvent)="formUpdate($event)"  [filteredUsersTerms]="( ingredientsList$ | async ) ?.terms"></app-auto-complete>
         </div>
 
         <div class="select">

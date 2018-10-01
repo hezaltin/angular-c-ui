@@ -17,8 +17,8 @@ export class AutoCompleteComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log(this.filteredUsersTerms)
-    console.log(this.formField)
+    //console.log(this.filteredUsersTerms)
+    //console.log(this.formField)
   }
 
   selectedId(selectId){

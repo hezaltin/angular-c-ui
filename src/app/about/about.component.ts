@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef,ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, FormControl } from '@angular/forms';
 import { ClarityIcons } from '@clr/icons';
 //import { SmartCompliance } from '../models/smart-compliance';
@@ -6,7 +6,7 @@ import { SmartComplainceClass, Product, ProductionStrain } from './about-class';
 import { Router } from '@angular/router';
 import { SmartComplainceService } from '../services/smart-complaince.service';
 import { Observable } from 'rxjs';
-import { debounceTime, map,switchMap,take  } from 'rxjs/operators';
+import { debounceTime, map,switchMap,delay } from 'rxjs/operators';
 import "rxjs/add/operator/do";
 import {productionStrainOptionsGe,enzymeActivity,rawSupplier,formPercentage,formFunction,formManufactureStep,resetSmartCompliance} from './smart-complaince.config'
 //import { shouldCallLifecycleInitHook } from '@angular/core/src/view';
@@ -15,7 +15,10 @@ import {productionStrainOptionsGe,enzymeActivity,rawSupplier,formPercentage,form
 @Component({
   selector: 'app-smart-complaince',
   templateUrl: './about.component.html',
-  styleUrls: ['./about.component.scss']
+  styleUrls: ['./about.component.scss'],
+  host: {
+    '(document:click)': 'onClick($event)',
+  },
 })
 export class AboutComponent implements OnInit {
   public rawSupplier: any = Object.assign([],rawSupplier);
@@ -25,8 +28,12 @@ export class AboutComponent implements OnInit {
   public formManufactureStep: any = Object.assign([],formManufactureStep);
   public enzymeActivityControl: any = Object.assign([],enzymeActivity)
   productionStrainOptionsGe: any[] = Object.assign([],productionStrainOptionsGe);
-  filteredUsers:Observable<any>;
+  productCodeList$:Observable<any>;
+  rawMaterialList$:Observable<any>
+  ingredientsList$:Observable<any>
   filterProductSub:any;
+  focusedControl:string;
+  blurControl:boolean
   opendValue:boolean= false;
 
   productForm:any;
@@ -39,38 +46,66 @@ export class AboutComponent implements OnInit {
     public router: Router,
     public smartService: SmartComplainceService,
     private fb: FormBuilder,
+    private cd: ChangeDetectorRef,
+    private ElementRef:ElementRef
   ) { }
 
   ngOnInit() {
     this.productForm=this.createProductForm()
     this.formCountryName = ['United States', 'Canada'];
-    console.log(this.productForm)
+    this.productCodeList$ = this.productCodeList;
+    this.rawMaterialList$ = this.rawMaterialList;
+    this.ingredientsList$ = this.ingredientsList;
    
-
-    this.filteredUsers =  this.productCodeList;
-   
-    console.log(this.productCodeList)
-   this.filteredUsers.subscribe((nextVal)=>{
-     console.log('filterProductChangd===>',nextVal)
-      let getTerm = nextVal.terms.filter(term=>term.bulkCode===this.productForm
-        .get('bulkCode').value);
-        let {0:getinternalProductName}= getTerm;
-        if(!getinternalProductName){
-          return;
-        }
-      let self =this
-      console.log(self)
-      this.smartService.getProductDetails({name:self.productForm
-        .get('bulkCode').value,internalProductName:getinternalProductName.internalProductName}).subscribe((next)=>{
-            if(next.bulkCode){
-                let {bulkCode,country,uri,endUses,externalProductName, internalProductName,...property} = next;
-                Object.keys(property).map(item=> this.mappedValue(property[item],item));
-                this.formBindingMapping(next);
-            }
-        })
-   });
   }
 
+  get productCode(){
+    return this.productForm.get('bulkCode') as FormControl
+  }
+
+  get productCodeList(){
+      return this.productCode.valueChanges.pipe(
+        debounceTime(100),
+        switchMap(value =>this.smartService.getSearchProduct({name: value}))
+       )
+  }
+
+  get rawMaterialName(){
+    return this.productForm.controls.formbinding.get('rawChem') as FormControl
+  }
+
+  get rawMaterialList(){
+  return  this.rawMaterialName.valueChanges.pipe(
+      debounceTime(100),
+      switchMap(value =>this.smartService.getSearchRawMaterials({name: value}))
+     )
+  }
+
+  get ingredientsName(){
+    return this.productForm.controls.formbinding.get('ingred') as FormControl
+  }
+
+  get ingredientsList(){
+  return  this.ingredientsName.valueChanges.pipe(
+      debounceTime(100),
+      switchMap(value =>this.smartService.getSearchRawMaterials({name: value}))
+     )
+  }
+
+  focusField(name){
+    console.log('FocusedFields')
+        this.focusedControl= name;
+         this.blurControl=false
+        //this.cd.detectChanges();
+  }
+  onClick(event){
+    console.log(event)
+    if(event.target.tagName!=='INPUT'){
+      this.blurControl=true
+    }
+
+  }
+  
   formBindingMapping(formBind){
     this.productForm.controls.formbinding.setValue({
       'strainGicc':formBind.productionStrains[0].gicc,
@@ -101,16 +136,7 @@ export class AboutComponent implements OnInit {
     }
   }
 
-  get productCode(){
-    return this.productForm.get('bulkCode') as FormControl
-  }
-
-  get productCodeList(){
-      return this.productCode.valueChanges.pipe(
-        debounceTime(100),
-        switchMap(value =>  this.smartService.getSearchProduct({name: value}))
-        )
-  }
+  
 
   get productionStrains() {
     return this.productForm.get('productionStrains') as FormArray
@@ -236,9 +262,38 @@ export class AboutComponent implements OnInit {
 }
 
 formUpdate(event){
-      this.productForm.get(event.fieldName).setValue(event.select.bulkCode);
-      this.filteredUsers= this.filteredUsers.do((val)=>val)
-  }
+      console.log(event)
+      
+    //  this.productCodeList$= this.productCodeList$.do((val)=>val);
+      this.blurControl = true;
+      if(event.fieldName==="bulkCode"){
+        this.productForm.get(event.fieldName).setValue(event.select.bulkCode);
+        this.updateProductField(event)
+      }
+      else if(event.fieldName==="rawMaterials"){
+        this.rawMaterialName.setValue(event.select.term);
+      }
+      else if(event.fieldName==="ingred"){
+        this.ingredientsName.setValue(event.select.term);
+      }
+     
+}
+
+updateProductField(selectField){
+  this.smartService.getProductDetails({name:this.productForm
+    .get('bulkCode').value,internalProductName:selectField.internalProductName}).subscribe((next)=>{
+        if(next.bulkCode){
+            let {bulkCode,country,uri,endUses,externalProductName, internalProductName,...property} = next;
+            Object.keys(property).map(item=> this.mappedValue(property[item],item));
+            this.formBindingMapping(next);
+        }
+    })
+}
+
+updateFormBindingFields(){
+
+}
+
 
   complianceOnReset(product) {
     let {bulkCode,country,uri,endUses, ...property} = product.controls;
