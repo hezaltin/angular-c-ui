@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output,EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output,EventEmitter, SimpleChanges } from '@angular/core';
 
 @Component({
   selector: 'app-auto-complete',
@@ -11,6 +11,10 @@ export class AutoCompleteComponent implements OnInit {
   @Output() formUpdateEvent = new EventEmitter();
   @Input () formField;
   constructor() { }
+
+  ngOnChange(changes:SimpleChanges){
+      console.log(changes)
+  }
 
   ngOnInit() {
     //console.log(this.filteredUsersTerms)

@@ -1,6 +1,7 @@
-import { Component, OnInit, ChangeDetectorRef,ElementRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef,ElementRef, state } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, FormControl } from '@angular/forms';
 import { ClarityIcons } from '@clr/icons';
+import {Store} from '@ngrx/store';
 //import { SmartCompliance } from '../models/smart-compliance';
 import { SmartComplainceClass, Product, ProductionStrain } from './about-class';
 import { Router } from '@angular/router';
@@ -10,6 +11,8 @@ import { debounceTime, map,switchMap,delay } from 'rxjs/operators';
 import "rxjs/add/operator/do";
 import {productionStrainOptionsGe,enzymeActivity,rawSupplier,formPercentage,formFunction,formManufactureStep,resetSmartCompliance} from './smart-complaince.config'
 //import { shouldCallLifecycleInitHook } from '@angular/core/src/view';
+import * as fromStore from '../store';
+import {ProductState} from '../store'
 
 
 @Component({
@@ -46,15 +49,18 @@ export class AboutComponent implements OnInit {
     public smartService: SmartComplainceService,
     private fb: FormBuilder,
     private cd: ChangeDetectorRef,
-    private ElementRef:ElementRef
+    private ElementRef:ElementRef,
+    private store:Store<fromStore.ProductState | ProductState>
   ) { }
 
   ngOnInit() {
     this.productForm=this.createProductForm()
     this.formCountryName = ['United States', 'Canada'];
-    this.productCodeList$ = this.productCodeList;
+    this.productCodeList.subscribe(next=>this.store.dispatch(new fromStore.LoadProduct({name: next})));
     this.rawMaterialList$ = this.rawMaterialList;
     this.ingredientsList$ = this.ingredientsList;
+    this.productCodeList$= this.store.select((state:ProductState)=>state.product.entites.terms);
+
    
   }
 
@@ -63,10 +69,9 @@ export class AboutComponent implements OnInit {
   }
 
   get productCodeList(){
-      return this.productCode.valueChanges.pipe(
-        debounceTime(100),
-        switchMap(value =>this.smartService.getSearchProduct({name: value}))
-       )
+    return  this.productCode.valueChanges.pipe(
+      debounceTime(100)
+    );
   }
 
   get rawMaterialName(){
@@ -277,14 +282,23 @@ formUpdate(event){
 }
 
 updateProductField(selectField){
-  this.smartService.getProductDetails({name:this.productForm
-    .get('bulkCode').value,internalProductName:selectField.internalProductName}).subscribe((next)=>{
-        if(next.bulkCode){
-            let {bulkCode,country,uri,endUses,externalProductName, internalProductName,...property} = next;
-            Object.keys(property).map(item=> this.mappedValue(property[item],item));
-            this.formBindingMapping(next);
-        }
-    })
+  this.store.dispatch(new fromStore.LoadProductForm({name:this.productForm.get('bulkCode').value,internalProductName:selectField.internalProductName}));
+  this.store.select((state:ProductState)=>state.productForm.entites).subscribe((next)=>{
+    console.log(next)
+    if(next.bulkCode){
+      let {bulkCode,country,uri,endUses,externalProductName, internalProductName,...property} = next;
+        Object.keys(property).map(item=> this.mappedValue(property[item],item));
+        this.formBindingMapping(next);
+    }
+  })
+  // this.smartService.getProductDetails({name:this.productForm
+  //   .get('bulkCode').value,internalProductName:selectField.internalProductName}).subscribe((next)=>{
+  //       if(next.bulkCode){
+  //           let {bulkCode,country,uri,endUses,externalProductName, internalProductName,...property} = next;
+  //           Object.keys(property).map(item=> this.mappedValue(property[item],item));
+  //           this.formBindingMapping(next);
+  //       }
+  //   })
 }
 
 updateFormBindingFields(){
