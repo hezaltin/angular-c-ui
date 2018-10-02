@@ -85,7 +85,7 @@ ng build --prod
 ## Documentation
 
 
-For documentation on the Clarity Design System, including a list of components and example usage, see [our website](https://vmware.github.io/clarity).
+For documentation on the Clarity Design System, including a list of components and example usage, see [website](https://vmware.github.io/clarity).
 
 
 #### Directory structure
