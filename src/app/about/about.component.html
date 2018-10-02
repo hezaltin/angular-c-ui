@@ -5,7 +5,10 @@
             <div class="clr-input-wrapper flex-box-class">
                 <input   id="product" formControlName="bulkCode" placeholder="Search by Product Bulk Code..." class="clr-input"
                     name="product"  (focus)="focusField('bulkCode')" >
-                    <app-auto-complete *ngIf="focusedControl=='bulkCode' && !blurControl" [formField]="'bulkCode'" (formUpdateEvent)="formUpdate($event)"  [filteredUsersTerms]="( productCodeList$ | async ) ?.terms"></app-auto-complete>
+                    <!-- <app-auto-complete *ngIf="focusedControl=='bulkCode' && !blurControl" [formField]="'bulkCode'" (formUpdateEvent)="formUpdate($event)"  [filteredUsersTerms]="( productCodeList$ | async ) ?.terms"></app-auto-complete> -->
+
+                    <app-auto-complete *ngIf="focusedControl=='bulkCode' && !blurControl" [formField]="'bulkCode'" (formUpdateEvent)="formUpdate($event)"  [filteredUsersTerms]="(productCodeList$ | async)"></app-auto-complete>
+
             </div>
         </div>
     </div>
