@@ -291,14 +291,7 @@ updateProductField(selectField){
         this.formBindingMapping(next);
     }
   })
-  // this.smartService.getProductDetails({name:this.productForm
-  //   .get('bulkCode').value,internalProductName:selectField.internalProductName}).subscribe((next)=>{
-  //       if(next.bulkCode){
-  //           let {bulkCode,country,uri,endUses,externalProductName, internalProductName,...property} = next;
-  //           Object.keys(property).map(item=> this.mappedValue(property[item],item));
-  //           this.formBindingMapping(next);
-  //       }
-  //   })
+  
 }
 
 updateFormBindingFields(){
@@ -309,41 +302,6 @@ updateFormBindingFields(){
   complianceOnReset(product) {
     let {bulkCode,country,uri,endUses, ...property} = product.controls;
     Object.keys(property).map(item=> this.resetValue(item));
-    // this.productForm = this.fb.group({
-    //   bulkCode: ['T1234'],
-    //   productionStrains: this.fb.array([]),
-    //   enzymeActivity: this.fb.array([]),
-    //   rawMaterials: this.fb.array([]),
-    //   ingredients: this.fb.array([]),
-    //   manufacturingSites: this.fb.array([]),
-    //   endUses: this.fb.array([
-    //     this.fb.group({
-    //       uri: "http://www.dupont.com/ontology/ontoPSR-product/CAS_110-44-1_for_T00006_FRED",
-    //       name: ['Advanced Biofuels'],
-    //       jurisdiction: ['Tech'],
-    //     })
-    //   ]),
-    //   country: this.fb.group({
-    //     code: ['us'],
-    //     name: [0],
-    //     region: ['NA'],
-    //   }),
-    //   formbinding:this.fb.group({
-    //     strainGicc:[''],
-    //     strainGe:[0],
-    //     enzymename:[''],
-    //     enzymeec:[0],
-    //     rawChem:[''],
-    //     rawSup:[0],
-    //     ingred:[''],
-    //     ingredPct:[0],
-    //     ingredFunc:[0],
-    //     siteIndex:[''],
-    //     siteStep:[0],
-
-    // }) 
-    // })
-  
   }
 
   createProductForm(){
