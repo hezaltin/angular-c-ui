@@ -9,7 +9,7 @@ import { SmartComplainceService } from '../services/smart-complaince.service';
 import { Observable } from 'rxjs';
 import { debounceTime, map,switchMap,delay } from 'rxjs/operators';
 import "rxjs/add/operator/do";
-import {productionStrainOptionsGe,enzymeActivity,rawSupplier,formPercentage,formFunction,formManufactureStep,resetSmartCompliance} from './smart-complaince.config'
+import {productionStrainOptionsGe,enzymeActivity,rawSupplier,formPercentage,formFunction,formManufactureStep,resetSmartCompliance} from './smart-complaince.config';
 //import { shouldCallLifecycleInitHook } from '@angular/core/src/view';
 import * as fromStore from '../store';
 import {ProductState} from '../store'
@@ -21,7 +21,7 @@ import {ProductState} from '../store'
   styleUrls: ['./about.component.scss'],
   host: {
     '(document:click)': 'onClick($event)',
-  },
+  }
 })
 export class AboutComponent implements OnInit {
   public rawSupplier: any = Object.assign([],rawSupplier);
@@ -29,18 +29,16 @@ export class AboutComponent implements OnInit {
   public formFunction: any = Object.assign([],formFunction);
   public formCountryName: any = [];
   public formManufactureStep: any = Object.assign([],formManufactureStep);
-  public enzymeActivityControl: any = Object.assign([],enzymeActivity)
+  public enzymeActivityControl: any = Object.assign([],enzymeActivity);
   productionStrainOptionsGe: any[] = Object.assign([],productionStrainOptionsGe);
   productCodeList$:Observable<ProductState>;
   rawMaterialList$:Observable<ProductState>;
   ingredientsList$:Observable<ProductState>;
   filterProductSub:any;
   focusedControl:string;
-  blurControl:boolean
+  blurControl:boolean;
   opendValue:boolean= false;
-
   productForm:any;
- 
   formSubmit: boolean = false;
   productAssesment:any;
 
