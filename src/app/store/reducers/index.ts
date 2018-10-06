@@ -2,17 +2,20 @@ import {ActionReducerMap, createFeatureSelector,createSelector} from '@ngrx/stor
 
 import * as fromProduct from '../reducers/product.reducers';
 import * as fromProductForm from '../reducers/productForm.reducers';
+import * as fromRawMaterials from '../reducers/rawMaterials.reducers'
 
 
 export interface ProductState{
     product:fromProduct.ProductState
-    productForm:fromProductForm.ProductFormState
+    productForm:fromProductForm.ProductFormState,
+    rawMaterials:fromRawMaterials.RawMaterialsState
 }
 
 
 export const reducers:ActionReducerMap<ProductState> = {
     product: fromProduct.reducers,
-    productForm:fromProductForm.reducers
+    productForm:fromProductForm.reducers,
+    rawMaterials:fromRawMaterials.reducers
 
 }
 

@@ -57,11 +57,11 @@ export class AboutComponent implements OnInit {
     this.productForm=this.createProductForm()
     this.formCountryName = ['United States', 'Canada'];
     this.productCodeList.subscribe(next=>this.store.dispatch(new fromStore.LoadProduct({name: next})));
-    this.rawMaterialList$ = this.rawMaterialList;
-    this.ingredientsList$ = this.ingredientsList;
-    this.productCodeList$= this.store.select((state:ProductState)=>state.product.entites.terms);
-
-   
+    this.rawMaterialList.subscribe(next=> this.store.dispatch(new fromStore.LoadRawMaterials({name: next})));
+    this.ingredientsList.subscribe(next=> this.store.dispatch(new fromStore.LoadRawMaterials({name: next})));
+    this.productCodeList$ = this.store.select((state:ProductState)=>state.product.entites.terms);
+    this.rawMaterialList$ = this.store.select((state:ProductState)=>state.rawMaterials.entites.terms);
+    this.ingredientsList$ = this.store.select((state:ProductState)=>state.rawMaterials.entites.terms);
   }
 
   get productCode(){
@@ -80,9 +80,8 @@ export class AboutComponent implements OnInit {
 
   get rawMaterialList(){
   return  this.rawMaterialName.valueChanges.pipe(
-      debounceTime(100),
-      switchMap(value =>this.smartService.getSearchRawMaterials({name: value}))
-     )
+      debounceTime(100)
+     );
   }
 
   get ingredientsName(){
@@ -91,9 +90,8 @@ export class AboutComponent implements OnInit {
 
   get ingredientsList(){
   return  this.ingredientsName.valueChanges.pipe(
-      debounceTime(100),
-      switchMap(value =>this.smartService.getSearchRawMaterials({name: value}))
-     )
+      debounceTime(100)
+     );
   }
 
   focusField(name){
@@ -265,8 +263,6 @@ export class AboutComponent implements OnInit {
 
 formUpdate(event){
       console.log(event)
-      
-    //  this.productCodeList$= this.productCodeList$.do((val)=>val);
       this.blurControl = true;
       if(event.fieldName==="bulkCode"){
         this.productForm.get(event.fieldName).setValue(event.select.bulkCode);
@@ -291,14 +287,6 @@ updateProductField(selectField){
         this.formBindingMapping(next);
     }
   })
-  // this.smartService.getProductDetails({name:this.productForm
-  //   .get('bulkCode').value,internalProductName:selectField.internalProductName}).subscribe((next)=>{
-  //       if(next.bulkCode){
-  //           let {bulkCode,country,uri,endUses,externalProductName, internalProductName,...property} = next;
-  //           Object.keys(property).map(item=> this.mappedValue(property[item],item));
-  //           this.formBindingMapping(next);
-  //       }
-  //   })
 }
 
 updateFormBindingFields(){
@@ -309,41 +297,6 @@ updateFormBindingFields(){
   complianceOnReset(product) {
     let {bulkCode,country,uri,endUses, ...property} = product.controls;
     Object.keys(property).map(item=> this.resetValue(item));
-    // this.productForm = this.fb.group({
-    //   bulkCode: ['T1234'],
-    //   productionStrains: this.fb.array([]),
-    //   enzymeActivity: this.fb.array([]),
-    //   rawMaterials: this.fb.array([]),
-    //   ingredients: this.fb.array([]),
-    //   manufacturingSites: this.fb.array([]),
-    //   endUses: this.fb.array([
-    //     this.fb.group({
-    //       uri: "http://www.dupont.com/ontology/ontoPSR-product/CAS_110-44-1_for_T00006_FRED",
-    //       name: ['Advanced Biofuels'],
-    //       jurisdiction: ['Tech'],
-    //     })
-    //   ]),
-    //   country: this.fb.group({
-    //     code: ['us'],
-    //     name: [0],
-    //     region: ['NA'],
-    //   }),
-    //   formbinding:this.fb.group({
-    //     strainGicc:[''],
-    //     strainGe:[0],
-    //     enzymename:[''],
-    //     enzymeec:[0],
-    //     rawChem:[''],
-    //     rawSup:[0],
-    //     ingred:[''],
-    //     ingredPct:[0],
-    //     ingredFunc:[0],
-    //     siteIndex:[''],
-    //     siteStep:[0],
-
-    // }) 
-    // })
-  
   }
 
   createProductForm(){
