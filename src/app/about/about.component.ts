@@ -57,11 +57,11 @@ export class AboutComponent implements OnInit {
     this.productForm=this.createProductForm()
     this.formCountryName = ['United States', 'Canada'];
     this.productCodeList.subscribe(next=>this.store.dispatch(new fromStore.LoadProduct({name: next})));
-    this.rawMaterialList$ = this.rawMaterialList;
-    this.ingredientsList$ = this.ingredientsList;
-    this.productCodeList$= this.store.select((state:ProductState)=>state.product.entites.terms);
-
-   
+    this.rawMaterialList.subscribe(next=> this.store.dispatch(new fromStore.LoadRawMaterials({name: next})));
+    this.ingredientsList.subscribe(next=> this.store.dispatch(new fromStore.LoadRawMaterials({name: next})));
+    this.productCodeList$ = this.store.select((state:ProductState)=>state.product.entites.terms);
+    this.rawMaterialList$ = this.store.select((state:ProductState)=>state.rawMaterials.entites.terms);
+    this.ingredientsList$ = this.store.select((state:ProductState)=>state.rawMaterials.entites.terms);
   }
 
   get productCode(){
@@ -80,9 +80,8 @@ export class AboutComponent implements OnInit {
 
   get rawMaterialList(){
   return  this.rawMaterialName.valueChanges.pipe(
-      debounceTime(100),
-      switchMap(value =>this.smartService.getSearchRawMaterials({name: value}))
-     )
+      debounceTime(100)
+     );
   }
 
   get ingredientsName(){
@@ -91,9 +90,8 @@ export class AboutComponent implements OnInit {
 
   get ingredientsList(){
   return  this.ingredientsName.valueChanges.pipe(
-      debounceTime(100),
-      switchMap(value =>this.smartService.getSearchRawMaterials({name: value}))
-     )
+      debounceTime(100)
+     );
   }
 
   focusField(name){
@@ -265,8 +263,6 @@ export class AboutComponent implements OnInit {
 
 formUpdate(event){
       console.log(event)
-      
-    //  this.productCodeList$= this.productCodeList$.do((val)=>val);
       this.blurControl = true;
       if(event.fieldName==="bulkCode"){
         this.productForm.get(event.fieldName).setValue(event.select.bulkCode);
@@ -291,7 +287,6 @@ updateProductField(selectField){
         this.formBindingMapping(next);
     }
   })
-  
 }
 
 updateFormBindingFields(){

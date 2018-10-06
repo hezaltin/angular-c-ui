@@ -76,7 +76,7 @@
         <div class="clr-input-wrapper form-position-set">
             <input #rawChem type="tel" id="enzyme" class="clr-input" size="35" style="width:250px"
              placeholder="Search by Chemical name" formControlName='rawChem' (focus)="focusField('rawMaterials')" >
-             <app-auto-complete  *ngIf="focusedControl=='rawMaterials' && !blurControl" [formField]="'rawMaterials'"  (formUpdateEvent)="formUpdate($event)"  [filteredUsersTerms]="( rawMaterialList$ | async ) ?.terms"></app-auto-complete>
+             <app-auto-complete  *ngIf="focusedControl=='rawMaterials' && !blurControl" [formField]="'rawMaterials'"  (formUpdateEvent)="formUpdate($event)"  [filteredUsersTerms]="( rawMaterialList$ | async )"></app-auto-complete>
         </div>
 
         <div class="select">
@@ -109,7 +109,7 @@
         <div class="clr-input-wrapper form-position-set">
             <input #ingred type="tel" id="enzyme" class="clr-input" size="35" style="width:200px"
              placeholder="Search by Ingredient" formControlName='ingred'  (focus)="focusField('ingred')" >
-             <app-auto-complete  *ngIf="focusedControl=='ingred' && !blurControl" [formField]="'ingred'"  (formUpdateEvent)="formUpdate($event)"  [filteredUsersTerms]="( ingredientsList$ | async ) ?.terms"></app-auto-complete>
+             <app-auto-complete  *ngIf="focusedControl=='ingred' && !blurControl" [formField]="'ingred'"  (formUpdateEvent)="formUpdate($event)"  [filteredUsersTerms]="( ingredientsList$ | async )"></app-auto-complete>
         </div>
 
         <div class="select">
