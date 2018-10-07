@@ -7,10 +7,9 @@ import { SmartComplainceClass, Product, ProductionStrain } from './about-class';
 import { Router } from '@angular/router';
 import { SmartComplainceService } from '../services/smart-complaince.service';
 import { Observable } from 'rxjs';
-import { debounceTime, map, switchMap, delay } from 'rxjs/operators';
+import { debounceTime, map, switchMap, delay, filter } from 'rxjs/operators';
 import "rxjs/add/operator/do";
-import { productionStrainOptionsGe, enzymeActivity, rawSupplier, formPercentage, formFunction, formManufactureStep, resetSmartCompliance } from './smart-complaince.config'
-//import { shouldCallLifecycleInitHook } from '@angular/core/src/view';
+import { productionStrainOptionsGe, enzymeActivity, rawSupplier, formPercentage, formFunction, formManufactureStep, resetSmartCompliance } from './smart-complaince.config';
 import * as fromStore from '../store';
 import { ProductState } from '../store'
 
@@ -38,9 +37,7 @@ export class AboutComponent implements OnInit {
   focusedControl: string;
   blurControl: boolean
   opendValue: boolean = false;
-
   productForm: any;
-
   formSubmit: boolean = false;
   productAssesment: any;
 
@@ -109,6 +106,7 @@ export class AboutComponent implements OnInit {
   }
 
   formBindingMapping(formBind) {
+    console.log(formBind)
     this.productForm.controls.formbinding.setValue({
       'strainGicc': formBind.productionStrains[0].gicc,
       'strainGe': formBind.productionStrains[0].geneticallyEngineered,
@@ -120,7 +118,8 @@ export class AboutComponent implements OnInit {
       'ingredPct': formBind.ingredients[0].concentration,
       'ingredFunc': formBind.ingredients[0].ingredientFunction,
       'siteIndex': formBind.manufacturingSites[0].name,
-      'siteStep': formBind.manufacturingSites[0].process
+      'siteStep': formBind.manufacturingSites[0].process,
+      'enduses' : formBind.endUses[0].name
     });
   }
 
@@ -244,6 +243,14 @@ export class AboutComponent implements OnInit {
     this.manufacturingSites.removeAt(index)
   }
 
+  get endUses(){
+    return this.productForm.get('endUses') as FormArray
+  }
+
+  removeEndUses(index){
+     this.endUses.removeAt(index);
+  }
+
   complianceOnSubmit(productForm) {
     this.formSubmit = false;
     let productFormRequest = Object.keys(this.productForm.value).reduce(this.submitRequestBuild.bind(this), <Product>{});
@@ -263,9 +270,10 @@ export class AboutComponent implements OnInit {
 
   formUpdate(event) {
     console.log(event)
+    
     this.blurControl = true;
     if (event.fieldName === "bulkCode") {
-      this.productForm.get(event.fieldName).setValue(event.select.bulkCode);
+      this.productForm.get(event.fieldName).setValue(event.select.term);
       this.updateProductField(event)
     }
     else if (event.fieldName === "rawMaterials") {
@@ -278,13 +286,15 @@ export class AboutComponent implements OnInit {
   }
 
   updateProductField(selectField) {
-    this.store.dispatch(new fromStore.LoadProductForm({ name: this.productForm.get('bulkCode').value, internalProductName: selectField.internalProductName }));
+    console.log(event)
+    this.store.dispatch(new fromStore.LoadProductForm({ name: selectField.select.bulkCode, internalProductName: selectField.internalProductName }));
     this.store.select((state: ProductState) => state.productForm.entites).subscribe((next) => {
       console.log(next)
       if (next.bulkCode) {
-        let { bulkCode, country, uri, endUses, externalProductName, internalProductName, ...property } = next;
+        let { bulkCode, country, uri, externalProductName, internalProductName, ...property } = next;
         Object.keys(property).map(item => this.mappedValue(property[item], item));
         this.formBindingMapping(next);
+        console.log(this.manufacturingSites)
       }
     })
   }
@@ -293,10 +303,15 @@ export class AboutComponent implements OnInit {
 
   }
 
+  resetForminding(key, value) {
+    this.productForm.controls.formbinding.controls[key].setValue(value)
+  }
 
   complianceOnReset(product) {
-    let { bulkCode, country, uri, endUses, ...property } = product.controls;
+    let { bulkCode, country, uri, ...property } = product.controls;
     Object.keys(property).map(item => this.resetValue(item));
+    Object.keys(resetSmartCompliance).map(item => this.resetForminding(item, resetSmartCompliance[item]))
+    this.productForm.controls["country"].controls["name"].setValue(0);
   }
 
   createProductForm() {
@@ -309,13 +324,7 @@ export class AboutComponent implements OnInit {
       rawMaterials: this.fb.array([]),
       ingredients: this.fb.array([]),
       manufacturingSites: this.fb.array([]),
-      endUses: this.fb.array([
-        this.fb.group({
-          uri: "http://www.dupont.com/ontology/ontoPSR-product/EndUse_Grain_Processing_Product",
-          name: ['Advanced Biofuels'],
-          jurisdiction: ['Tech'],
-        })
-      ]),
+      endUses: this.fb.array([]),
       country: this.fb.group({
         uri: "http://www.dupont.com/ontology/ontoPSR-product/Country_US",
         code: ['us'],
@@ -334,6 +343,7 @@ export class AboutComponent implements OnInit {
         ingredFunc: [formFunction[0]],
         siteIndex: ['Manufacturing Sites'],
         siteStep: [formManufactureStep[0]],
+        enduses:['endUses']
 
       })
     });
