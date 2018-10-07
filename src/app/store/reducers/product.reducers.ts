@@ -45,6 +45,6 @@ export function reducers(state=initialState,action:fromProduct.ProductAction):Pr
     return state;
 }
 
-export const getProductEntites = (state:ProductState) => state.entites;
+export const getProductEntites = (state:ProductState) => state.entites.terms;
 export const getProductLoading = (state:ProductState) => state.loading;
 export const getProductLoaded = (state:ProductState) => state.loaded;
