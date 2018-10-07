@@ -31,9 +31,9 @@ export class AboutComponent implements OnInit {
   public formManufactureStep: any = Object.assign([],formManufactureStep);
   public enzymeActivityControl: any = Object.assign([],enzymeActivity)
   productionStrainOptionsGe: any[] = Object.assign([],productionStrainOptionsGe);
-  productCodeList$:Observable<any>;
-  rawMaterialList$:Observable<any>
-  ingredientsList$:Observable<any>
+  productCodeList$:Observable<ProductState>;
+  rawMaterialList$:Observable<ProductState>;
+  ingredientsList$:Observable<ProductState>;
   filterProductSub:any;
   focusedControl:string;
   blurControl:boolean
