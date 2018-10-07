@@ -45,6 +45,6 @@ export function reducers(state=initialState,action:fromRawMaterials.RawMaterials
     return state;
 }
 
-export const getProductEntites = (state:RawMaterialsState) => state.entites;
-export const getProductLoading = (state:RawMaterialsState) => state.loading;
-export const getProductLoaded = (state:RawMaterialsState) => state.loaded;
+export const getRawMaterialsEntites = (state:RawMaterialsState) => state.entites.terms;
+export const getRawMaterialsLoading = (state:RawMaterialsState) => state.loading;
+export const getRawMaterialsLoaded = (state:RawMaterialsState) => state.loaded;

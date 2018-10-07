@@ -56,9 +56,9 @@ export class AboutComponent implements OnInit {
     this.productCodeList.subscribe(next => this.store.dispatch(new fromStore.LoadProduct({ name: next })));
     this.rawMaterialList.subscribe(next => this.store.dispatch(new fromStore.LoadRawMaterials({ name: next })));
     this.ingredientsList.subscribe(next => this.store.dispatch(new fromStore.LoadRawMaterials({ name: next })));
-    this.productCodeList$ = this.store.select((state: ProductState) => state.product.entites.terms);
-    this.rawMaterialList$ = this.store.select((state: ProductState) => state.rawMaterials.entites.terms);
-    this.ingredientsList$ = this.store.select((state: ProductState) => state.rawMaterials.entites.terms);
+    this.productCodeList$ = this.store.select(fromStore.getProductEntites);
+    this.rawMaterialList$ = this.store.select(fromStore.getRawMaterialsEntites);
+    this.ingredientsList$ = this.store.select(fromStore.getRawMaterialsEntites);
   }
 
   get productCode() {
@@ -288,7 +288,7 @@ export class AboutComponent implements OnInit {
   updateProductField(selectField) {
     console.log(event)
     this.store.dispatch(new fromStore.LoadProductForm({ name: selectField.select.bulkCode, internalProductName: selectField.internalProductName }));
-    this.store.select((state: ProductState) => state.productForm.entites).subscribe((next) => {
+    this.store.select(fromStore.getProductFormEntites).subscribe((next) => {
       console.log(next)
       if (next.bulkCode) {
         let { bulkCode, country, uri, externalProductName, internalProductName, ...property } = next;

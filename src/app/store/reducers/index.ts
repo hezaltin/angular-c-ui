@@ -19,6 +19,10 @@ export const reducers:ActionReducerMap<ProductState> = {
 
 }
 
-export const getProductState = createFeatureSelector<ProductState>('product');
+//export const getProductState = createFeatureSelector<ProductState>('product');
 
-//export const getProductStateSelector = createSelector(getProductState,(state:ProductState)=>state.product);
+export const getProductState = (state: ProductState) => state.product;
+export const getProductFormState = (state: ProductState) => state.productForm;
+export const getRawMaterialsState = (state:ProductState) => state.rawMaterials;
+
+//export const getProductStateSelector = createSelector(getProductState,(state:fromProduct.ProductState)=>state);
