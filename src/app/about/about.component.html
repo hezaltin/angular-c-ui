@@ -177,13 +177,22 @@
         </a>
     </div>
 
-    <div class="form-group">
+    <div class="form-group" formGroupName="formbinding">
         <label for="example">End Use</label>
         <div class="clr-input-wrapper">
             <input type="text" id="endUse"
              placeholder="Search by Name" class="clr-input" name="endUse"
-               >
+             formControlName="enduses">
         </div>
+    </div>
+    
+    <div class="form-group" *ngFor='let enduses of endUses.controls; let i=index'>
+        <label for="selects_2"></label>
+        <a href="javascript:" class="label label-icon-set">
+            <span class="set-margin-level">{{ enduses.value.name }}</span>
+            <span class="set-margin-level">{{ enduses.value.jurisdiction }}</span>
+            <clr-icon shape='close' (click)='removeEndUses(i)'></clr-icon>
+        </a>
     </div>
     <div class="form-group" formGroupName="country">
         <label for="example">Country</label>

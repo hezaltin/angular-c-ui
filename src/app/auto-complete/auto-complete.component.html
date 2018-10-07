@@ -1,7 +1,16 @@
 <div id="productCodes"  class="autocomplete-items">
     <ul *ngFor="let user of filteredUsersTerms" (click)="selectedId(user)" style="list-style-type:none" >
-        <li>
+        <li *ngIf="formField=== 'bulkCode'">
             <a>{{user.term}}</a>
+            <br>
+            <small>ExternalProductName: {{user.externalProductName}}</small>
+            <small class="mb-1">InternalProductName: {{user.internalProductName}}</small>
+        </li>
+        <li *ngIf="formField=== 'ingred'||formField=== 'rawMaterials'">
+            <a>{{user.term}}</a>
+        <br>
+            <small>PrefLabel: {{user.prefLabel}}</small>
+            <small class="mb-1">CAS: {{user.cas}}</small>
         </li>
     </ul>   
 </div>
