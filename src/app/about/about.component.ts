@@ -9,8 +9,7 @@ import { SmartComplainceService } from '../services/smart-complaince.service';
 import { Observable } from 'rxjs';
 import { debounceTime, map, switchMap, delay } from 'rxjs/operators';
 import "rxjs/add/operator/do";
-import { productionStrainOptionsGe, enzymeActivity, rawSupplier, formPercentage, formFunction, formManufactureStep, resetSmartCompliance } from './smart-complaince.config'
-//import { shouldCallLifecycleInitHook } from '@angular/core/src/view';
+import { productionStrainOptionsGe, enzymeActivity, rawSupplier, formPercentage, formFunction, formManufactureStep, resetSmartCompliance } from './smart-complaince.config';
 import * as fromStore from '../store';
 import { ProductState } from '../store'
 
@@ -38,9 +37,7 @@ export class AboutComponent implements OnInit {
   focusedControl: string;
   blurControl: boolean
   opendValue: boolean = false;
-
   productForm: any;
-
   formSubmit: boolean = false;
   productAssesment: any;
 
