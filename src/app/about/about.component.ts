@@ -33,7 +33,6 @@ export class AboutComponent implements OnInit {
   productCodeList$: Observable<ProductState>;
   rawMaterialList$: Observable<ProductState>;
   ingredientsList$: Observable<ProductState>;
-  filterProductSub: any;
   focusedControl: string;
   blurControl: boolean
   opendValue: boolean = false;
