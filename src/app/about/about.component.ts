@@ -97,7 +97,7 @@ export class AboutComponent implements OnInit {
     //this.cd.detectChanges();
   }
   onClick(event) {
-    console.log(event)
+   // console.log(event)
     if (event.target.tagName !== 'INPUT') {
       this.blurControl = true
     }
@@ -286,7 +286,7 @@ export class AboutComponent implements OnInit {
 
   updateProductField(selectField) {
     console.log(event)
-    this.store.dispatch(new fromStore.LoadProductForm({ name: selectField.select.bulkCode, internalProductName: selectField.internalProductName }));
+    this.store.dispatch(new fromStore.LoadProductForm({ name: selectField.select.bulkCode, internalProductName: selectField.select.internalProductName }));
     this.store.select(fromStore.getProductFormEntites).subscribe((next) => {
       console.log(next)
       if (next.bulkCode) {

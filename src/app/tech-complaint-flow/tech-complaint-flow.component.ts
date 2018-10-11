@@ -1,6 +1,7 @@
 import { Component, OnInit,Input,AfterViewInit} from '@angular/core';
 import * as d3Graphviz from 'd3-graphviz'
-import * as d3 from 'd3v4'
+import * as d3 from 'd3v4';
+import * as ChartResponsive from './decesion-tree-responsive';
 
 @Component({
   selector: 'app-tech-complaint-flow',
@@ -44,6 +45,7 @@ function render() {
         .on("end", function () {
            // this.dotIndex = (this.dotIndex + 1) % this.dots.length;
            //  render();
+           d3.select("svg").call(ChartResponsive.lineResponsive);
            d3.select("svg").on("dblclick.zoom", null);
             d3.selectAll('.node').on('click',(event)=>{
               console.log(event)
