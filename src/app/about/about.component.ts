@@ -307,7 +307,10 @@ export class AboutComponent implements OnInit {
   }
 
   complianceOnReset(product) {
+    console.log(product)
     let { bulkCode, country, uri, ...property } = product.controls;
+    console.log(bulkCode)
+    console.log(...property)
     Object.keys(property).map(item => this.resetValue(item));
     Object.keys(resetSmartCompliance).map(item => this.resetForminding(item, resetSmartCompliance[item]))
     this.productForm.controls["country"].controls["name"].setValue(0);
