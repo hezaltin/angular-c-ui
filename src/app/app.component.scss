@@ -30,8 +30,9 @@
 }
 
 .content-container {
-  height: 100%;
-  overflow: hidden;
+ display: flex;
+ flex: 1 1 auto;
+ min-height: 1px;
 }
 /* .header header-6 {
   background: #0a8cce;
