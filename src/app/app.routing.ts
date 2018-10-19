@@ -13,7 +13,9 @@ import { Routes, RouterModule } from '@angular/router';
 export const ROUTES: Routes = [
     {path: '', redirectTo: 'home', pathMatch: 'full'},
     {path: 'home', loadChildren:'../libs/home-module/home.module#ClarityHomeModule'},
-    {path: 'product', loadChildren:'../libs/product-forms/product.module#ProductModule'}
+    {path: 'product', loadChildren:'../libs/product-forms/product.module#ProductModule'},
+    {path: 'datavisualization', loadChildren:'../libs/data-visualization-module/data-visualization.module#DataVisualizationModule'},
+    {path: 'analytics', loadChildren:'../libs/analytics-module/analytics.module#AnalyticsModule'}
 ];
 
 export const ROUTING: ModuleWithProviders = RouterModule.forRoot(ROUTES);

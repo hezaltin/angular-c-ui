@@ -17,9 +17,10 @@ import { ROUTING } from "./app.routing";
 // import { AutoCompleteComponent } from './auto-complete/auto-complete.component';
 import { reducers,CustoumSerializer } from './store';
 
+
 @NgModule({
     declarations: [
-        AppComponent
+        AppComponent,
         
     ],
     imports: [
