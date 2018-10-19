@@ -1,1 +1,27 @@
-<p>data-visualization component works!!</p>
+<form [formGroup]="visualForm" class="clr-form clr-form-horizontal" autocomplete="off">
+        <div class="form-group"  >
+                <label for="example">Search Value</label>
+        
+                <div class="clr-input-wrapper flex-box-class">
+                  <input
+                    id="vizualizationCode"
+                    formControlName="vizualizationCode"
+                    placeholder="Search by Visualization Code..."
+                    class="clr-input"
+                    name="vizualizationCode">
+              </div>
+        </div>
+</form>
+
+
+<div class="card" *ngFor="let visual of getVisualData">
+        <div class="card-block">
+            <h4 class="card-title">{{visual?.fragment}}</h4>
+            <p class="card-text">
+                <small>ExternalProductName: <b>{{visual.externalProductName}}</b></small>
+                <b>|</b>
+                <small class="mb-1">InternalProductName: <b>{{visual.internalProductName}}</b></small>
+            </p>
+        </div>
+        
+</div>
