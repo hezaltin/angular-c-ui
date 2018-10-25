@@ -14,6 +14,6 @@ export class AppComponent {
 
     collapsiable(){
         this.isCollapsed = !this.isCollapsed
-        console.log(this.elementRef.nativeElement)
+       // console.log(this.elementRef.nativeElement)
     }
 }
