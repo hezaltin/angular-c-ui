@@ -1,12 +1,13 @@
 <clr-main-container>
   <clr-header>
     <div class="branding">
-      <a
+      <!-- <a
         href="#"
-        class="nav-link">
+        class="nav-link"> -->
+        <clr-icon shape="bars" class="nav-btn collapse-shape" (click)="collapsiable()"></clr-icon>
         <span class="clr-icon clr-clarity-logo"></span>
         <span class="title">Tech</span>
-      </a>
+      <!-- </a> -->
     </div>
     <div class="header-actions"></div>
   </clr-header>
@@ -17,7 +18,7 @@
     </div>
     <clr-vertical-nav
       [clrVerticalNavCollapsible]="true"
-      [(clrVerticalNavCollapsed)]="collapsed">
+      [(clrVerticalNavCollapsed)]="isCollapsed"  [ngClass]="{'is-collapsed': isCollapsed === false }">
       <a
         clrVerticalNavLink
         routerLink="home"
