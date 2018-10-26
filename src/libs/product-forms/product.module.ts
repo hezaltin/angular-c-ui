@@ -4,6 +4,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { FormsModule,ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { ClarityModule } from '@clr/angular';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import { AboutComponent } from "./about/about.component";
 import {SmartComplainceService} from "./services/smart-complaince.service";
 import { TechComplaintFlowComponent } from './tech-complaint-flow/tech-complaint-flow.component';
@@ -25,6 +26,7 @@ export const ROUTES: Routes = [
         ReactiveFormsModule,
         HttpClientModule,
         ClarityModule,
+        MatAutocompleteModule,
         RouterModule.forChild(ROUTES),
         StoreModule.forFeature('products',reducers),
         EffectsModule.forFeature(effects)

@@ -22,6 +22,7 @@ export class AutoCompleteComponent implements OnInit {
   }
 
   selectedId(selectId){
+    console.log('selectId====>',selectId)
     this.formUpdateEvent.emit({select:selectId,fieldName:this.formField})
   }
 
