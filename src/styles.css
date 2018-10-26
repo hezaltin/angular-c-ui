@@ -1,1 +1,10 @@
 /* You can add global styles to this file, and also import other style files */
+
+
+
+.vertical-nav-component .nav-trigger{
+    display: none;
+}
+.vertical-nav-component{
+    padding-top:0;
+}

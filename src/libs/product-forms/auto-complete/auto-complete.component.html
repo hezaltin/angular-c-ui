@@ -1,16 +1,30 @@
-<div id="productCodes"  class="autocomplete-items">
-    <ul *ngFor="let user of filteredUsersTerms" (click)="selectedId(user)" style="list-style-type:none" >
-        <li *ngIf="formField=== 'bulkCode'">
-            <a>{{user.term}}</a>
+<!-- <div id="productCodes"  class="autocomplete-items">
+    <ul  (click)="selectedId(user)" style="list-style-type:none"  >
+        <li  *ngFor="let user of filteredUsersTerms" tabindex="0">
+            <div *ngIf="formField=== 'bulkCode'">
+                    <a>{{user.term}}</a>
+                    <br>
+                    <small>ExternalProductName: {{user.externalProductName}}</small>
+                    <small class="mb-1">InternalProductName: {{user.internalProductName}}</small>
+            </div>
+            
+
+           <div *ngIf="formField=== 'ingred'||formField=== 'rawMaterials'">
+                <a >{{user.term}}</a>
             <br>
-            <small>ExternalProductName: {{user.externalProductName}}</small>
-            <small class="mb-1">InternalProductName: {{user.internalProductName}}</small>
-        </li>
-        <li *ngIf="formField=== 'ingred'||formField=== 'rawMaterials'">
-            <a>{{user.term}}</a>
-        <br>
-            <small>PrefLabel: {{user.prefLabel}}</small>
+            <small >PrefLabel: {{user.prefLabel}}</small>
             <small class="mb-1">CAS: {{user.cas}}</small>
+           </div>
+
         </li>
+        
     </ul>   
-</div>
+</div> -->
+<mat-form-field class="example-full-width">
+        <input type="text" placeholder="Pick one" aria-label="Number" matInput [formControl]="myControl" [matAutocomplete]="auto">
+        <mat-autocomplete #auto="matAutocomplete">
+          <mat-option *ngFor="let option of options" [value]="option">
+            {{option}}
+          </mat-option>
+        </mat-autocomplete>
+    </mat-form-field>
