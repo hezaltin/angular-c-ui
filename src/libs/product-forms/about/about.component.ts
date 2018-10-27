@@ -27,6 +27,8 @@ import {
 import * as fromStore from "../store";
 import { ProductState } from "../store";
 
+const keyCodes = { keyup: 38, keydown: 40, enter: 13 }
+
 @Component({
     selector: "app-smart-complaince",
     templateUrl: "./about.component.html",
@@ -49,6 +51,7 @@ export class AboutComponent implements OnInit {
     productCodeList$: Observable<ProductState>;
     rawMaterialList$: Observable<ProductState>;
     ingredientsList$: Observable<ProductState>;
+    productCodeListData: any
     focusedControl: string;
     blurControl: boolean;
     opendValue: boolean = false;
@@ -56,7 +59,9 @@ export class AboutComponent implements OnInit {
     formSubmit: boolean = false;
     productAssesment: any;
     formBindingObject: any = null;
-
+    currentFocus: number = -1;
+    currentFocusData: any;
+    formUpdateValue: boolean = false;
     constructor(
         public router: Router,
         public smartService: SmartComplainceService,
@@ -64,36 +69,24 @@ export class AboutComponent implements OnInit {
         private cd: ChangeDetectorRef,
         private ElementRef: ElementRef,
         private store: Store<fromStore.ProductState | ProductState>
-    ) {}
+    ) { }
 
     ngOnInit() {
         this.productForm = this.createProductForm();
         this.formCountryName = ["United States", "Canada"];
-        this.productCodeList.subscribe(next =>{
-          console.log(this.focusedControl)
-          if(this.focusedControl!=='bulkCode'){
-            return
-          }
-          this.store.dispatch(new fromStore.LoadProduct({ name: next }))
-        }
-           
-        );
-        this.rawMaterialList.subscribe(next =>{
-          if(this.focusedControl!=='rawMaterials'){
-            return
-          }
-          this.store.dispatch(new fromStore.LoadRawMaterials({ name: next }))
-        }
-           
-        );
-        this.ingredientsList.subscribe(next =>{
-          if(this.focusedControl!=='ingred'){
-            return
-          }
-          this.store.dispatch(new fromStore.LoadRawMaterials({ name: next }))
-        }
-           
-        );
+        this.productCodeList.subscribe(next => {
+           // console.log(this.focusedControl)
+            this.setProductData('bulkCode');
+            this.store.dispatch(new fromStore.LoadProduct({ name: next }))
+        });
+        this.rawMaterialList.subscribe(next => {
+            this.setProductData('rawMaterials');
+            this.store.dispatch(new fromStore.LoadRawMaterials({ name: next }))
+        });
+        this.ingredientsList.subscribe(next => {
+            this.setProductData('ingred');
+            this.store.dispatch(new fromStore.LoadRawMaterials({ name: next }))
+        });
         this.productCodeList$ = this.store.select(fromStore.getProductEntites);
         this.rawMaterialList$ = this.store.select(
             fromStore.getRawMaterialsEntites
@@ -101,6 +94,31 @@ export class AboutComponent implements OnInit {
         this.ingredientsList$ = this.store.select(
             fromStore.getRawMaterialsEntites
         );
+    }
+
+    setProductData(productKey) {
+        this.currentFocus = -1;
+        if (this.focusedControl !== productKey || this.formUpdateValue) {
+            this.formUpdateValue = false
+            return;
+        }
+        this.blurControl = false;
+    }
+    // get the data for key down auto complete functionality
+    getProductCodeListData() {
+        let productData;
+        this.productCodeList$.subscribe(productCode => productData = productCode)
+        return { productData: productData, fieldName: 'bulkCode' };
+    }
+    getrawMaterialListData() {
+        let productData;
+        this.rawMaterialList$.subscribe(productCode => productData = productCode)
+        return { productData: productData, fieldName: 'rawMaterials' };
+    }
+    getingredientsListData() {
+        let productData;
+        this.ingredientsList$.subscribe(productCode => productData = productCode)
+        return { productData: productData, fieldName: 'ingred' };
     }
 
     get productCode() {
@@ -135,7 +153,7 @@ export class AboutComponent implements OnInit {
         //console.log("FocusedFields");
         this.focusedControl = name;
         this.blurControl = false;
-        //this.cd.detectChanges();
+
     }
     onClick(event) {
         // //console.log(event)
@@ -381,9 +399,10 @@ export class AboutComponent implements OnInit {
     }
 
     formUpdate(event) {
-        //console.log(event);
-
-        this.blurControl = true;
+        // console.log(event);
+        // console.log(this.productForm.get(event.fieldName))
+        if (!event.select) return;
+        this.formUpdateValue = true;
         if (event.fieldName === "bulkCode") {
             this.productForm.get(event.fieldName).setValue(event.select.term);
             this.updateProductField(event);
@@ -392,6 +411,7 @@ export class AboutComponent implements OnInit {
         } else if (event.fieldName === "ingred") {
             this.ingredientsName.setValue(event.select.term);
         }
+        this.blurControl = true;
     }
 
     updateProductField(selectField) {
@@ -403,7 +423,7 @@ export class AboutComponent implements OnInit {
             })
         );
         this.store.select(fromStore.getProductFormEntites).subscribe(next => {
-            //console.log(next);
+            //this.storeUpdatae
             if (next.bulkCode) {
                 let {
                     bulkCode,
@@ -424,7 +444,7 @@ export class AboutComponent implements OnInit {
         });
     }
 
-    updateFormBindingFields() {}
+    updateFormBindingFields() { }
 
     resetForminding(key, value) {
         this.productForm.controls.formbinding.controls[key].setValue(value);
@@ -437,6 +457,29 @@ export class AboutComponent implements OnInit {
             this.resetForminding(item, resetSmartCompliance[item])
         );
         this.productForm.controls["country"].controls["name"].setValue(0);
+    }
+    //Keydown autocomplete
+    keydownHandler(event, field) {
+        let dataValue = field();
+        if (!dataValue.productData) return;
+        if (event.keyCode == keyCodes.keydown) {
+            this.currentFocus++;
+            this.activeList(dataValue.productData);
+        } else if (event.keyCode == keyCodes.keyup) {
+            this.currentFocus--;
+            this.activeList(dataValue.productData);
+        } else if (event.keyCode === keyCodes.enter) {
+            event.preventDefault();
+            this.formUpdate({ select: dataValue.productData[this.currentFocus], fieldName: dataValue.fieldName });
+        }
+    }
+
+    activeList(data) {
+        if (!data) return false;
+        if (this.currentFocus >= data.length) this.currentFocus = 0;
+        if (this.currentFocus < 0) this.currentFocus = (data.length - 1);
+        this.currentFocusData = { data: data[this.currentFocus], count: this.currentFocus }
+        // console.log('this.currentFocus===>',this.currentFocus); 
     }
 
     createProductForm() {

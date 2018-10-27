@@ -1,408 +1,225 @@
 <div class="tech-complaint-form">
   <div class="product-form">
-    <form
-      [formGroup]="productForm"
-      class="clr-form  clr-form-horizontal"
-      autocomplete="off">
+    <form [formGroup]="productForm" class="clr-form  clr-form-horizontal" autocomplete="off">
       <div class="form-group">
         <label for="example">Product</label>
 
         <div class="clr-input-wrapper flex-box-class">
-          <input
-            id="product"
-            formControlName="bulkCode"
-            placeholder="Search by Product Bulk Code..."
-            class="clr-input"
-            name="product"
-            (focus)="focusField('bulkCode')">
-          <!-- <app-auto-complete *ngIf="focusedControl=='bulkCode' && !blurControl" [formField]="'bulkCode'" (formUpdateEvent)="formUpdate($event)"  [filteredUsersTerms]="( productCodeList$ | async ) ?.terms"></app-auto-complete> -->
-
-          <app-auto-complete
-            *ngIf="focusedControl=='bulkCode' && !blurControl"
-            [formField]="'bulkCode'"
-            (formUpdateEvent)="formUpdate($event)"
-            [filteredUsersTerms]="(productCodeList$ | async)"></app-auto-complete>
+          <input id="product" formControlName="bulkCode" placeholder="Search by Product Bulk Code..." class="clr-input"
+            name="product" (focus)="focusField('bulkCode')" (keydown)="keydownHandler($event,getProductCodeListData.bind(this))">
+            
+          <app-auto-complete *ngIf="focusedControl=='bulkCode' && !blurControl" [formField]="'bulkCode'"
+            (formUpdateEvent)="formUpdate($event)" [filteredUsersTerms]="(productCodeList$ | async)" [currentFocus]="currentFocusData"></app-auto-complete>
         </div>
       </div>
 
-      <div
-        class="form-group"
-        formGroupName="formbinding">
+      <div class="form-group" formGroupName="formbinding">
         <label for="selects_1">Production Strain</label>
         <div class="clr-input-wrapper">
-          <input
-            #strainGicc
-            type="tel"
-            id="productioStrain"
-            class="clr-input"
-            size="35"
-            style="width:250px"
-            placeholder="Search by GICC# or genus/species"
-            formControlName="strainGicc">
+          <input #strainGicc type="tel" id="productioStrain" class="clr-input" size="35" style="width:250px"
+            placeholder="Search by GICC# or genus/species" formControlName="strainGicc">
         </div>
 
         <div class="select">
-          <select
-            #strainGe
-            class="select-narrow"
-            formControlName="strainGe">
-            <option
-              [ngValue]="0"
-              disabled="disabled">
+          <select #strainGe class="select-narrow" formControlName="strainGe">
+            <option [ngValue]="0" disabled="disabled">
               Select
             </option>
-            <option
-              *ngFor="let strainGe of productionStrainOptionsGe"
-              [value]="strainGe.value">
+            <option *ngFor="let strainGe of productionStrainOptionsGe" [value]="strainGe.value">
               {{strainGe.text}}
             </option>
           </select>
         </div>
 
-        <button
-          type="button"
-          class="btn btn-icon">
-          <clr-icon
-            class="icon"
-            shape="plus"
-            (click)="addProductionStrain({gicc: strainGicc.value, geneticallyEngineered: strainGe.value=='true' })">
+        <button type="button" class="btn btn-icon">
+          <clr-icon class="icon" shape="plus" (click)="addProductionStrain({gicc: strainGicc.value, geneticallyEngineered: strainGe.value=='true' })">
           </clr-icon>
         </button>
       </div>
-      <div
-        class="form-group"
-        *ngFor="let strain of productionStrains.controls; let i=index">
+      <div class="form-group" *ngFor="let strain of productionStrains.controls; let i=index">
         <label for="selects_2"></label>
-        <a
-          href="javascript:"
-          class="label label-icon-set">
+        <a href="javascript:" class="label label-icon-set">
           <span class="set-margin">{{strain.value.gicc}}</span>
           <span class="set-margin-level">GE: {{strain.value.geneticallyEngineered}}</span>
-          <clr-icon
-            shape="close"
-            (click)="removeProductionStrain(i)"></clr-icon>
+          <clr-icon shape="close" (click)="removeProductionStrain(i)"></clr-icon>
         </a>
       </div>
 
-      <div
-        class="form-group"
-        formGroupName="formbinding">
+      <div class="form-group" formGroupName="formbinding">
         <label for="example">Enzyme Activity</label>
         <div class="clr-input-wrapper">
-          <input
-            type="tel"
-            #enzymename
-            id="enzyme"
-            class="clr-input"
-            size="35"
-            style="width:300px"
-            placeholder="Search by EC# or activity text"
+          <input type="tel" #enzymename id="enzyme" class="clr-input" size="35" style="width:300px" placeholder="Search by EC# or activity text"
             formControlName="enzymename">
         </div>
 
         <div class="select">
-          <select
-            #enzymeec
-            class="select-narrow"
-            formControlName="enzymeec">
-            <option
-              [value]="0"
-              disabled="disabled">
+          <select #enzymeec class="select-narrow" formControlName="enzymeec">
+            <option [value]="0" disabled="disabled">
               Select
             </option>
-            <option
-              [ngValue]="enzymeec.ec"
-              *ngFor="let enzymeec of enzymeActivityControl">
+            <option [ngValue]="enzymeec.ec" *ngFor="let enzymeec of enzymeActivityControl">
               {{enzymeec.name}}
             </option>
           </select>
         </div>
 
-        <button
-          type="button"
-          class="btn btn-icon">
-          <clr-icon
-            class="icon"
-            shape="plus"
-            (click)="addEnzyme({name:enzymename.value,
+        <button type="button" class="btn btn-icon">
+          <clr-icon class="icon" shape="plus" (click)="addEnzyme({name:enzymename.value,
                  ec:enzymeec.value})">
           </clr-icon>
         </button>
       </div>
-      <div
-        class="form-group"
-        *ngFor="let enzymename of enzymeActivity.controls; let i=index">
+      <div class="form-group" *ngFor="let enzymename of enzymeActivity.controls; let i=index">
         <label for="selects_2"></label>
-        <a
-          href="javascript:"
-          class="label label-icon-set">
+        <a href="javascript:" class="label label-icon-set">
           <span class="set-margin">{{enzymename.value.name}}</span>
           <span class="set-margin-level">{{enzymename.value.jurisdiction}}</span>
-          <clr-icon
-            shape="close"
-            (click)="removeEnzymeActivity(i)"></clr-icon>
+          <clr-icon shape="close" (click)="removeEnzymeActivity(i)"></clr-icon>
         </a>
       </div>
 
       <!-- Raw Materials -->
-      <div
-        formGroupName="formbinding"
-        class="form-group">
+      <div formGroupName="formbinding" class="form-group">
         <label for="selects_1">Raw Materials</label>
         <div class="clr-input-wrapper form-position-set">
-          <input
-            #rawChem
-            type="tel"
-            id="enzyme"
-            class="clr-input"
-            size="35"
-            style="width:250px"
-            placeholder="Search by Chemical name"
-            formControlName="rawChem"
-            (focus)="focusField('rawMaterials')">
-          <app-auto-complete
-            *ngIf="focusedControl=='rawMaterials' && !blurControl"
-            [formField]="'rawMaterials'"
-            (formUpdateEvent)="formUpdate($event)"
-            [filteredUsersTerms]="( rawMaterialList$ | async )"></app-auto-complete>
+          <input #rawChem type="tel" id="enzyme" class="clr-input" size="35" style="width:250px" placeholder="Search by Chemical name"
+            formControlName="rawChem" (focus)="focusField('rawMaterials')" (keydown)="keydownHandler($event,getrawMaterialListData.bind(this))">
+          <app-auto-complete *ngIf="focusedControl=='rawMaterials' && !blurControl" [formField]="'rawMaterials'"
+            (formUpdateEvent)="formUpdate($event)" [filteredUsersTerms]="( rawMaterialList$ | async )" [currentFocus]="currentFocusData"></app-auto-complete>
         </div>
 
         <div class="select">
-          <select
-            #rawSup
-            class="select-wide"
-            formControlName="rawSup">
-            <option
-              [value]="0"
-              disabled="disabled">
+          <select #rawSup class="select-wide" formControlName="rawSup">
+            <option [value]="0" disabled="disabled">
               Select
             </option>
-            <option
-              *ngFor="let supplier of rawSupplier; let i=index"
-              [value]="supplier.value">
+            <option *ngFor="let supplier of rawSupplier; let i=index" [value]="supplier.value">
               {{supplier.text}} ({{supplier.address}}, {{supplier.country}})
             </option>
           </select>
         </div>
 
-        <button
-          type="button"
-          class="btn btn-icon">
-          <clr-icon
-            class="icon"
-            shape="plus"
-            (click)="addRawMaterial({rawChem: rawChem.value, rawSup: rawSup.value})">
+        <button type="button" class="btn btn-icon">
+          <clr-icon class="icon" shape="plus" (click)="addRawMaterial({rawChem: rawChem.value, rawSup: rawSup.value})">
           </clr-icon>
         </button>
       </div>
-      <div
-        class="form-group"
-        *ngFor="let mater of rawMaterials.controls; let i=index">
+      <div class="form-group" *ngFor="let mater of rawMaterials.controls; let i=index">
         <label for="selects_2"></label>
-        <a
-          href="javascript:"
-          class="label label-icon-set">
+        <a href="javascript:" class="label label-icon-set">
           <span class="set-margin">{{mater.value.name}}</span>
-          <span class="set-margin-level">{{mater.value.producer.name}} ({{mater.value.producer.address}}, {{mater.value.producer.country}})</span>
-          <clr-icon
-            shape="close"
-            (click)="removeRawMaterial(i)"></clr-icon>
+          <span class="set-margin-level">{{mater.value.producer.name}} ({{mater.value.producer.address}},
+            {{mater.value.producer.country}})</span>
+          <clr-icon shape="close" (click)="removeRawMaterial(i)"></clr-icon>
         </a>
       </div>
 
       <!-- Ingredients -->
 
-      <div
-        formGroupName="formbinding"
-        class="form-group">
+      <div formGroupName="formbinding" class="form-group">
         <label for="selects_1">Ingredients</label>
         <div class="clr-input-wrapper form-position-set">
-          <input
-            #ingred
-            type="tel"
-            id="enzyme"
-            class="clr-input"
-            size="35"
-            style="width:200px"
-            placeholder="Search by Ingredient"
-            formControlName="ingred"
-            (focus)="focusField('ingred')">
-          <app-auto-complete
-            *ngIf="focusedControl=='ingred' && !blurControl"
-            [formField]="'ingred'"
-            (formUpdateEvent)="formUpdate($event)"
-            [filteredUsersTerms]="( ingredientsList$ | async )"></app-auto-complete>
+          <input #ingred type="tel" id="enzyme" class="clr-input" size="35" style="width:200px" placeholder="Search by Ingredient"
+            formControlName="ingred" (focus)="focusField('ingred')" (keydown)="keydownHandler($event,getingredientsListData.bind(this))">
+          <app-auto-complete *ngIf="focusedControl=='ingred' && !blurControl" [formField]="'ingred'" (formUpdateEvent)="formUpdate($event)"
+            [filteredUsersTerms]="( ingredientsList$ | async )" [currentFocus]="currentFocusData"></app-auto-complete>
         </div>
 
         <div class="select">
-          <select
-            #ingredPct
-            class="select-slim"
-            formControlName="ingredPct">
-            <option
-              [value]="0"
-              disabled="disabled">
+          <select #ingredPct class="select-slim" formControlName="ingredPct">
+            <option [value]="0" disabled="disabled">
               Select
             </option>
-            <option
-              *ngFor="let pct of formPercentage; let i=index"
-              [value]="pct">
+            <option *ngFor="let pct of formPercentage; let i=index" [value]="pct">
               {{ pct }}
             </option>
           </select>
         </div>
 
         <div class="select">
-          <select
-            #ingredFunc
-            class="select-narrow"
-            formControlName="ingredFunc">
-            <option
-              [value]="0"
-              disabled="disabled">
+          <select #ingredFunc class="select-narrow" formControlName="ingredFunc">
+            <option [value]="0" disabled="disabled">
               Select
             </option>
-            <option
-              *ngFor="let func of formFunction; let i=index"
-              [value]="func">
+            <option *ngFor="let func of formFunction; let i=index" [value]="func">
               {{ func }}
             </option>
           </select>
         </div>
 
-        <button
-          type="button"
-          class="btn btn-icon">
-          <clr-icon
-            class="icon"
-            shape="plus"
-            (click)="addIngredient({ingredient: ingred.value, percentage: ingredPct.value, function: ingredFunc.value})">
+        <button type="button" class="btn btn-icon">
+          <clr-icon class="icon" shape="plus" (click)="addIngredient({ingredient: ingred.value, percentage: ingredPct.value, function: ingredFunc.value})">
           </clr-icon>
         </button>
       </div>
-      <div
-        class="form-group"
-        *ngFor="let ingred of ingredients.controls; let i=index">
+      <div class="form-group" *ngFor="let ingred of ingredients.controls; let i=index">
         <label for="selects_2"></label>
-        <a
-          href="javascript:"
-          class="label label-icon-set">
+        <a href="javascript:" class="label label-icon-set">
           <span class="set-margin">{{ingred.value.name}}</span>
           <span class="set-margin-level">{{ingred.value.concentration}}</span>
           <span class="set-margin-level">{{ingred.value.ingredientFunction}}</span>
-          <clr-icon
-            shape="close"
-            (click)="removeIngredients(i)"></clr-icon>
+          <clr-icon shape="close" (click)="removeIngredients(i)"></clr-icon>
         </a>
       </div>
 
       <!-- Manufacturing Sites -->
-      <div
-        formGroupName="formbinding"
-        class="form-group">
+      <div formGroupName="formbinding" class="form-group">
         <label for="selects_1">Manufacturing Sites</label>
         <div class="clr-input-wrapper">
-          <input
-            #siteIndex
-            type="tel"
-            id="manufactureSite"
-            class="clr-input"
-            size="35"
-            style="width:200px"
-            placeholder="Search by Site"
+          <input #siteIndex type="tel" id="manufactureSite" class="clr-input" size="35" style="width:200px" placeholder="Search by Site"
             formControlName="siteIndex">
         </div>
 
         <div class="select">
-          <select
-            #siteStep
-            class="select-narrow"
-            formControlName="siteStep">
-            <option
-              [value]="0"
-              disabled="disabled">
+          <select #siteStep class="select-narrow" formControlName="siteStep">
+            <option [value]="0" disabled="disabled">
               Select
             </option>
-            <option
-              *ngFor="let step of formManufactureStep"
-              [value]="step">
+            <option *ngFor="let step of formManufactureStep" [value]="step">
               {{ step }}
             </option>
           </select>
         </div>
 
-        <button
-          type="button"
-          class="btn btn-icon">
-          <clr-icon
-            class="icon"
-            shape="plus"
-            (click)="addManufacturingSite({siteIndex: siteIndex.value, siteStep: siteStep.value })">
+        <button type="button" class="btn btn-icon">
+          <clr-icon class="icon" shape="plus" (click)="addManufacturingSite({siteIndex: siteIndex.value, siteStep: siteStep.value })">
           </clr-icon>
         </button>
       </div>
 
-      <div
-        class="form-group"
-        *ngFor="let site of manufacturingSites.controls; let i=index">
+      <div class="form-group" *ngFor="let site of manufacturingSites.controls; let i=index">
         <label for="selects_2"></label>
-        <a
-          href="javascript:"
-          class="label label-icon-set">
+        <a href="javascript:" class="label label-icon-set">
           <!-- <span class="set-margin">{{site.value.name}} ({{ site.value.country }})</span> -->
           <span class="set-margin-level">{{ site.value.name }}</span>
           <span class="set-margin-level">{{ site.value.process }}</span>
-          <clr-icon
-            shape="close"
-            (click)="removeManufacturingSite(i)"></clr-icon>
+          <clr-icon shape="close" (click)="removeManufacturingSite(i)"></clr-icon>
         </a>
       </div>
 
-      <div
-        class="form-group"
-        formGroupName="formbinding">
+      <div class="form-group" formGroupName="formbinding">
         <label for="example">End Use</label>
         <div class="clr-input-wrapper">
-          <input
-            type="text"
-            id="endUse"
-            placeholder="Search by Name"
-            class="clr-input"
-            name="endUse"
-            formControlName="enduses">
+          <input type="text" id="endUse" placeholder="Search by Name" class="clr-input" name="endUse" formControlName="enduses">
         </div>
       </div>
 
-      <div
-        class="form-group"
-        *ngFor="let enduses of endUses.controls; let i=index">
+      <div class="form-group" *ngFor="let enduses of endUses.controls; let i=index">
         <label for="selects_2"></label>
-        <a
-          href="javascript:"
-          class="label label-icon-set">
+        <a href="javascript:" class="label label-icon-set">
           <span class="set-margin-level">{{ enduses.value.name }}</span>
           <span class="set-margin-level">{{ enduses.value.jurisdiction }}</span>
-          <clr-icon
-            shape="close"
-            (click)="removeEndUses(i)"></clr-icon>
+          <clr-icon shape="close" (click)="removeEndUses(i)"></clr-icon>
         </a>
       </div>
-      <div
-        class="form-group"
-        formGroupName="country">
+      <div class="form-group" formGroupName="country">
         <label for="example">Country</label>
         <div class="select">
-          <select
-            class="select-narrow"
-            formControlName="name">
-            <option
-              [value]="0"
-              disabled="disabled">
+          <select class="select-narrow" formControlName="name">
+            <option [value]="0" disabled="disabled">
               Select
             </option>
-            <option
-              [value]="country"
-              *ngFor="let country of formCountryName">
+            <option [value]="country" *ngFor="let country of formCountryName">
               {{country}}
             </option>
           </select>
@@ -411,17 +228,11 @@
       </div>
 
       <div class="clr-form-control clr-row">
-        <div
-          class="btn-group btn-primary"
-          style="margin:auto">
-          <button
-            class="btn"
-            (click)="complianceOnSubmit(productForm)">
+        <div class="btn-group btn-primary" style="margin:auto">
+          <button class="btn" (click)="complianceOnSubmit(productForm)">
             Submit
           </button>
-          <button
-            class="btn btn-danger"
-            (click)="complianceOnReset(productForm)">
+          <button class="btn btn-danger" (click)="complianceOnReset(productForm)">
             Reset
           </button>
         </div>
