@@ -75,17 +75,23 @@ export class AboutComponent implements OnInit {
         this.productForm = this.createProductForm();
         this.formCountryName = ["United States", "Canada"];
         this.productCodeList.subscribe(next => {
-           // console.log(this.focusedControl)
             this.setProductData('bulkCode');
-            this.store.dispatch(new fromStore.LoadProduct({ name: next }))
+            if(this.focusedControl==='bulkCode'){
+                this.store.dispatch(new fromStore.LoadProduct({ name: next }))
+            }
+            
         });
         this.rawMaterialList.subscribe(next => {
-            this.setProductData('rawMaterials');
-            this.store.dispatch(new fromStore.LoadRawMaterials({ name: next }))
+                this.setProductData('rawMaterials');
+                if(this.focusedControl==='rawMaterials'){
+                    this.store.dispatch(new fromStore.LoadRawMaterials({ name: next }))
+                }
         });
         this.ingredientsList.subscribe(next => {
             this.setProductData('ingred');
-            this.store.dispatch(new fromStore.LoadRawMaterials({ name: next }))
+            if(this.focusedControl==='ingred'){
+             this.store.dispatch(new fromStore.LoadRawMaterials({ name: next }));
+            }
         });
         this.productCodeList$ = this.store.select(fromStore.getProductEntites);
         this.rawMaterialList$ = this.store.select(
@@ -98,9 +104,9 @@ export class AboutComponent implements OnInit {
 
     setProductData(productKey) {
         this.currentFocus = -1;
-        if (this.focusedControl !== productKey || this.formUpdateValue) {
+        if (this.focusedControl !== productKey || this.formUpdateValue ) {
             this.formUpdateValue = false
-            return;
+            return ;
         }
         this.blurControl = false;
     }
@@ -150,13 +156,11 @@ export class AboutComponent implements OnInit {
     }
 
     focusField(name) {
-        //console.log("FocusedFields");
         this.focusedControl = name;
-        this.blurControl = false;
+        this.blurControl = true;
 
     }
     onClick(event) {
-        // //console.log(event)
         if (event.target.tagName !== "INPUT") {
             this.blurControl = true;
         }
@@ -198,7 +202,6 @@ export class AboutComponent implements OnInit {
     }
 
     addProductionStrain(strain) {
-        //console.log("strain======>", strain);
         this.productionStrains.push(
             this.fb.control({
                 uri:
@@ -227,7 +230,6 @@ export class AboutComponent implements OnInit {
     }
 
     addEnzyme(enzymename) {
-        //console.log("enzymename======>", enzymename);
         this.enzymeActivity.push(
             this.fb.control({
                 uri:
@@ -255,8 +257,6 @@ export class AboutComponent implements OnInit {
     }
 
     addRawMaterial(rawIndex) {
-        //console.log("rawIndex===>", rawIndex);
-        //console.log(this.formBindingObject);
         let rawChem = rawIndex.rawChem;
         let getRawSupplier = this.rawSupplier.filter(
             supplier => supplier.value == parseInt(rawIndex.rawSup)
@@ -306,7 +306,6 @@ export class AboutComponent implements OnInit {
     }
 
     addIngredient(indIndex) {
-        //console.log("indIndex======>", indIndex);
         let ingred = indIndex.ingredient;
         let concentration = parseFloat(indIndex.percentage);
         let ingredientFunction = indIndex.function;
@@ -344,7 +343,6 @@ export class AboutComponent implements OnInit {
     }
 
     addManufacturingSite(siteIndex) {
-        //console.log("siteIndex======>", siteIndex);
         this.manufacturingSites.push(
             this.fb.control({
                 uri:
@@ -399,8 +397,6 @@ export class AboutComponent implements OnInit {
     }
 
     formUpdate(event) {
-        // console.log(event);
-        // console.log(this.productForm.get(event.fieldName))
         if (!event.select) return;
         this.formUpdateValue = true;
         if (event.fieldName === "bulkCode") {
@@ -415,7 +411,6 @@ export class AboutComponent implements OnInit {
     }
 
     updateProductField(selectField) {
-        //console.log(event);
         this.store.dispatch(
             new fromStore.LoadProductForm({
                 name: selectField.select.bulkCode,
@@ -451,6 +446,7 @@ export class AboutComponent implements OnInit {
     }
 
     complianceOnReset(product) {
+        this.focusedControl =''
         let { bulkCode, country, uri, ...property } = product.controls;
         Object.keys(property).map(item => this.resetValue(item));
         Object.keys(resetSmartCompliance).map(item =>
@@ -479,7 +475,6 @@ export class AboutComponent implements OnInit {
         if (this.currentFocus >= data.length) this.currentFocus = 0;
         if (this.currentFocus < 0) this.currentFocus = (data.length - 1);
         this.currentFocusData = { data: data[this.currentFocus], count: this.currentFocus }
-        // console.log('this.currentFocus===>',this.currentFocus); 
     }
 
     createProductForm() {
