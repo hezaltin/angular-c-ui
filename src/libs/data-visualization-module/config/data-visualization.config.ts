@@ -124,3 +124,27 @@ export const DataVisualizationSearchResponse =  {
         }
     ]
   }
+
+  export const getProductDropDownResponse =  [
+    {
+        name:'visualProductsCountry',
+        subProductsList:[
+                            {
+                                name:'country',
+                                list:['USA','Canada','United Kingdom','Brazil','Argentena']
+                            }
+                        ],
+        list:['country','enzyme','productStrains','RawMaterials','Ingeridents'],
+        id:Math.random()
+    },
+    {
+        name:'visualProducts',
+        subProductsList:[
+            {
+                name:'productStrain',
+                list:['productStrain 1','productStrain 2','productStrain 3','productStrain 4','productStrain 5']
+            }
+        ],
+        list:['country','enzyme','productStrains','RawMaterials','Ingeridents']
+    }
+]

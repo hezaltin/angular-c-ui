@@ -1,0 +1,24 @@
+<div class="dropdown-container"  *ngFor="let productDropdown of products let dropdownndex=index">
+    <clr-dropdown>
+            <button type="button" class="btn btn-outline-primary" clrDropdownTrigger>
+                {{productDropdown.name}}
+                <clr-icon shape="caret down"></clr-icon>
+            </button>
+            <clr-dropdown-menu clrPosition="top-bottom" *clrIfOpen>
+                <label class="dropdown-header">Products</label>
+                <button type="button" clrDropdownItem *ngFor="let productlist of productDropdown.list let proIndex=index" (click)="changeHandler($event,dropdownndex)">{{productlist}}</button>
+            </clr-dropdown-menu>
+    </clr-dropdown>
+
+    <clr-dropdown *ngFor="let productSubDropDown of productDropdown.subProductsList let subIndex=index">
+            <button type="button" class="btn btn-outline-primary" clrDropdownTrigger>
+                    {{productSubDropDown.name}}
+                <clr-icon shape="caret down"></clr-icon>
+            </button>
+            <clr-dropdown-menu clrPosition="top-bottom" *clrIfOpen>
+                <label class="dropdown-header">{{productSubDropDown.name}}</label>
+                <button type="button" clrDropdownItem *ngFor="let productSublist of productSubDropDown.list let listIndex=index" (click)="changeHandlerSubList($event,dropdownndex)">{{productSublist}}</button>
+            </clr-dropdown-menu>
+    </clr-dropdown>
+
+</div>

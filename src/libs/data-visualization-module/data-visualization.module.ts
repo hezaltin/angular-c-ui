@@ -4,6 +4,7 @@ import { ClarityModule } from '@clr/angular';
 import { FormsModule,ReactiveFormsModule } from '@angular/forms';
 import { Routes, RouterModule } from '@angular/router';
 import {DataVisualizationComponent} from './data-visualization/data-visualization.component';
+import {VisualizationDropdownComponent} from './visualization-dropdown-component/visualization-dropdown.component'
 import {DataVisualizationService} from './services/data-visualization.service';
 import { HttpClientModule } from '@angular/common/http';
 import {StoreModule} from '@ngrx/store';
@@ -27,7 +28,8 @@ export const ROUTES: Routes = [
     EffectsModule.forFeature(effects)
   ],
   declarations: [
-    DataVisualizationComponent
+    DataVisualizationComponent,
+    VisualizationDropdownComponent
 
   ],
   providers:[DataVisualizationService]

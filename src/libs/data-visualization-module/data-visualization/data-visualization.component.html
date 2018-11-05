@@ -1,3 +1,10 @@
+
+<button class="btn btn-icon" (click)="addProductComponent($event)">
+                <clr-icon shape="add"></clr-icon>
+        Add Component</button>
+
+<app-data-visualization-dropdown [dropdownVisual]="productDropdown" (emitdropDown)="getParentDropDown($event)"></app-data-visualization-dropdown>
+
 <form [formGroup]="visualForm" class="clr-form clr-form-horizontal" autocomplete="off">
         <div class="form-group"  >
                 <label for="example">Search Value</label>
