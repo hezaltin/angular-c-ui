@@ -1,5 +1,18 @@
 .dropdown-container{
     display:flex;
+    margin-bottom: 1rem;
     // flex-direction: row;
     // justify-content: space-evenly;
+}
+.dropdown-container > .select{
+    width:20%;
+    margin-right: 30px;
+}
+
+.form-group-visual{
+    display:flex;
+}
+
+.form-label{
+    margin-right: 10px;
 }

@@ -1,24 +1,25 @@
 <div class="dropdown-container"  *ngFor="let productDropdown of products let dropdownndex=index">
-    <clr-dropdown>
-            <button type="button" class="btn btn-outline-primary" clrDropdownTrigger>
-                {{productDropdown.name}}
-                <clr-icon shape="caret down"></clr-icon>
-            </button>
-            <clr-dropdown-menu clrPosition="top-bottom" *clrIfOpen>
-                <label class="dropdown-header">Products</label>
-                <button type="button" clrDropdownItem *ngFor="let productlist of productDropdown.list let proIndex=index" (click)="changeHandler($event,dropdownndex)">{{productlist}}</button>
-            </clr-dropdown-menu>
-    </clr-dropdown>
+    <div class="select">
+        <select #rawSup class="select-wide" (change)="changeHandler($event,dropdownndex)">
+          <option [value]="0" disabled="disabled">
+            {{productDropdown.name}}
+          </option>
+          <option *ngFor="let productlist of productDropdown.list let proIndex=index" [value]="productlist">
+            {{productlist}}
+          </option>
+        </select>
+      </div>
 
-    <clr-dropdown *ngFor="let productSubDropDown of productDropdown.subProductsList let subIndex=index">
-            <button type="button" class="btn btn-outline-primary" clrDropdownTrigger>
-                    {{productSubDropDown.name}}
-                <clr-icon shape="caret down"></clr-icon>
-            </button>
-            <clr-dropdown-menu clrPosition="top-bottom" *clrIfOpen>
-                <label class="dropdown-header">{{productSubDropDown.name}}</label>
-                <button type="button" clrDropdownItem *ngFor="let productSublist of productSubDropDown.list let listIndex=index" (click)="changeHandlerSubList($event,dropdownndex)">{{productSublist}}</button>
-            </clr-dropdown-menu>
-    </clr-dropdown>
+    <div class="form-group form-group-visual"  *ngFor="let productSubDropDown of productDropdown.subProductsList let subIndex=index">
+        <!-- <label for="example" class="form-label"> {{productSubDropDown.name}}</label> -->
+
+        <div class="clr-input-wrapper flex-box-class">
+          <input
+            id="vizualizationCode"
+            placeholder="{{productSubDropDown.name}}"
+            class="clr-input"
+            name="vizualizationCode">
+      </div>
+    </div>
 
 </div>
