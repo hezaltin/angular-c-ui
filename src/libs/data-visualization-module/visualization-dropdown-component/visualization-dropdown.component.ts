@@ -31,7 +31,8 @@ export class VisualizationDropdownComponent {
     }
 
     changeHandler(event,drodownIndex){  
-        this.emitdropDown.emit({index:drodownIndex,eventName:event.target.textContent})
+        console.log(event)
+        this.emitdropDown.emit({index:drodownIndex,eventName:event.target.value})
     }
 
     changeHandlerSubList(event,drodownIndex){
