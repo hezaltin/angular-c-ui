@@ -3,21 +3,41 @@
                 <clr-icon shape="add"></clr-icon>
         Add Filter</button>
 
-<app-data-visualization-dropdown [dropdownVisual]="productDropdown" (emitdropDown)="getParentDropDown($event)"></app-data-visualization-dropdown>
-
 <form [formGroup]="visualForm" class="clr-form clr-form-horizontal" autocomplete="off">
-        <div class="form-group"  >
-                <label for="example">Search Value</label>
-        
-                <div class="clr-input-wrapper flex-box-class">
-                  <input
-                    id="vizualizationCode"
-                    formControlName="vizualizationCode"
-                    placeholder="Search by Visualization Code..."
-                    class="clr-input"
-                    name="vizualizationCode">
-              </div>
+        <div class="filter-container"  formGroupName="filterControl" *ngFor="let productDropdown of filterControl.controls let dropdownndex=index">
+        <div class="filter-field-control" [formGroup]="filterControl.controls[dropdownndex]">
+                <div class="select" >
+                        <select  class="select-wide" (change)="changeFIlterField($event,dropdownndex)"  formControlName="fieldId">
+                                <option [value]="0" disabled="disabled" >
+                                            {{productDropdown.value.name}}
+                                </option>
+                                <option *ngFor="let productlist of productList let proIndex=index" [value]="productlist">
+                                        {{productlist}}
+                                </option>
+                        </select>
+                </div>
+
+                <div class="form-group form-group-visual">
+                        <div class="clr-input-wrapper flex-box-class">
+                                <input id="vizualizationCode" formControlName="fieldValues" placeholder="{{productDropdown.value.fieldId}}" class="clr-input" name="vizualizationCode" (focus)="focusField('rawMaterials')" (keydown)="keydownHandler($event,getFieldValues.bind(this))">
+
+                                <app-data-visualization-dropdown *ngIf="focusedControl=='fieldVaues' && !blurControl" [formField]="'fieldVaues'" (formUpdateEvent)="formUpdate($event)" [filteredUsersTerms]="( ingredientsList$ | async )" [currentFocus]="currentFocusData"></app-data-visualization-dropdown>
+                        </div>
+                </div>
+
+                <div class="form-group form-group-visual">
+                        <div class="clr-input-wrapper flex-box-class">
+                                <input id="vizualizationProductId" formControlName="productId" placeholder="{{productDropdown.value.fieldId}}" class="clr-input"
+                                name="vizualizationProductId" (focus)="focusField('productId')" (keydown)="keydownHandler($event,getProductId.bind(this))">
+                                
+                                <app-data-visualization-dropdown *ngIf="focusedControl=='productId' && !blurControl" [formField]="'productId'" (formUpdateEvent)="formUpdate($event)" [filteredUsersTerms]="( ingredientsList$ | async )" [currentFocus]="currentFocusData"></app-data-visualization-dropdown>
+                        </div>
+                </div>
+
+        </div>       
+               
         </div>
+
 </form>
 
 
