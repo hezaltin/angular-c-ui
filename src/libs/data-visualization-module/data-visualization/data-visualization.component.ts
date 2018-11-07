@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { DataVisualizationService } from "../services/data-visualization.service";
 import { Observable } from "rxjs";
-import {getProductDropDownResponse} from '../config/data-visualization.config';
+import {getProductDropDownResponse,productList} from '../config/data-visualization.config';
 import { FormBuilder, FormGroup, FormArray, FormControl } from "@angular/forms";
 import { debounceTime, map, switchMap, delay, filter } from "rxjs/operators";
 
@@ -9,15 +9,27 @@ import * as fromVisual from '../store';
 import { VisualStateReducer } from '../store'
 import { Store } from "@ngrx/store";
 
+const keyCodes = { keyup: 38, keydown: 40, enter: 13 }
+
 @Component({
     styleUrls: ["./data-visualization.component.scss"],
-    templateUrl: "./data-visualization.component.html"
+    templateUrl: "./data-visualization.component.html",
+    host: {
+        "(document:click)": "onClick($event)"
+    }
 })
 export class DataVisualizationComponent {
     public getVisualData$: any;
     public getVisualData: any[];
     public visualForm: any;
     public productDropdown : any;
+    public productList:any;
+    public focusedControl:string;
+    public blurControl:boolean
+    rawMaterialList$: Observable<any>;
+    currentFocus: number = -1;
+    currentFocusData: any;
+     
     constructor(
         private dataVisualService: DataVisualizationService,
         private fb: FormBuilder,
@@ -30,12 +42,21 @@ export class DataVisualizationComponent {
         this.visualizationCodeList.subscribe(next => {this.store.dispatch(new fromVisual.LoadVisualChanges({ name: next }) )});
         this.store.select(fromVisual.getVisualChangesEntites).subscribe(next=>this.getVisualData = next)
         this.store.dispatch(new fromVisual.LoadVisual());
-        this.store.select(fromVisual.getVisualEntites).subscribe(next=>this.getVisualData = next) 
-        this.productDropdown = [...getProductDropDownResponse];
+        this.store.select(fromVisual.getVisualEntites).subscribe(next=>this.getVisualData = next) ;
+        this.productList = productList;
+        console.log(this.filterControl);
+        // this.rawMaterialList$ = this.store.select(
+        //     fromVisual.getRawMaterialsEntites
+        // );
     }
+
 
     get visualizationCode() {
         return this.visualForm.get("vizualizationCode") as FormControl;
+    }
+
+    get filterControl(){
+        return this.visualForm.get('filterControl') as FormArray
     }
 
     get visualizationCodeList() {
@@ -44,32 +65,79 @@ export class DataVisualizationComponent {
 
     creatVisualforms() {
         return this.fb.group({
-            vizualizationCode: ["visual data"]
+            vizualizationCode: ["visual data"],
+            filterControl : this.fb.array([])
         });
     }
 
+    getrawMaterialListData() {
+        let productData;
+        this.rawMaterialList$.subscribe(productCode => productData = productCode)
+        return { productData: productData, fieldName: 'rawMaterials' };
+    }
+
     addProductComponent(event){
-       let getData = this.addProductDropdownData();
-       let extractProductDropDown = this.productDropdown.map(item=>item)
-       this.productDropdown =[...extractProductDropDown,getData]
+       this.filterControl.push(this.fb.group({
+            name:['productFields'],
+            fieldId:[''],
+            fieldValues:'',
+            productId:''
+
+       }));
+       this.filterControl.controls[ this.filterControl.length-1].get('fieldValues').valueChanges.subscribe(next=>{
+            console.log('valuesChanges',next);
+        })
+        this.filterControl.controls[ this.filterControl.length-1].get('productId').valueChanges.subscribe(next=>{
+            console.log('valuesChanges',next);
+        })
     }
 
-    addProductDropdownData(){
-        let addData = {
-            name:'visualProducts',
-            subProductsList:[],
-            list:['country','enzyme','productStrains','RawMaterials','Ingeridents']
-        }    
-        return addData;
+
+    changeFIlterField(event,index){
+            this.visualForm.controls.filterControl.controls[index].patchValue({
+                fieldId :event.target.value
+            })
     }
 
-    getParentDropDown(event){
-        let getProductValues = this.productDropdown.map(item=>item);
-        let getSubTree = this.addSubListTreeBasedOnParent(event.eventName);
-        getProductValues[event.index].subProductsList=[];
-        getProductValues[event.index].subProductsList.push({name:event.eventName,list:getSubTree});
-        this.productDropdown = [...getProductValues];
+    formUpdate(event){
+        console.log(event)
     }
+
+    focusField(name) {
+        this.focusedControl = name;
+        this.blurControl = true;
+
+    }
+    onClick(event) {
+        if (event.target.tagName !== "INPUT") {
+            this.blurControl = true;
+        }
+    }
+
+    //Keydown autocomplete
+    keydownHandler(event, field) {
+        let dataValue = field();
+        if (!dataValue.productData) return;
+        if (event.keyCode == keyCodes.keydown) {
+            this.currentFocus++;
+            this.activeList(dataValue.productData);
+        } else if (event.keyCode == keyCodes.keyup) {
+            this.currentFocus--;
+            this.activeList(dataValue.productData);
+        } else if (event.keyCode === keyCodes.enter) {
+            event.preventDefault();
+            this.formUpdate({ select: dataValue.productData[this.currentFocus], fieldName: dataValue.fieldName });
+        }
+    }
+
+    activeList(data) {
+        if (!data) return false;
+        if (this.currentFocus >= data.length) this.currentFocus = 0;
+        if (this.currentFocus < 0) this.currentFocus = (data.length - 1);
+        this.currentFocusData = { data: data[this.currentFocus], count: this.currentFocus }
+    }
+
+   
 
 
 

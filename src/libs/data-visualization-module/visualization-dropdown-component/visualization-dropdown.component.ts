@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, SimpleChanges, EventEmitter, Output } from "@angular/core";
+import { Component, OnInit, Input, SimpleChanges, EventEmitter, Output, ElementRef, Renderer2, ViewChild } from "@angular/core";
 
 
 @Component({
@@ -7,22 +7,21 @@ import { Component, OnInit, Input, SimpleChanges, EventEmitter, Output } from "@
     templateUrl: "./visualization-dropdown.component.html"
 })
 export class VisualizationDropdownComponent {
-    @Input() dropdownVisual;
-    @Output() emitdropDown= new EventEmitter;
+    @Input() filteredUsersTerms;
+    @Output() formUpdateEvent = new EventEmitter();
+    @Input() formField;
+    @Input() currentFocus;
+    @ViewChild('list') list: ElementRef
     public getVisualData$: any;
     public getVisualData: any[];
     public products: any;
     
-    constructor() {}
+    constructor(private elementref: ElementRef, private renderer: Renderer2) {}
 
     ngOnChanges(changes:SimpleChanges){
-            console.log('changes===>',changes)
-            if(changes.dropdownVisual){
-                if(changes.dropdownVisual.currentValue){
-                    this.products = changes.dropdownVisual.currentValue
-                }
-            }
-           
+        if (changes.currentFocus) {
+            this.setAutoListClass(changes.currentFocus['currentValue'])
+          }
     }
 
     ngOnInit() {
@@ -30,18 +29,24 @@ export class VisualizationDropdownComponent {
         
     }
 
-    changeHandler(event,drodownIndex){  
-        console.log(event)
-        this.emitdropDown.emit({index:drodownIndex,eventName:event.target.value})
-    }
-
-    changeHandlerSubList(event,drodownIndex){
-        
-    }
-
-    getProductData(index){
-        return this.products[index];
-    }
+    selectedId(selectId) {
+        this.formUpdateEvent.emit({ select: selectId, fieldName: this.formField })
+      }
+    
+    
+      setAutoListClass(data) {
+        let nativeElement = this.list.nativeElement.children;
+        if (!nativeElement.length) return;
+        this.removeAutoListClass(nativeElement);
+        this.renderer.addClass(nativeElement[data.count], 'autocomplete-active')
+      }
+    
+      removeAutoListClass(nativeCollections) {
+        for (let i = 0; i < nativeCollections.length; i++) {
+          this.renderer.removeClass(nativeCollections[i], 'autocomplete-active');
+        }
+      }
+    
 
 
     

@@ -2,21 +2,26 @@ import {ActionReducerMap, createFeatureSelector,createSelector} from '@ngrx/stor
 
 import * as fromVisuals from '../reducers/visualization-default.reducers';
 import * as fromVisualsChanges from '../reducers/visualization-changes.reducers';
+import * as fieldValues from '../reducers/field-values.reducers';
 
 
 export interface VisualStateReducer{
     visual:fromVisuals.VisualState,
-    visualChanges : fromVisualsChanges.VisualChangesState
+    visualChanges : fromVisualsChanges.VisualChangesState,
+    fieldValues : fieldValues.FieldValuesState
    
 }
 
 
 export const reducers:ActionReducerMap<VisualStateReducer> = {
     visual: fromVisuals.reducers,
-    visualChanges: fromVisualsChanges.reducers
+    visualChanges: fromVisualsChanges.reducers,
+    fieldValues : fieldValues.reducers
 }
 
 export const getVisualStateReducerFeature = createFeatureSelector<VisualStateReducer>('visuals');
 
 export const getVisualStateReducer = createSelector(getVisualStateReducerFeature,(state:VisualStateReducer)=>state.visual);
 export const getVisualChangesStateReducer = createSelector(getVisualStateReducerFeature,(state:VisualStateReducer)=>state.visualChanges);
+
+export const getFieldValues = createSelector(getVisualStateReducerFeature,(state:VisualStateReducer)=>state.fieldValues);

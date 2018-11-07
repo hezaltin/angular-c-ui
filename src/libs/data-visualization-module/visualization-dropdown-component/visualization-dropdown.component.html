@@ -1,25 +1,11 @@
-<div class="dropdown-container"  *ngFor="let productDropdown of products let dropdownndex=index">
-    <div class="select">
-        <select #rawSup class="select-wide" (change)="changeHandler($event,dropdownndex)">
-          <option [value]="0" disabled="disabled">
-            {{productDropdown.name}}
-          </option>
-          <option *ngFor="let productlist of productDropdown.list let proIndex=index" [value]="productlist">
-            {{productlist}}
-          </option>
-        </select>
-      </div>
+<div id="productCodes" class="autocomplete-items" #list>
+  <ul *ngFor="let user of filteredUsersTerms" (click)="selectedId(user)" style="list-style-type:none">
+      <li *ngIf="formField=== 'bulkCode'">
+          <a>{{user.term}}</a>
+          <br>
+          <small>ExternalProductName: {{user.externalProductName}}</small>
+          <small class="mb-1">InternalProductName: {{user.internalProductName}}</small>
+      </li>
 
-    <div class="form-group form-group-visual"  *ngFor="let productSubDropDown of productDropdown.subProductsList let subIndex=index">
-        <!-- <label for="example" class="form-label"> {{productSubDropDown.name}}</label> -->
-
-        <div class="clr-input-wrapper flex-box-class">
-          <input
-            id="vizualizationCode"
-            placeholder="{{productSubDropDown.name}}"
-            class="clr-input"
-            name="vizualizationCode">
-      </div>
-    </div>
-
+  </ul>
 </div>

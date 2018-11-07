@@ -147,4 +147,6 @@ export const DataVisualizationSearchResponse =  {
         ],
         list:['country','enzyme','productStrains','RawMaterials','Ingeridents']
     }
-]
+];
+
+export const productList = ['country','enzyme','productStrains','RawMaterials','Ingeridents'];
