@@ -30,6 +30,7 @@ export class DataVisualizationComponent {
     fieldValueList$: Observable<any>;
     currentFocus: number = -1;
     currentFocusData: any;
+    formUpdateValue:boolean = false;
      
     constructor(
         private dataVisualService: DataVisualizationService,
@@ -87,7 +88,7 @@ export class DataVisualizationComponent {
     addProductComponent(event){
        this.filterControl.push(this.fb.group({
             name:['productFields'],
-            fieldId:[''],
+            fieldId:['select'],
             fieldValues:'',
             productId:''
 
@@ -104,14 +105,28 @@ export class DataVisualizationComponent {
     }
 
 
-    changeFIlterField(event,index){
+    changeFilterField(event,index){
             this.visualForm.controls.filterControl.controls[index].patchValue({
                 fieldId :event.target.value
             })
     }
 
     formUpdate(event){
-        console.log(event)
+        console.log('event===>',event)
+        console.log('this.focusControlIndex===>',this.focusControlIndex)
+
+        if (!event.select) return;
+       if(event.fieldName === "fieldValues"){
+            this.visualForm.controls.filterControl.controls[this.focusControlIndex].patchValue({
+                fieldValues :event.select.term
+            })
+       }
+       else if(event.fieldName === "productId"){
+        this.visualForm.controls.filterControl.controls[this.focusControlIndex].patchValue({
+            productId :event.select.term
+        })
+       }
+        this.blurControl = true;
     }
 
     focusField(index,name) {
@@ -130,7 +145,6 @@ export class DataVisualizationComponent {
     //Keydown autocomplete
     keydownHandler(event, field) {
         let dataValue = field();
-        console.log(dataValue)
         if (!dataValue.productData) return;
         if (event.keyCode == keyCodes.keydown) {
             this.currentFocus++;

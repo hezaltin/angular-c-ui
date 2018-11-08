@@ -1,15 +1,14 @@
 
-<button class="btn btn-icon btn-sm" (click)="addProductComponent($event)">
+<form [formGroup]="visualForm" class="clr-form clr-form-horizontal" autocomplete="off">
+        <button class="btn btn-icon btn-sm" (click)="addProductComponent($event)" [disabled]="visualForm.controls.filterControl.controls[visualForm.filterControl.controls.length-1].controls.fieldId==='select'">
                 <clr-icon shape="add"></clr-icon>
         Add Filter</button>
-
-<form [formGroup]="visualForm" class="clr-form clr-form-horizontal" autocomplete="off">
         <div class="filter-container"  formGroupName="filterControl" *ngFor="let productDropdown of filterControl.controls let dropdownndex=index">
         <div class="filter-field-control" [formGroup]="filterControl.controls[dropdownndex]">
                 <div class="select" >
-                        <select  class="select-wide" (change)="changeFIlterField($event,dropdownndex)"  formControlName="fieldId">
-                                <option [value]="0" disabled="disabled" >
-                                            {{productDropdown.value.name}}
+                        <select  class="select-wide" (change)="changeFilterField($event,dropdownndex)"  formControlName="fieldId">
+                                <option [value]="'select'" disabled="disabled" >
+                                            {{productDropdown.value.fieldId}}
                                 </option>
                                 <option *ngFor="let productlist of productList let proIndex=index" [value]="productlist">
                                         {{productlist}}
@@ -17,7 +16,7 @@
                         </select>
                 </div>
 
-                <div class="form-group form-group-visual">
+                <div class="form-group form-group-visual" *ngIf="productDropdown.value.fieldId!=='select'">
                         <div class="clr-input-wrapper flex-box-class">
                                 <input id="vizualizationCode" formControlName="fieldValues" placeholder="{{productDropdown.value.fieldId}}" class="clr-input" name="vizualizationCode" (focus)="focusField(dropdownndex,'fieldValues')" (keydown)="keydownHandler($event,getfieldValueListData.bind(this))">
 
@@ -25,7 +24,7 @@
                         </div>
                 </div>
 
-                <div class="form-group form-group-visual">
+                <div class="form-group form-group-visual" *ngIf="productDropdown.value.fieldId!=='select'">
                         <div class="clr-input-wrapper flex-box-class">
                                 <input id="vizualizationProductId" formControlName="productId" placeholder="{{productDropdown.value.fieldId}}" class="clr-input"
                                 name="vizualizationProductId" (focus)="focusField(dropdownndex,'productId')" (keydown)="keydownHandler($event,getProductIdListData.bind(this))">
