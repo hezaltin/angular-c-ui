@@ -19,18 +19,18 @@
 
                 <div class="form-group form-group-visual">
                         <div class="clr-input-wrapper flex-box-class">
-                                <input id="vizualizationCode" formControlName="fieldValues" placeholder="{{productDropdown.value.fieldId}}" class="clr-input" name="vizualizationCode" (focus)="focusField('rawMaterials')" (keydown)="keydownHandler($event,getFieldValues.bind(this))">
+                                <input id="vizualizationCode" formControlName="fieldValues" placeholder="{{productDropdown.value.fieldId}}" class="clr-input" name="vizualizationCode" (focus)="focusField(dropdownndex,'fieldValues')" (keydown)="keydownHandler($event,getfieldValueListData.bind(this))">
 
-                                <app-data-visualization-dropdown *ngIf="focusedControl=='fieldVaues' && !blurControl" [formField]="'fieldVaues'" (formUpdateEvent)="formUpdate($event)" [filteredUsersTerms]="( ingredientsList$ | async )" [currentFocus]="currentFocusData"></app-data-visualization-dropdown>
+                                <app-data-visualization-dropdown *ngIf="focusedControl=='fieldValues' && focusControlIndex ==dropdownndex && !blurControl" (formUpdateEvent)="formUpdate($event)" [filteredUsersTerms]="( (fieldValueList$) | async )" [currentFocus]="currentFocusData"></app-data-visualization-dropdown>
                         </div>
                 </div>
 
                 <div class="form-group form-group-visual">
                         <div class="clr-input-wrapper flex-box-class">
                                 <input id="vizualizationProductId" formControlName="productId" placeholder="{{productDropdown.value.fieldId}}" class="clr-input"
-                                name="vizualizationProductId" (focus)="focusField('productId')" (keydown)="keydownHandler($event,getProductId.bind(this))">
+                                name="vizualizationProductId" (focus)="focusField(dropdownndex,'productId')" (keydown)="keydownHandler($event,getProductIdListData.bind(this))">
                                 
-                                <app-data-visualization-dropdown *ngIf="focusedControl=='productId' && !blurControl" [formField]="'productId'" (formUpdateEvent)="formUpdate($event)" [filteredUsersTerms]="( ingredientsList$ | async )" [currentFocus]="currentFocusData"></app-data-visualization-dropdown>
+                                <app-data-visualization-dropdown *ngIf="focusedControl=='productId' && focusControlIndex ==dropdownndex && !blurControl" [formField]="dropdownndex" (formUpdateEvent)="formUpdate($event)" [filteredUsersTerms]="( fieldValueList$ | async )" [currentFocus]="currentFocusData"></app-data-visualization-dropdown>
                         </div>
                 </div>
 
