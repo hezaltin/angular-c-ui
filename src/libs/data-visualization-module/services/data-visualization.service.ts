@@ -36,7 +36,8 @@ export class DataVisualizationService {
     let headers = new HttpHeaders().set('Content-Type', 'application/json');
    // let url ='http://esanalyticsdv.es.dupont.com:7070/suggest/product?query='+productValue.name;
    // return this.http.get(url);
-    return Observable.of(res).pipe(delay(0));
+   console.log(res.terms)
+    return Observable.of(res.terms).pipe(delay(0));
   }
 
 

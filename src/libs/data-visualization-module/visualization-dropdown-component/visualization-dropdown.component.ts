@@ -19,6 +19,7 @@ export class VisualizationDropdownComponent {
     constructor(private elementref: ElementRef, private renderer: Renderer2) {}
 
     ngOnChanges(changes:SimpleChanges){
+     // console.log('changes===>',changes)
         if (changes.currentFocus) {
             this.setAutoListClass(changes.currentFocus['currentValue'])
           }

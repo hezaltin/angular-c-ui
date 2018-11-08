@@ -25,8 +25,9 @@ export class DataVisualizationComponent {
     public productDropdown : any;
     public productList:any;
     public focusedControl:string;
+    public focusControlIndex:number;
     public blurControl:boolean
-    rawMaterialList$: Observable<any>;
+    fieldValueList$: Observable<any>;
     currentFocus: number = -1;
     currentFocusData: any;
      
@@ -44,10 +45,10 @@ export class DataVisualizationComponent {
         this.store.dispatch(new fromVisual.LoadVisual());
         this.store.select(fromVisual.getVisualEntites).subscribe(next=>this.getVisualData = next) ;
         this.productList = productList;
-        console.log(this.filterControl);
-        // this.rawMaterialList$ = this.store.select(
-        //     fromVisual.getRawMaterialsEntites
-        // );
+        //this.fieldValueList$ = this.dataVisualService.getSearchFieldValues('next');
+        this.fieldValueList$ = this.store.select(fromVisual.getFieldValuesEntites);
+        console.log(this.fieldValueList$ );
+        
     }
 
 
@@ -70,10 +71,17 @@ export class DataVisualizationComponent {
         });
     }
 
-    getrawMaterialListData() {
+    getfieldValueListData() {
         let productData;
-        this.rawMaterialList$.subscribe(productCode => productData = productCode)
-        return { productData: productData, fieldName: 'rawMaterials' };
+        this.fieldValueList$.subscribe(productCode => productData = productCode);
+        console.log(productData)
+        return { productData: productData, fieldName: 'fieldValues' };
+    }
+    getProductIdListData(){
+        let productData;
+        this.fieldValueList$.subscribe(productCode => productData = productCode);
+        console.log(productData)
+        return { productData: productData, fieldName: 'productId' };
     }
 
     addProductComponent(event){
@@ -84,11 +92,14 @@ export class DataVisualizationComponent {
             productId:''
 
        }));
+       this.currentFocus = -1;
        this.filterControl.controls[ this.filterControl.length-1].get('fieldValues').valueChanges.subscribe(next=>{
-            console.log('valuesChanges',next);
+            this.blurControl = false;
+
         })
         this.filterControl.controls[ this.filterControl.length-1].get('productId').valueChanges.subscribe(next=>{
             console.log('valuesChanges',next);
+            this.blurControl = false;
         })
     }
 
@@ -103,7 +114,9 @@ export class DataVisualizationComponent {
         console.log(event)
     }
 
-    focusField(name) {
+    focusField(index,name) {
+        console.log(name)
+        this.focusControlIndex=index;
         this.focusedControl = name;
         this.blurControl = true;
 
@@ -117,6 +130,7 @@ export class DataVisualizationComponent {
     //Keydown autocomplete
     keydownHandler(event, field) {
         let dataValue = field();
+        console.log(dataValue)
         if (!dataValue.productData) return;
         if (event.keyCode == keyCodes.keydown) {
             this.currentFocus++;
