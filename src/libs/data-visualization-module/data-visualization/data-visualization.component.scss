@@ -1,7 +1,7 @@
 
 .filter-field-control{
     display:flex;
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
     // flex-direction: row;
     // justify-content: space-evenly;
 }
@@ -17,3 +17,16 @@
 .form-label{
     margin-right: 10px;
 }
+
+.form-group-visual{
+    padding-left: 0.5rem;
+}
+
+// .visual-filter-form{
+//     max-height: 300px;
+//     overflow: auto;
+//     /* box-shadow: 5px 10px #888888; */
+//     box-shadow: 0 0.125rem 0 0 #d7d7d7;
+//     border-radius: .125rem;
+//     /* border: 1px solid #d7d7d7; */
+// }

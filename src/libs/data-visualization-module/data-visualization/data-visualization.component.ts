@@ -2,7 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { DataVisualizationService } from "../services/data-visualization.service";
 import { Observable } from "rxjs";
 import {getProductDropDownResponse,productList} from '../config/data-visualization.config';
-import { FormBuilder, FormGroup, FormArray, FormControl } from "@angular/forms";
+import { FormBuilder, FormGroup, FormArray, FormControl, Validators } from "@angular/forms";
 import { debounceTime, map, switchMap, delay, filter } from "rxjs/operators";
 
 import * as fromVisual from '../store';
@@ -31,6 +31,7 @@ export class DataVisualizationComponent {
     currentFocus: number = -1;
     currentFocusData: any;
     formUpdateValue:boolean = false;
+    addFilterDisabled:boolean = false;
      
     constructor(
         private dataVisualService: DataVisualizationService,
@@ -46,12 +47,10 @@ export class DataVisualizationComponent {
         this.store.dispatch(new fromVisual.LoadVisual());
         this.store.select(fromVisual.getVisualEntites).subscribe(next=>this.getVisualData = next) ;
         this.productList = productList;
-        //this.fieldValueList$ = this.dataVisualService.getSearchFieldValues('next');
         this.fieldValueList$ = this.store.select(fromVisual.getFieldValuesEntites);
         console.log(this.fieldValueList$ );
         
     }
-
 
     get visualizationCode() {
         return this.visualForm.get("vizualizationCode") as FormControl;
@@ -78,6 +77,7 @@ export class DataVisualizationComponent {
         console.log(productData)
         return { productData: productData, fieldName: 'fieldValues' };
     }
+    
     getProductIdListData(){
         let productData;
         this.fieldValueList$.subscribe(productCode => productData = productCode);
@@ -86,9 +86,10 @@ export class DataVisualizationComponent {
     }
 
     addProductComponent(event){
+        console.log(this.filterControl)
        this.filterControl.push(this.fb.group({
             name:['productFields'],
-            fieldId:['select'],
+            fieldId:['select',Validators.required],
             fieldValues:'',
             productId:''
 
@@ -101,14 +102,25 @@ export class DataVisualizationComponent {
         this.filterControl.controls[ this.filterControl.length-1].get('productId').valueChanges.subscribe(next=>{
             console.log('valuesChanges',next);
             this.blurControl = false;
-        })
+        });
+        this.addFilterDisabled =true;
+    }
+
+    removeProductComponent(event,index){
+        this.filterControl.removeAt(index);
     }
 
 
     changeFilterField(event,index){
             this.visualForm.controls.filterControl.controls[index].patchValue({
-                fieldId :event.target.value
+                fieldId :event.target.value,
+                fieldValues:'',
+                productId:''
             })
+            if(this.filterControl.controls[ this.filterControl.length-1].get('fieldId').value==='select'){
+                return;
+            }
+            this.addFilterDisabled = false;
     }
 
     formUpdate(event){

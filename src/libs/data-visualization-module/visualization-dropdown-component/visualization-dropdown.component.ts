@@ -31,6 +31,7 @@ export class VisualizationDropdownComponent {
     }
 
     selectedId(selectId) {
+      console.log(this.formField)
         this.formUpdateEvent.emit({ select: selectId, fieldName: this.formField })
       }
     
@@ -46,9 +47,5 @@ export class VisualizationDropdownComponent {
         for (let i = 0; i < nativeCollections.length; i++) {
           this.renderer.removeClass(nativeCollections[i], 'autocomplete-active');
         }
-      }
-    
-
-
-    
+      }    
 }
