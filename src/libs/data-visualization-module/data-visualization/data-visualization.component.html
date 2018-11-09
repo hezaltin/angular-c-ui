@@ -1,6 +1,5 @@
 
 <form [formGroup]="visualForm" class="clr-form clr-form-horizontal visual-filter-form" autocomplete="off">
-        
         <div class="filter-container"  formGroupName="filterControl" *ngFor="let productDropdown of filterControl.controls let dropdownndex=index">
         <div class="filter-field-control" [formGroup]="filterControl.controls[dropdownndex]">
                 <div class="select" >
@@ -44,6 +43,10 @@
 
 </form>
 
+<button class="btn btn-icon btn-sm" (click)="searchProductComponent($event)" [disabled]="addFilterDisabled">
+        <clr-icon shape="search"></clr-icon>
+Search</button>
+
 
 <div class="card" *ngFor="let visual of getVisualData">
         <div class="card-block">
@@ -53,6 +56,5 @@
                 <b>|</b>
                 <small class="mb-1">InternalProductName: <b>{{visual.internalProductName}}</b></small>
             </p>
-        </div>
-        
+        </div>   
 </div>

@@ -1,10 +1,9 @@
-import { Component, OnInit } from "@angular/core";
+import { Component } from "@angular/core";
 import { DataVisualizationService } from "../services/data-visualization.service";
 import { Observable } from "rxjs";
-import {getProductDropDownResponse,productList} from '../config/data-visualization.config';
-import { FormBuilder, FormGroup, FormArray, FormControl, Validators } from "@angular/forms";
-import { debounceTime, map, switchMap, delay, filter } from "rxjs/operators";
-
+import { productList } from '../config/data-visualization.config';
+import { FormBuilder, FormArray, FormControl, Validators } from "@angular/forms";
+import { debounceTime } from "rxjs/operators";
 import * as fromVisual from '../store';
 import { VisualStateReducer } from '../store'
 import { Store } from "@ngrx/store";
@@ -74,34 +73,30 @@ export class DataVisualizationComponent {
     getfieldValueListData() {
         let productData;
         this.fieldValueList$.subscribe(productCode => productData = productCode);
-        console.log(productData)
         return { productData: productData, fieldName: 'fieldValues' };
     }
     
     getProductIdListData(){
         let productData;
         this.fieldValueList$.subscribe(productCode => productData = productCode);
-        console.log(productData)
         return { productData: productData, fieldName: 'productId' };
     }
 
     addProductComponent(event){
         console.log(this.filterControl)
-       this.filterControl.push(this.fb.group({
+        this.filterControl.push(this.fb.group({
             name:['productFields'],
             fieldId:['select',Validators.required],
             fieldValues:'',
             productId:''
-
-       }));
+        }));
        this.currentFocus = -1;
        this.filterControl.controls[ this.filterControl.length-1].get('fieldValues').valueChanges.subscribe(next=>{
-            this.blurControl = false;
-
+            this.setValueChanges()
         })
         this.filterControl.controls[ this.filterControl.length-1].get('productId').valueChanges.subscribe(next=>{
             console.log('valuesChanges',next);
-            this.blurControl = false;
+            this.setValueChanges();
         });
         this.addFilterDisabled =true;
     }
@@ -110,34 +105,35 @@ export class DataVisualizationComponent {
         this.filterControl.removeAt(index);
     }
 
+    setValueChanges(){
+        this.currentFocus = -1;
+        this.blurControl = false;
+    }
 
     changeFilterField(event,index){
-            this.visualForm.controls.filterControl.controls[index].patchValue({
-                fieldId :event.target.value,
-                fieldValues:'',
-                productId:''
-            })
-            if(this.filterControl.controls[ this.filterControl.length-1].get('fieldId').value==='select'){
-                return;
-            }
-            this.addFilterDisabled = false;
+        this.visualForm.controls.filterControl.controls[index].patchValue({
+            fieldId :event.target.value,
+            fieldValues:'',
+            productId:''
+        })
+        if(this.filterControl.controls[ this.filterControl.length-1].get('fieldId').value==='select'){
+            return;
+        }
+        this.addFilterDisabled = false;
     }
 
     formUpdate(event){
-        console.log('event===>',event)
-        console.log('this.focusControlIndex===>',this.focusControlIndex)
-
         if (!event.select) return;
-       if(event.fieldName === "fieldValues"){
+        if(event.fieldName === "fieldValues"){
             this.visualForm.controls.filterControl.controls[this.focusControlIndex].patchValue({
                 fieldValues :event.select.term
             })
-       }
-       else if(event.fieldName === "productId"){
-        this.visualForm.controls.filterControl.controls[this.focusControlIndex].patchValue({
-            productId :event.select.term
-        })
-       }
+        }
+        else if(event.fieldName === "productId"){
+            this.visualForm.controls.filterControl.controls[this.focusControlIndex].patchValue({
+                productId :event.select.term
+            })
+        }
         this.blurControl = true;
     }
 
@@ -146,8 +142,8 @@ export class DataVisualizationComponent {
         this.focusControlIndex=index;
         this.focusedControl = name;
         this.blurControl = true;
-
     }
+
     onClick(event) {
         if (event.target.tagName !== "INPUT") {
             this.blurControl = true;
@@ -177,33 +173,46 @@ export class DataVisualizationComponent {
         this.currentFocusData = { data: data[this.currentFocus], count: this.currentFocus }
     }
 
-   
+    searchProductComponent(){
+        let getControlFieldId = this.filterControl.controls.map(control=>control.value.fieldId);
+        let removeDuplicates = (controls) => controls.filter((control,index)=>controls.indexOf(control)===index);
+        let createSearchRequestObjcet = removeDuplicates(getControlFieldId).reduce((response,resvalue)=>{
+            let getFieldId = this.getFilterFieldId(resvalue);
+            response.query.push({
+                fieldId: resvalue,
+                values : getFieldId.map(fieldvalue=>fieldvalue.value.fieldValues).filter(fieldvalue=>fieldvalue!=='')
+            });
+            return response;
+        },{query:[],limit:50,skip:0})
+        console.log('createRequestObjcet====>',createSearchRequestObjcet);
+        this.dataVisualService.searchApplyFilter(createSearchRequestObjcet).subscribe(next=>this.getVisualData=next)
+    }
 
-
+    getFilterFieldId(fieldId){
+        return this.filterControl.controls.filter(item=>item.value.fieldId === fieldId)
+    }
 
     addSubListTreeBasedOnParent(type){
         let getProducts = {
-            'country' : ()=>{
-                return['USA','Canada','United Kingdom','Brazil','Argentena'];
+            'country' : () => {
+                return ['USA','Canada','United Kingdom','Brazil','Argentena'];
             },
-            'enzyme' : ()=>{
+            'enzyme' : () => {
                 return ['enzyme-one','enzyme-two','enzyme-three','enzyme-four','enzyme-five'];
             },
-            'productStrains' : ()=>{
+            'productStrains' : () => {
                 return ['productStrains-one','productStrains-two','productStrains-three','productStrains-four','productStrains-five'];
             },
-            'RawMaterials' : ()=>{
+            'RawMaterials' : () => {
                 return ['RawMaterials-one','RawMaterials-two','RawMaterials-three','RawMaterials-four','RawMaterials-five'];
             },
-            'Ingeridents' : ()=>{
-                return['Ingeridents-one','Ingeridents-two','Ingeridents-three','Ingeridents-four','Ingeridents-five'];
+            'Ingeridents' : () => {
+                return ['Ingeridents-one','Ingeridents-two','Ingeridents-three','Ingeridents-four','Ingeridents-five'];
             },
-            'default' : ()=>{
+            'default' : () => {
                 return ['USA','Canada','United Kingdom','Brazil','Argentena']
             }
         }
-        return (getProducts[type] || getProducts['default'])();
-    }
-
-    
+        return (getProducts[type] || getProducts['default']) ();
+    }    
 }
