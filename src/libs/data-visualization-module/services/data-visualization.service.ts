@@ -40,5 +40,14 @@ export class DataVisualizationService {
     return Observable.of(res.terms).pipe(delay(0));
   }
 
+  searchApplyFilter(req){
+    const res=Object.assign({},DataVisualizationSearchResponse)
+    let headers = new HttpHeaders().set('Content-Type', 'application/json');
+   // let url ='http://esanalyticsdv.es.dupont.com:7070/suggest/product?query='+productValue.name;
+   // return this.http.get(url);
+   console.log(res.terms)
+    return Observable.of(res.terms).pipe(delay(0));
+  }
+
 
 }
