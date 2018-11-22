@@ -206,7 +206,7 @@ export class DataVisualizationComponent {
             let getFieldId = this.getFilterFieldId(resvalue);
             response.query.push({
                 fieldId: resvalue,
-                values : getFieldId.map(fieldvalue=>fieldvalue.value.fieldValues).filter(fieldvalue=>fieldvalue!=='')
+                values : getFieldId.map(fieldvalue=>fieldvalue.value.productId).filter(fieldvalue=>fieldvalue!=='')
             });
             return response;
         },{query:[],limit:50,skip:0})

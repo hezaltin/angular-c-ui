@@ -1,5 +1,5 @@
 <div class="tech-complaint-form">
-  <div class="product-form">
+  <div class="product-form" *ngIf="!formSubmit"> 
     <form [formGroup]="productForm" class="clr-form  clr-form-horizontal" autocomplete="off">
       <div class="form-group">
         <label for="example">Product</label>
@@ -239,7 +239,7 @@
       </div>
     </form>
   </div>
-  <!-- <div
+  <div
     class="decesion-tree"
     id="decesiontree">
     <app-tech-complaint-flow
@@ -247,5 +247,5 @@
       *ngIf="formSubmit">
     </app-tech-complaint-flow>
 
-  </div> -->
+  </div>
 </div>

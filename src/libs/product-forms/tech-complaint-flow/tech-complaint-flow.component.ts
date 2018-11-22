@@ -38,7 +38,7 @@ export class TechComplaintFlowComponent implements OnInit {
             .graphviz("#graph")
             .logEvents(true)
             .on("initEnd", render.bind(self))
-            .attributer(this.attributer);
+            // .attributer(this.attributer);
 
         function render() {
             let dotLines = this.dots[this.dotIndex];
