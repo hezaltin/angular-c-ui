@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
 import { DataVisualizationService } from "../services/data-visualization.service";
 import { Observable } from "rxjs";
-import { productList } from '../config/data-visualization.config';
+import { productList,PRODUCTKEYS,filterModel } from '../config/data-visualization.config';
 import { FormBuilder, FormArray, FormControl, Validators } from "@angular/forms";
 import { debounceTime } from "rxjs/operators";
 import * as fromVisual from '../store';
@@ -31,6 +31,7 @@ export class DataVisualizationComponent {
     currentFocusData: any;
     formUpdateValue:boolean = false;
     addFilterDisabled:boolean = false;
+    filterModels:any
      
     constructor(
         private dataVisualService: DataVisualizationService,
@@ -41,11 +42,14 @@ export class DataVisualizationComponent {
     ngOnInit() {
         console.log("onInitEntry");
         this.visualForm = this.creatVisualforms();
-        this.visualizationCodeList.subscribe(next => {this.store.dispatch(new fromVisual.LoadVisualChanges({ name: next }) )});
+        this.visualizationCodeList.subscribe(next => {
+            this.store.dispatch(new fromVisual.LoadVisualChanges({ name: next }) )
+        });
         this.store.select(fromVisual.getVisualChangesEntites).subscribe(next=>this.getVisualData = next)
         this.store.dispatch(new fromVisual.LoadVisual());
         this.store.select(fromVisual.getVisualEntites).subscribe(next=>this.getVisualData = next) ;
         this.productList = productList;
+        this.filterModels = filterModel;
         this.fieldValueList$ = this.store.select(fromVisual.getFieldValuesEntites);
         console.log(this.fieldValueList$ );
         
@@ -87,22 +91,35 @@ export class DataVisualizationComponent {
         this.filterControl.push(this.fb.group({
             name:['productFields'],
             fieldId:['select',Validators.required],
-            fieldValues:'',
-            productId:''
+            fieldValues:'includes any',
+            productId:'',
+            productFieldList : [this.productList]
         }));
        this.currentFocus = -1;
-       this.filterControl.controls[ this.filterControl.length-1].get('fieldValues').valueChanges.subscribe(next=>{
-            this.setValueChanges()
+       let filterCOntrolFields = this.filterControl.controls[ this.filterControl.length-1];
+       filterCOntrolFields.get('fieldValues').valueChanges.subscribe(next=>{
+
+           // this.setValueChanges()
         })
-        this.filterControl.controls[ this.filterControl.length-1].get('productId').valueChanges.subscribe(next=>{
-            console.log('valuesChanges',next);
-            this.setValueChanges();
+        filterCOntrolFields.get('productId').valueChanges.subscribe(next=>{
+            if(this.focusedControl==='productId'){
+                let getFieldDetails = this.getProductDetails(filterCOntrolFields);
+                this.store.dispatch(new fromVisual.LoadFieldValues({fieldId:getFieldDetails.value,urlParams:PRODUCTKEYS[getFieldDetails.value],name:next}));
+                this.setValueChanges();
+            }
+          
         });
+        this.getSelectedProductList(this.filterControl)
         this.addFilterDisabled =true;
+    }
+
+    getProductDetails(formgroup){
+        return formgroup.get('fieldId')
     }
 
     removeProductComponent(event,index){
         this.filterControl.removeAt(index);
+        this.getSelectedProductList(this.filterControl)
     }
 
     setValueChanges(){
@@ -113,13 +130,22 @@ export class DataVisualizationComponent {
     changeFilterField(event,index){
         this.visualForm.controls.filterControl.controls[index].patchValue({
             fieldId :event.target.value,
-            fieldValues:'',
+            fieldValues:'includes any',
             productId:''
         })
+        this.getSelectedProductList(this.filterControl);
+        
         if(this.filterControl.controls[ this.filterControl.length-1].get('fieldId').value==='select'){
             return;
         }
+       
         this.addFilterDisabled = false;
+    }
+
+    changeFilterModel(event,index){
+        this.visualForm.controls.filterControl.controls[index].patchValue({
+            fieldValues :event.target.value
+        })
     }
 
     formUpdate(event){
@@ -180,7 +206,7 @@ export class DataVisualizationComponent {
             let getFieldId = this.getFilterFieldId(resvalue);
             response.query.push({
                 fieldId: resvalue,
-                values : getFieldId.map(fieldvalue=>fieldvalue.value.fieldValues).filter(fieldvalue=>fieldvalue!=='')
+                values : getFieldId.map(fieldvalue=>fieldvalue.value.productId).filter(fieldvalue=>fieldvalue!=='')
             });
             return response;
         },{query:[],limit:50,skip:0})
@@ -190,6 +216,19 @@ export class DataVisualizationComponent {
 
     getFilterFieldId(fieldId){
         return this.filterControl.controls.filter(item=>item.value.fieldId === fieldId)
+    }
+
+    getSelectedProductList(formData){
+        let MappedData = formData.controls.map(control=>control.controls.fieldId.value);
+        console.log(MappedData)
+            formData.controls.forEach((eachControl)=>{
+                let filterData = this.productList.filter(control=> MappedData.indexOf(control) == (-1) || control ===  eachControl.controls.fieldId.value
+                );
+                console.log(filterData)
+                eachControl.patchValue({
+                    productFieldList:filterData
+                }) ;
+            })
     }
 
     addSubListTreeBasedOnParent(type){

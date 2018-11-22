@@ -48,6 +48,16 @@ export class DataVisualizationService {
    console.log(res.terms)
     return Observable.of(res.terms).pipe(delay(0));
   }
+  filterSearchDetails(payload){
+    console.log('payload===>',payload)
+    const res=Object.assign({},DataVisualizationSearchResponse)
+    let headers = new HttpHeaders().set('Content-Type', 'application/json');
+    let url =`http://esanalyticsdv.es.dupont.com:7070/suggest/${payload.urlParams}?query=${payload.name}`;
+    console.log(url);
+   // return this.http.get(url);
+   console.log(res.terms)
+    return Observable.of(res.terms).pipe(delay(0));
+  }
 
 
 }

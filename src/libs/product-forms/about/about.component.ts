@@ -22,7 +22,8 @@ import {
     formPercentage,
     formFunction,
     formManufactureStep,
-    resetSmartCompliance
+    resetSmartCompliance,
+    productKeys
 } from "./smart-complaince.config";
 import * as fromStore from "../store";
 import { ProductState } from "../store";
@@ -81,6 +82,7 @@ export class AboutComponent implements OnInit {
             }
             
         });
+        
         this.rawMaterialList.subscribe(next => {
                 this.setProductData('rawMaterials');
                 if(this.focusedControl==='rawMaterials'){
@@ -157,7 +159,9 @@ export class AboutComponent implements OnInit {
 
     focusField(name) {
         this.focusedControl = name;
-        this.blurControl = true;
+        this.activateFormTypes(name,productKeys,'');
+        this.blurControl = false;
+        
 
     }
     onClick(event) {
@@ -168,18 +172,18 @@ export class AboutComponent implements OnInit {
 
     formBindingMapping(formBind) {
         return {
-            strainGicc: formBind.productionStrains[0].gicc,
-            strainGe: formBind.productionStrains[0].geneticallyEngineered,
-            enzymename: formBind.enzymeActivity[0].name,
-            enzymeec: formBind.enzymeActivity[0].ec,
-            rawChem: formBind.rawMaterials[0].name,
-            rawSup: 10,
-            ingred: formBind.ingredients[0].name,
-            ingredPct: formBind.ingredients[0].concentration,
-            ingredFunc: formBind.ingredients[0].ingredientFunction,
-            siteIndex: formBind.manufacturingSites[0].name,
-            siteStep: formBind.manufacturingSites[0].process,
-            enduses: formBind.endUses[0].name
+            strainGicc: '',
+            strainGe: 0,
+            enzymename: '',
+            enzymeec: 0,
+            rawChem: '',
+            rawSup: 0,
+            ingred: '',
+            ingredPct: '',
+            ingredFunc: 0,
+            siteIndex: '',
+            siteStep: 0,
+            enduses: ''
         };
     }
 
@@ -510,5 +514,23 @@ export class AboutComponent implements OnInit {
                 enduses: ["endUses"]
             })
         });
+    }
+
+    activateFormTypes(type,{productBulkCode,productRawMaterials,productIngred},name){
+        let getProducts = {
+            [productBulkCode]: () => {
+                return this.store.dispatch(new fromStore.LoadProduct({ name: name }));
+            },
+            [productRawMaterials] : () => {
+                return  this.store.dispatch(new fromStore.LoadRawMaterials({ name: name}));
+            },
+            [productIngred] : () => {
+                return this.store.dispatch(new fromStore.LoadRawMaterials({ name: name }));
+            },
+            'default' : () => {
+                return this.store.dispatch(new fromStore.LoadProduct({ name: name }))
+            }
+        }
+        return (getProducts[type] || getProducts['default']) ();
     }
 }

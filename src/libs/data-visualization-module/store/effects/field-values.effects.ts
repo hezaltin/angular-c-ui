@@ -15,7 +15,7 @@ export class FieldValuesEffects{
     loadVisual$ = this.action$.ofType(FieldValuesAction.LOAD_FIELDVALUES)
         .pipe(
             switchMap((action:FieldValuesAction.LoadFieldValues)=> {
-                return this.fromService.getSearchFieldValues(action.payload).pipe(map((item)=>new FieldValuesAction.LoadFieldValuesSuccess(item)),
+                return this.fromService.filterSearchDetails(action.payload).pipe(map((item)=>new FieldValuesAction.LoadFieldValuesSuccess(item)),
                 catchError(error=>of(new FieldValuesAction.LoadFieldValuesFail(error)))
             )})
         )

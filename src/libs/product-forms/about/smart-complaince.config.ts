@@ -34,3 +34,9 @@ export const resetSmartCompliance= {
         siteIndex:'',
         siteStep:0
     }
+export const productKeys = {
+  productBulkCode :'bulkCode',
+  productRawMaterials:'rawMaterials',
+  productIngred:'ingred'
+
+}

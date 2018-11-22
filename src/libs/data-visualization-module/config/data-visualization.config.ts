@@ -150,3 +150,13 @@ export const DataVisualizationSearchResponse =  {
 ];
 
 export const productList = ['country','enzyme','productStrains','RawMaterials','Ingeridents'];
+
+export const filterModel = ['includes any', 'does not include','is blank' , 'includes all']
+
+export const PRODUCTKEYS = {
+    productStrains : 'productionStrain',
+    enzyme : 'enzymeActivity',
+    RawMaterials : 'chemical',
+    Ingeridents : 'chemical'
+}
+

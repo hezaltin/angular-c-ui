@@ -8,7 +8,7 @@ import { Router } from '@angular/router';
     styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-    isCollapsed:boolean =false;
+    isCollapsed:boolean =true;
     constructor(private router: Router,private elementRef:ElementRef) {
     }
 
