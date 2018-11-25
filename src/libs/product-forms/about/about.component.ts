@@ -69,7 +69,7 @@ export class AboutComponent implements OnInit {
         private fb: FormBuilder,
         private cd: ChangeDetectorRef,
         private ElementRef: ElementRef,
-        private store: Store<fromStore.ProductState | ProductState>
+        private store: Store<fromStore.ProductState | ProductState>,
     ) { }
 
     ngOnInit() {
@@ -393,9 +393,10 @@ export class AboutComponent implements OnInit {
         this.smartService
             .getSmartCompliance(productFormRequest)
             .subscribe(smartres => {
-                this.formSubmit = true;
+                //this.formSubmit = true;
                 this.opendValue = true;
-                this.productAssesment = smartres["assessment"];
+               // this.productAssesment = smartres["assessment"];
+                this.router.navigate(['product/techComplaint'])
             });
             this.store.dispatch(new fromStore.LoadProductFormSubmit(productFormRequest));
     }
