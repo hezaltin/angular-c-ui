@@ -18,9 +18,13 @@ export class TechComplaintFlowComponent implements OnInit {
 
     ngOnInit() {
         this.opened = true;
+        console.log('this.techComplaintNodes===>',this.techComplaintNodes)
        
     }
     ngAfterViewInit() {
+        if(!this.techComplaintNodes){
+            return
+        }
         let sample = this.sample();
         this.flowInit();
         this.getTextgraphvizData(this.techComplaintNodes);
@@ -104,5 +108,8 @@ export class TechComplaintFlowComponent implements OnInit {
         var d = svg.datum();
         d.attributes["width"] = width;
         d.attributes["height"] = height;
+    }
+    ngOnDestroy(){
+        d3.select(window).on("resize", null);
     }
 }

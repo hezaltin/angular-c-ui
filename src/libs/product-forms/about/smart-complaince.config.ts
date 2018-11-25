@@ -38,5 +38,4 @@ export const productKeys = {
   productBulkCode :'bulkCode',
   productRawMaterials:'rawMaterials',
   productIngred:'ingred'
-
 }
