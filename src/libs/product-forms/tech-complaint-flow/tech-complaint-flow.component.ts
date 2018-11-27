@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, AfterViewInit } from "@angular/core";
+import { Router } from "@angular/router";
 import * as d3Graphviz from "d3-graphviz";
 import * as d3 from "d3";
 import * as ChartResponsive from "./decesion-tree-responsive";
@@ -14,13 +15,17 @@ export class TechComplaintFlowComponent implements OnInit {
     public dotIndex: number = 0;
     @Input()
     techComplaintNodes;
-    constructor() {}
+    constructor(private router: Router) {}
 
     ngOnInit() {
         this.opened = true;
+        console.log('this.techComplaintNodes===>',this.techComplaintNodes)
        
     }
     ngAfterViewInit() {
+        if(!this.techComplaintNodes){
+            return
+        }
         let sample = this.sample();
         this.flowInit();
         this.getTextgraphvizData(this.techComplaintNodes);
@@ -104,5 +109,11 @@ export class TechComplaintFlowComponent implements OnInit {
         var d = svg.datum();
         d.attributes["width"] = width;
         d.attributes["height"] = height;
+    }
+    formEdit(){
+        this.router.navigate(['/product']);
+    }
+    ngOnDestroy(){
+        d3.select(window).on("resize", null);
     }
 }

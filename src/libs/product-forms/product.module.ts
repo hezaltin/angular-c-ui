@@ -17,7 +17,12 @@ export const ROUTES: Routes = [
   {
     path: '',
     component: AboutComponent,
-  },]
+  },
+  {
+    path: 'techComplaint',
+    component: TechComplaintFlowComponent,
+  },
+]
 
 @NgModule({
   imports: [

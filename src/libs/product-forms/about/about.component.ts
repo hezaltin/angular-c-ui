@@ -69,10 +69,11 @@ export class AboutComponent implements OnInit {
         private fb: FormBuilder,
         private cd: ChangeDetectorRef,
         private ElementRef: ElementRef,
-        private store: Store<fromStore.ProductState | ProductState>
+        private store: Store<fromStore.ProductState | ProductState>,
     ) { }
 
     ngOnInit() {
+        console.log('let the component initiate')
         this.productForm = this.createProductForm();
         this.formCountryName = ["United States", "Canada"];
         this.productCodeList.subscribe(next => {
@@ -102,6 +103,11 @@ export class AboutComponent implements OnInit {
         this.ingredientsList$ = this.store.select(
             fromStore.getRawMaterialsEntites
         );
+
+        this.store.select(fromStore.getProductFormSubmitEntites).subscribe(product=>{
+            console.log('productFormSubmit===>',product)
+            this.updateFormBindingFields(product) 
+        })
     }
 
     setProductData(productKey) {
@@ -387,10 +393,12 @@ export class AboutComponent implements OnInit {
         this.smartService
             .getSmartCompliance(productFormRequest)
             .subscribe(smartres => {
-                this.formSubmit = true;
+                //this.formSubmit = true;
                 this.opendValue = true;
-                this.productAssesment = smartres["assessment"];
+               // this.productAssesment = smartres["assessment"];
+                this.router.navigate(['product/techComplaint'])
             });
+            this.store.dispatch(new fromStore.LoadProductFormSubmit(productFormRequest));
     }
 
     submitRequestBuild(responseBuild, currentProp) {
@@ -415,6 +423,7 @@ export class AboutComponent implements OnInit {
     }
 
     updateProductField(selectField) {
+        console.log(selectField)
         this.store.dispatch(
             new fromStore.LoadProductForm({
                 name: selectField.select.bulkCode,
@@ -423,27 +432,33 @@ export class AboutComponent implements OnInit {
         );
         this.store.select(fromStore.getProductFormEntites).subscribe(next => {
             //this.storeUpdatae
-            if (next.bulkCode) {
-                let {
-                    bulkCode,
-                    country,
-                    uri,
-                    externalProductName,
-                    internalProductName,
-                    ...property
-                } = next;
-                Object.keys(property).map(item =>
-                    this.mappedValue(property[item], item)
-                );
-                this.formBindingObject = this.formBindingMapping(next);
-                this.productForm.controls.formbinding.setValue(
-                    this.formBindingObject
-                );
-            }
+            this.updateFormBindingFields(next)  
         });
     }
 
-    updateFormBindingFields() { }
+    updateFormBindingFields(productData) { 
+        if (!productData.bulkCode) {
+            return
+        }
+            let {
+                bulkCode,
+                country,
+                uri,
+                externalProductName,
+                internalProductName,
+                ...property
+            } = productData;
+            Object.keys(property).map(item =>
+                this.mappedValue(property[item], item)
+            );
+            this.formBindingObject = this.formBindingMapping(productData);
+            this.productForm.controls.formbinding.setValue(
+                this.formBindingObject
+            );
+        
+
+
+    }
 
     resetForminding(key, value) {
         this.productForm.controls.formbinding.controls[key].setValue(value);
@@ -532,5 +547,10 @@ export class AboutComponent implements OnInit {
             }
         }
         return (getProducts[type] || getProducts['default']) ();
+    }
+
+    formEdit(){
+        console.log(event)
+        this.formSubmit = false;
     }
 }
