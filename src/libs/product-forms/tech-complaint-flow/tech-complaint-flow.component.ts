@@ -3,6 +3,10 @@ import { Router } from "@angular/router";
 import * as d3Graphviz from "d3-graphviz";
 import * as d3 from "d3";
 import * as ChartResponsive from "./decesion-tree-responsive";
+import { Store } from "@ngrx/store";
+import { SmartComplainceService } from "../services/smart-complaince.service";
+import * as fromStore from "../store";
+import { FormBuilder } from "@angular/forms";
 
 @Component({
     selector: "app-tech-complaint-flow",
@@ -13,23 +17,36 @@ export class TechComplaintFlowComponent implements OnInit {
     opened: boolean;
     public dots: any = [];
     public dotIndex: number = 0;
+    public complianceForm:any;
     @Input()
     techComplaintNodes;
-    constructor(private router: Router) {}
+    constructor(private router: Router,
+        public smartService: SmartComplainceService,
+        private store: Store<fromStore.ProductState>,
+        private fb: FormBuilder,
+        ) {}
 
     ngOnInit() {
         this.opened = true;
-        console.log('this.techComplaintNodes===>',this.techComplaintNodes)
-       
+        this.complianceForm= this.createComplianceForm()
+        console.log('this.techComplaintNodes===>',this.techComplaintNodes);
+        this.store.select(fromStore.getProductFormAssessments).subscribe(product=>{
+            console.log(product)
+           this.techComplaintNodes= product.techCompliance;
+           console.log(this.complianceForm.get('toogleEnabled'))
+           this.complianceForm.get('toogleEnabled').valueChanges.subscribe((item)=>{
+            this.smartService.getToggleButton({name:item});
+               console.log(item)
+           })
+        })
     }
     ngAfterViewInit() {
-        if(!this.techComplaintNodes){
+        if(!this.complianceForm.get('toogleEnabled').value){
             return
         }
         let sample = this.sample();
         this.flowInit();
         this.getTextgraphvizData(this.techComplaintNodes);
-        d3.select(window).on("resize", this.resizeSVG);
     }
 
     sample() {
@@ -43,7 +60,6 @@ export class TechComplaintFlowComponent implements OnInit {
             .graphviz("#graph")
             .logEvents(true)
             .on("initEnd", render.bind(self))
-            // .attributer(this.attributer);
 
         function render() {
             let dotLines = this.dots[this.dotIndex];
@@ -66,54 +82,16 @@ export class TechComplaintFlowComponent implements OnInit {
         self.dots.push(test);
     }
 
-    attributer(datum, index, nodes) {
-        var selection = d3.select(this);
-        if (datum.tag == "svg") {
-            var width = d3.select("#decesiontree").node().clientWidth;
-            var height = d3.select("#decesiontree").node().clientHeight;
-            var x = "10";
-            var y = "10";
-            var unit = "px";
-            selection.attr("width", width + unit).attr("height", height + unit);
-            datum.attributes.width = width + unit;
-            datum.attributes.height = height + unit;
-        }
-    }
 
-    resizeSVG() {
-        var width = d3.select("#decesiontree").node().clientWidth;
-        var height = d3.select("#decesiontree").node().clientHeight;
-        var svg = d3.select("#graph").selectWithoutDataPropagation("svg");
-        var gTag = svg.selectWithoutDataPropagation("g");
-        gTag.transition()
-            .duration(700)
-            .attr("transform", d => {
-                // translate(4,996) scale(1)
-                let valueX = 4;
-                let valueY = 996;
-                let scale = 1;
-                return (
-                    "translate(" +
-                    valueX +
-                    "," +
-                    valueY +
-                    ") scale(" +
-                    scale +
-                    ")"
-                );
-            });
-        svg.transition()
-            .duration(700)
-            .attr("width", width)
-            .attr("height", height);
-        var d = svg.datum();
-        d.attributes["width"] = width;
-        d.attributes["height"] = height;
-    }
     formEdit(){
         this.router.navigate(['/product']);
     }
     ngOnDestroy(){
-        d3.select(window).on("resize", null);
+
+    }
+    createComplianceForm(){
+        return this.fb.group({
+            toogleEnabled: this.fb.control(false,[])
+        })
     }
 }

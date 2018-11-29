@@ -53,4 +53,15 @@ export class SmartComplainceService {
    return Observable.of(bulkResponeData).pipe(delay(0));  
   }
 
+
+  
+  getToggleButton(productValue){
+      const productData = {
+          name:`getResponse for the data is ${productValue}`
+      }
+     let url ='http://esanalyticsdv.es.dupont.com:7070/product/'+productValue.name +'/'+ productValue.internalProductName;
+   //  return this.http.get(url);
+    return Observable.of(productData).pipe(delay(0));  
+   }
+
 }

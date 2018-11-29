@@ -6,4 +6,5 @@ import * as fromProductSubmit from '../reducers/productFormSubmit.reducers';
 // export const getProduct = createSelector(fromFeature.getProductState, (state:fromProduct.ProductState)=>state);
 
 export const getProductFormSubmitEntites= createSelector(fromFeature.getProductFormSubmitState,fromProductSubmit.getProductFormSubmitEntites);
+export const getProductFormAssessments= createSelector(fromFeature.getProductFormSubmitState,fromProductSubmit.getProductAssesments);
 
