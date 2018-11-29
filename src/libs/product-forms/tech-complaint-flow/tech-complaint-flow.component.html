@@ -2,10 +2,18 @@
     <clr-icon shape="note"></clr-icon>
     Edit
   </button>
+<form [formGroup]="complianceForm">
+    <div class="toggle-switch"  >
+        <input type="checkbox" id="toggle_1" formControlName="toogleEnabled" #toggle>
+        <label for="toggle_1" >Toggles turn on and off</label>
+    </div>
+</form>
+
 <!-- <clr-modal [(clrModalOpen)]="opened" [clrModalStaticBackdrop]="true" [clrModalSize]="'xl'">
     <h3 class="modal-title">Complaint Flow</h3> -->
     <!-- <div class="modal-body"> -->
-            <div id="graph" ></div>   
+        {{complianceForm.get('toogleEnabled').value}}
+            <div id="graph" *ngIf="complianceForm.get('toogleEnabled').value"></div>   
     <!-- </div> -->
     <!-- <div class="modal-footer">
         <button type="button" class="btn btn-outline" (click)="opened = false">Cancel</button>

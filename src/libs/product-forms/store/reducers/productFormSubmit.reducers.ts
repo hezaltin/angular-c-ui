@@ -6,22 +6,29 @@ import * as fromProductForm from '../actions/productFromSubmit.action';
 export interface ProductFormSubmitState{
     entites:any,
     loaded:boolean,
-    loading:boolean
+    loading:boolean,
+    assesments:any
 }
 
 export const initialState:ProductFormSubmitState ={
     entites:{},
     loaded:false,
-    loading:false
+    loading:false,
+    assesments:{}
 }
 
 
 export function reducers(state=initialState,action:fromProductForm.ProductFormSubmitAction):ProductFormSubmitState{
     switch(action.type){
-        case fromProductForm.LOAD_PRODUCT_FORM_SUBMIT_SUCCESS:{
+        case fromProductForm.LOAD_TECH_COMPLIANCE_ASSESMENT:{
+            console.log(action.payload)
+            const product=action.payload
+            const assesments= action.payload
+
             return {
                 ...state,
-                loading:true
+                loading:true,
+                assesments
             }
         }
         case fromProductForm.LOAD_PRODUCT_SUBMIT_FORM:{
@@ -48,5 +55,6 @@ export function reducers(state=initialState,action:fromProductForm.ProductFormSu
 }
 
 export const getProductFormSubmitEntites = (state:ProductFormSubmitState) => state.entites;
+export const getProductAssesments = (state:ProductFormSubmitState) => state.assesments;
 export const getProductFormSubmitLoading = (state:ProductFormSubmitState) => state.loading;
 export const getProductFormSubmitLoaded = (state:ProductFormSubmitState) => state.loaded;

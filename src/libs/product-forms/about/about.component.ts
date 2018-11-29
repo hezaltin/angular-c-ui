@@ -396,6 +396,7 @@ export class AboutComponent implements OnInit {
                 //this.formSubmit = true;
                 this.opendValue = true;
                // this.productAssesment = smartres["assessment"];
+               this.store.dispatch(new fromStore.LoadTechComplainceAssesment({techCompliance:smartres["assessment"]}))
                 this.router.navigate(['product/techComplaint'])
             });
             this.store.dispatch(new fromStore.LoadProductFormSubmit(productFormRequest));
