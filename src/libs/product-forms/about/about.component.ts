@@ -63,6 +63,7 @@ export class AboutComponent implements OnInit {
     currentFocus: number = -1;
     currentFocusData: any;
     formUpdateValue: boolean = false;
+    formSelectDefault = {select:0}
     constructor(
         public router: Router,
         public smartService: SmartComplainceService,
@@ -516,18 +517,18 @@ export class AboutComponent implements OnInit {
                 region: ["NA"]
             }),
             formbinding: this.fb.group({
-                strainGicc: ["Name"],
-                strainGe: [productionStrainOptionsGe[0].value],
-                enzymename: ["Enzyme"],
-                enzymeec: [enzymeActivity[0].ec],
-                rawChem: ["Raw Supplier"],
-                rawSup: [rawSupplier[0].value],
-                ingred: ["Ingredients"],
-                ingredPct: [formPercentage[0]],
-                ingredFunc: [formFunction[0]],
-                siteIndex: ["Manufacturing Sites"],
-                siteStep: [formManufactureStep[0]],
-                enduses: ["endUses"]
+                strainGicc: [""],
+                strainGe: [this.formSelectDefault.select],
+                enzymename: [""],
+                enzymeec: [""],
+                rawChem: [""],
+                rawSup: [""],
+                ingred: [""],
+                ingredPct: [""],
+                ingredFunc: [""],
+                siteIndex: [""],
+                siteStep: [""],
+                enduses: [""]
             })
         });
     }
