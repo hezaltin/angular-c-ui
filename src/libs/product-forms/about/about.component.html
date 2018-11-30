@@ -22,7 +22,7 @@
 
         <div class="select">
           <select #strainGe class="select-narrow" formControlName="strainGe">
-            <option [ngValue]="0" disabled="disabled">
+            <option [value]="formSelectDefault.select" disabled="disabled">
               Select
             </option>
             <option *ngFor="let strainGe of productionStrainOptionsGe" [value]="strainGe.value">
@@ -30,9 +30,9 @@
             </option>
           </select>
         </div>
-
-        <button type="button" class="btn btn-icon">
-          <clr-icon class="icon" shape="plus" (click)="addProductionStrain({gicc: strainGicc.value, geneticallyEngineered: strainGe.value=='true' })">
+        {{strainGe.value}}
+        <button type="button" [disabled]="strainGe.value==0" class="btn btn-icon"  (click)="addProductionStrain({gicc: strainGicc.value, geneticallyEngineered: strainGe.value=='true' })">
+          <clr-icon class="icon"  shape="plus" >
           </clr-icon>
         </button>
       </div>
