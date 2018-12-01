@@ -5,7 +5,7 @@ import {
     ElementRef,
     state
 } from "@angular/core";
-import { FormBuilder, FormGroup, FormArray, FormControl } from "@angular/forms";
+import { FormBuilder, FormGroup, FormArray, FormControl, Validators } from "@angular/forms";
 import { ClarityIcons } from "@clr/icons";
 import { Store } from "@ngrx/store";
 //import { SmartCompliance } from '../models/smart-compliance';
@@ -23,7 +23,9 @@ import {
     formFunction,
     formManufactureStep,
     resetSmartCompliance,
-    productKeys
+    productKeys,
+    countryStateList,
+    CustoumValidators
 } from "./smart-complaince.config";
 import * as fromStore from "../store";
 import { ProductState } from "../store";
@@ -40,6 +42,7 @@ const keyCodes = { keyup: 38, keydown: 40, enter: 13 }
 })
 export class AboutComponent implements OnInit {
     public rawSupplier: any = Object.assign([], rawSupplier);
+    public countryList : any = Object.assign([],countryStateList)
     public formPercentage: any = Object.assign([], formPercentage);
     public formFunction: any = Object.assign([], formFunction);
     public formCountryName: any = [];
@@ -76,16 +79,15 @@ export class AboutComponent implements OnInit {
     ngOnInit() {
         console.log('let the component initiate')
         this.productForm = this.createProductForm();
-        this.formCountryName = ["United States", "Canada"];
         this.productCodeList.subscribe(next => {
             this.setProductData('bulkCode');
             if(this.focusedControl==='bulkCode'){
                 this.store.dispatch(new fromStore.LoadProduct({ name: next }))
             }
-            
         });
         
         this.rawMaterialList.subscribe(next => {
+            console.log(this.productForm)
                 this.setProductData('rawMaterials');
                 if(this.focusedControl==='rawMaterials'){
                     this.store.dispatch(new fromStore.LoadRawMaterials({ name: next }))
@@ -136,9 +138,11 @@ export class AboutComponent implements OnInit {
         return { productData: productData, fieldName: 'ingred' };
     }
 
+
     get productCode() {
         return this.productForm.get("bulkCode") as FormControl;
     }
+
 
     get productCodeList() {
         return this.productCode.valueChanges.pipe(debounceTime(100));
@@ -195,7 +199,12 @@ export class AboutComponent implements OnInit {
     }
 
     mappedValue(array, key) {
+        console.log(array)
         this.resetValue(key);
+        if(key==='country'){
+            this.productForm.controls[key].patchValue(array)
+            return
+        }
         array.map(item => {
             this.productForm.controls[key].push(this.fb.control(item));
         });
@@ -222,14 +231,12 @@ export class AboutComponent implements OnInit {
                 geneticallyEngineered: strain.geneticallyEngineered
             })
         );
-        if (this.formBindingObject) {
+        //if (this.formBindingObject) {
             this.productForm.controls.formbinding.patchValue({
-                strainGe: this.formBindingObject.strainGicc
+                strainGe: this.formSelectDefault.select,
+                strainGicc: ''
             });
-            this.productForm.controls.formbinding.patchValue({
-                strainGicc: this.formBindingObject.strainGicc
-            });
-        }
+       // }
     }
 
     removeProductionStrain(index) {
@@ -426,6 +433,7 @@ export class AboutComponent implements OnInit {
 
     updateProductField(selectField) {
         console.log(selectField)
+        console.log(this.productForm)
         this.store.dispatch(
             new fromStore.LoadProductForm({
                 name: selectField.select.bulkCode,
@@ -439,12 +447,13 @@ export class AboutComponent implements OnInit {
     }
 
     updateFormBindingFields(productData) { 
+        console.log(productData)
         if (!productData.bulkCode) {
             return
         }
             let {
                 bulkCode,
-                country,
+              //  country,
                 uri,
                 externalProductName,
                 internalProductName,
@@ -473,7 +482,7 @@ export class AboutComponent implements OnInit {
         Object.keys(resetSmartCompliance).map(item =>
             this.resetForminding(item, resetSmartCompliance[item])
         );
-        this.productForm.controls["country"].controls["name"].setValue(0);
+        this.productForm.controls["country"].setValue(this.formSelectDefault.select);
     }
     //Keydown autocomplete
     keydownHandler(event, field) {
@@ -498,24 +507,25 @@ export class AboutComponent implements OnInit {
         this.currentFocusData = { data: data[this.currentFocus], count: this.currentFocus }
     }
 
+    compareSelectName(c1: any, c2:any): boolean {  
+        return c1 && c2 ? c1.name === c2.name : c1 === c2; 
+   }
+
+  
+
     createProductForm() {
         return this.fb.group({
             uri: "http://www.dupont.com/ontology/ontoPSR-product/T00006_FRED",
-            bulkCode: ["T1234"],
-            productionStrains: this.fb.array([]),
-            enzymeActivity: this.fb.array([]),
+            bulkCode: ["T1234",Validators.required],
+            productionStrains: this.fb.array([],CustoumValidators.customValidators),
+            enzymeActivity: this.fb.array([],CustoumValidators.customValidators),
 
-            rawMaterials: this.fb.array([]),
-            ingredients: this.fb.array([]),
-            manufacturingSites: this.fb.array([]),
+            rawMaterials: this.fb.array([],CustoumValidators.customValidators),
+            ingredients: this.fb.array([],CustoumValidators.customValidators),
+            manufacturingSites: this.fb.array([],CustoumValidators.customValidators),
             endUses: this.fb.array([]),
-            country: this.fb.group({
-                uri:
-                    "http://www.dupont.com/ontology/ontoPSR-product/Country_US",
-                code: ["us"],
-                name: ["United States"],
-                region: ["NA"]
-            }),
+          //  country: this.
+            country: [this.formSelectDefault.select],
             formbinding: this.fb.group({
                 strainGicc: [""],
                 strainGe: [this.formSelectDefault.select],

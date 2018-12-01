@@ -51,6 +51,12 @@
         <clr-icon shape="search"></clr-icon>
 Search</button>
 
+<div class="search-results" infinite-scroll
+[infiniteScrollDistance]="scrollDistance"
+[infiniteScrollThrottle]="throttle"
+(scrolled)="onScrollDown()"
+[fromRoot]="true"
+[infiniteScrollContainer]="scrollContainerSelector">
 
 <div class="card" *ngFor="let visual of getVisualData">
         <div class="card-block">
@@ -61,4 +67,6 @@ Search</button>
                 <small class="mb-1">InternalProductName: <b>{{visual.internalProductName}}</b></small>
             </p>
         </div>   
+</div>
+
 </div>

@@ -212,15 +212,15 @@
           <clr-icon shape="close" (click)="removeEndUses(i)"></clr-icon>
         </a>
       </div>
-      <div class="form-group" formGroupName="country">
+      <div class="form-group" >
         <label for="example">Country</label>
         <div class="select">
-          <select class="select-narrow" formControlName="name">
+          <select class="select-narrow" #countryControl formControlName="country" [compareWith]="compareSelectName">
             <option [value]="0" disabled="disabled">
               Select
             </option>
-            <option [value]="country" *ngFor="let country of formCountryName">
-              {{country}}
+            <option [ngValue]="countryName"  *ngFor="let countryName of countryList">
+              {{countryName.name}}
             </option>
           </select>
 
@@ -229,7 +229,7 @@
 
       <div class="clr-form-control clr-row">
         <div class="btn-group btn-primary" style="margin:auto">
-          <button class="btn" (click)="complianceOnSubmit(productForm)">
+          <button class="btn" [disabled]="productForm.invalid" (click)="complianceOnSubmit(productForm)">
             Submit
           </button>
           <button class="btn btn-danger" (click)="complianceOnReset(productForm)">

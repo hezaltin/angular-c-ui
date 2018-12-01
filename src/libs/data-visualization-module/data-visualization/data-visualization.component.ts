@@ -32,6 +32,10 @@ export class DataVisualizationComponent {
     formUpdateValue:boolean = false;
     addFilterDisabled:boolean = false;
     filterModels:any
+    throttle:number = 300;
+    scrollDistance:number = 1;
+    scrollContainerSelector: string = '.content-area';
+    concatDataForScroll:any;
      
     constructor(
         private dataVisualService: DataVisualizationService,
@@ -47,7 +51,10 @@ export class DataVisualizationComponent {
         });
         this.store.select(fromVisual.getVisualChangesEntites).subscribe(next=>this.getVisualData = next)
         this.store.dispatch(new fromVisual.LoadVisual());
-        this.store.select(fromVisual.getVisualEntites).subscribe(next=>this.getVisualData = next) ;
+        this.store.select(fromVisual.getVisualEntites).subscribe(next=>{
+            this.getVisualData = next;
+            this.concatDataForScroll = next;
+        }) ;
         this.productList = productList;
         this.filterModels = filterModel;
         this.fieldValueList$ = this.store.select(fromVisual.getFieldValuesEntites);
@@ -253,5 +260,9 @@ export class DataVisualizationComponent {
             }
         }
         return (getProducts[type] || getProducts['default']) ();
-    }    
+    }
+
+    onScrollDown (ev) {
+        this.getVisualData = this.getVisualData.concat(this.concatDataForScroll)
+    } 
 }

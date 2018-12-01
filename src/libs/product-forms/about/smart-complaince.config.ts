@@ -1,3 +1,5 @@
+import { Validators, FormArray } from "@angular/forms";
+
 export const productionStrainOptionsGe = [
     { text: 'GE', value: 'true' },
     { text: 'Non-GE', value: 'false' }
@@ -15,6 +17,20 @@ export const rawSupplier = [
     { text: 'Chemours', value:30, address: 'Delaware', country: 'US' },
     { text: 'Dow Chemical', value:40, address: 'Michigan', country: 'US' },
   ];
+
+export const countryStateList =[{
+  uri:"http://www.dupont.com/ontology/ontoPSR-product/Country_US",
+  code: "us",
+  name: "United States",
+  region: "US"
+},
+{
+  uri:"http://www.dupont.com/ontology/ontoPSR-product/Country_CA",
+  code: "ca",
+  name: "Canada",
+  region: "CA"
+}
+]
 
 export const formPercentage = [0.1, 0.2, 0.5, 0.8];
 export const formFunction = ['Preservative', 'Biocide', 'Medium'];
@@ -38,4 +54,12 @@ export const productKeys = {
   productBulkCode :'bulkCode',
   productRawMaterials:'rawMaterials',
   productIngred:'ingred'
+}
+
+
+export class CustoumValidators extends Validators{
+  static  customValidators(control:FormArray):Validators{
+    console.log(control)
+    return control.controls.length>0 ? false:true
+  }
 }
