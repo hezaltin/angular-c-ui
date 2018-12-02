@@ -231,12 +231,12 @@ export class AboutComponent implements OnInit {
                 geneticallyEngineered: strain.geneticallyEngineered
             })
         );
-        //if (this.formBindingObject) {
+
             this.productForm.controls.formbinding.patchValue({
                 strainGe: this.formSelectDefault.select,
                 strainGicc: ''
             });
-       // }
+            this.focusedControl=''
     }
 
     removeProductionStrain(index) {
@@ -256,14 +256,11 @@ export class AboutComponent implements OnInit {
                 jurisdiction: enzymename.ec
             })
         );
-        if (this.formBindingObject) {
             this.productForm.controls.formbinding.patchValue({
-                enzymeec: this.formBindingObject.enzymeec
+                enzymeec: this.formSelectDefault.select,
+                enzymename:''
             });
-            this.productForm.controls.formbinding.patchValue({
-                enzymename: this.formBindingObject.enzymename
-            });
-        }
+            this.focusedControl=''
     }
 
     removeEnzymeActivity(index) {
@@ -301,14 +298,11 @@ export class AboutComponent implements OnInit {
                 }
             })
         );
-        if (this.formBindingObject) {
             this.productForm.controls.formbinding.patchValue({
-                rawChem: this.formBindingObject.rawChem
+                rawChem: '',
+                rawSup: this.formSelectDefault.select
             });
-            this.productForm.controls.formbinding.patchValue({
-                rawSup: this.formBindingObject.rawSup
-            });
-        }
+            this.focusedControl=''
     }
 
     removeRawMaterial(index) {
@@ -339,17 +333,12 @@ export class AboutComponent implements OnInit {
                 ingredientFunction: ingredientFunction
             })
         );
-        if (this.formBindingObject) {
             this.productForm.controls.formbinding.patchValue({
-                ingred: this.formBindingObject.ingred
+                ingred: '',
+                ingredFunc: this.formSelectDefault.select,
+                ingredPct: this.formSelectDefault.select
             });
-            this.productForm.controls.formbinding.patchValue({
-                ingredFunc: this.formBindingObject.ingredFunc
-            });
-            this.productForm.controls.formbinding.patchValue({
-                ingredPct: this.formBindingObject.ingredPct
-            });
-        }
+            this.focusedControl=''
     }
 
     removeIngredient(index) {
@@ -370,14 +359,11 @@ export class AboutComponent implements OnInit {
                 process: siteIndex.siteStep
             })
         );
-        if (this.formBindingObject) {
             this.productForm.controls.formbinding.patchValue({
-                siteIndex: this.formBindingObject.siteIndex
+                siteIndex: '',
+                siteStep: this.formSelectDefault.select
             });
-            this.productForm.controls.formbinding.patchValue({
-                siteStep: this.formBindingObject.siteStep
-            });
-        }
+            this.focusedControl=''
     }
 
     removeManufacturingSite(index) {
@@ -511,21 +497,17 @@ export class AboutComponent implements OnInit {
         return c1 && c2 ? c1.name === c2.name : c1 === c2; 
    }
 
-  
-
     createProductForm() {
         return this.fb.group({
             uri: "http://www.dupont.com/ontology/ontoPSR-product/T00006_FRED",
             bulkCode: ["T1234",Validators.required],
             productionStrains: this.fb.array([],CustoumValidators.customValidators),
             enzymeActivity: this.fb.array([],CustoumValidators.customValidators),
-
             rawMaterials: this.fb.array([],CustoumValidators.customValidators),
             ingredients: this.fb.array([],CustoumValidators.customValidators),
             manufacturingSites: this.fb.array([],CustoumValidators.customValidators),
             endUses: this.fb.array([]),
-          //  country: this.
-            country: [this.formSelectDefault.select],
+            country: this.fb.control(this.formSelectDefault.select,[CustoumValidators.countryValidators]),
             formbinding: this.fb.group({
                 strainGicc: [""],
                 strainGe: [this.formSelectDefault.select],

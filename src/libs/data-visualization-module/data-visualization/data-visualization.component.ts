@@ -263,6 +263,7 @@ export class DataVisualizationComponent {
     }
 
     onScrollDown (ev) {
-        this.getVisualData = this.getVisualData.concat(this.concatDataForScroll)
+        this.getVisualData = this.getVisualData.concat(this.concatDataForScroll);
+        console.log(this.getVisualData)
     } 
 }

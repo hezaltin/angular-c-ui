@@ -1,4 +1,4 @@
-import { Validators, FormArray } from "@angular/forms";
+import { Validators, FormArray, FormControl } from "@angular/forms";
 
 export const productionStrainOptionsGe = [
     { text: 'GE', value: 'true' },
@@ -58,8 +58,14 @@ export const productKeys = {
 
 
 export class CustoumValidators extends Validators{
+
   static  customValidators(control:FormArray):Validators{
-    console.log(control)
-    return control.controls.length>0 ? false:true
+    return control.controls.length > 0 ? null : true;
   }
+
+  static countryValidators(control:FormControl):Validators{
+    return control.value == 0  ? {country:true} : null;
+  }
+
 }
+
