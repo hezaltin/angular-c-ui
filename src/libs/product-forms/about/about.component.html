@@ -30,8 +30,8 @@
             </option>
           </select>
         </div>
-        {{strainGe.value}}
-        <button type="button" [disabled]="strainGe.value==0" class="btn btn-icon"  (click)="addProductionStrain({gicc: strainGicc.value, geneticallyEngineered: strainGe.value=='true' })">
+        
+        <button type="button" [disabled]="strainGe.value==0 || strainGicc.value.length==0" class="btn btn-icon"  (click)="addProductionStrain({gicc: strainGicc.value, geneticallyEngineered: strainGe.value=='true' })">
           <clr-icon class="icon"  shape="plus" >
           </clr-icon>
         </button>
@@ -63,9 +63,9 @@
           </select>
         </div>
 
-        <button type="button" class="btn btn-icon">
-          <clr-icon class="icon" shape="plus" (click)="addEnzyme({name:enzymename.value,
-                 ec:enzymeec.value})">
+        <button type="button" class="btn btn-icon" [disabled]="enzymeec.value==0 || enzymename.value.length==0" (click)="addEnzyme({name:enzymename.value,
+          ec:enzymeec.value})">
+          <clr-icon class="icon" shape="plus">
           </clr-icon>
         </button>
       </div>
@@ -99,8 +99,8 @@
           </select>
         </div>
 
-        <button type="button" class="btn btn-icon">
-          <clr-icon class="icon" shape="plus" (click)="addRawMaterial({rawChem: rawChem.value, rawSup: rawSup.value})">
+        <button type="button" class="btn btn-icon" (click)="addRawMaterial({rawChem: rawChem.value, rawSup: rawSup.value})"  [disabled]="rawChem.value==0 || rawSup.value.length==0">
+          <clr-icon class="icon" shape="plus" >
           </clr-icon>
         </button>
       </div>
@@ -147,7 +147,7 @@
           </select>
         </div>
 
-        <button type="button" class="btn btn-icon">
+        <button type="button" class="btn btn-icon"   [disabled]="ingredFunc.value==0 || ingredPct.value==0 || ingred.value.length==0">
           <clr-icon class="icon" shape="plus" (click)="addIngredient({ingredient: ingred.value, percentage: ingredPct.value, function: ingredFunc.value})">
           </clr-icon>
         </button>
@@ -181,8 +181,8 @@
           </select>
         </div>
 
-        <button type="button" class="btn btn-icon">
-          <clr-icon class="icon" shape="plus" (click)="addManufacturingSite({siteIndex: siteIndex.value, siteStep: siteStep.value })">
+        <button type="button" class="btn btn-icon"  (click)="addManufacturingSite({siteIndex: siteIndex.value, siteStep: siteStep.value })"  [disabled]="siteStep.value==0 || siteIndex.value.length==0">
+          <clr-icon class="icon" shape="plus">
           </clr-icon>
         </button>
       </div>
@@ -212,15 +212,15 @@
           <clr-icon shape="close" (click)="removeEndUses(i)"></clr-icon>
         </a>
       </div>
-      <div class="form-group" formGroupName="country">
+      <div class="form-group" >
         <label for="example">Country</label>
         <div class="select">
-          <select class="select-narrow" formControlName="name">
-            <option [value]="0" disabled="disabled">
+          <select class="select-narrow" formControlName="country" [compareWith]="compareSelectName">
+            <option [value]="0" >
               Select
             </option>
-            <option [value]="country" *ngFor="let country of formCountryName">
-              {{country}}
+            <option [ngValue]="countryName"  *ngFor="let countryName of countryList">
+              {{countryName.name}}
             </option>
           </select>
 
@@ -229,7 +229,7 @@
 
       <div class="clr-form-control clr-row">
         <div class="btn-group btn-primary" style="margin:auto">
-          <button class="btn" (click)="complianceOnSubmit(productForm)">
+          <button class="btn" [disabled]="productForm.invalid || productForm.get('country').errors?.country" (click)="complianceOnSubmit(productForm)">
             Submit
           </button>
           <button class="btn btn-danger" (click)="complianceOnReset(productForm)">

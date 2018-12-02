@@ -10,6 +10,7 @@ import { HttpClientModule } from '@angular/common/http';
 import {StoreModule} from '@ngrx/store';
 import {EffectsModule} from '@ngrx/effects';
 import { reducers,effects } from './store';
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 export const ROUTES: Routes = [
   {
     path: '',
@@ -25,11 +26,13 @@ export const ROUTES: Routes = [
     FormsModule,
     ReactiveFormsModule,
     StoreModule.forFeature('visuals',reducers),
-    EffectsModule.forFeature(effects)
+    EffectsModule.forFeature(effects),
+    InfiniteScrollModule
   ],
   declarations: [
     DataVisualizationComponent,
-    VisualizationDropdownComponent
+    VisualizationDropdownComponent,
+    
 
   ],
   providers:[DataVisualizationService]
