@@ -21,6 +21,11 @@
                 "../node_modules/bootstrap/dist/css/bootstrap.min.css",
                 "../node_modules/@clr/icons/clr-icons.min.css",
                 "../node_modules/@clr/ui/clr-ui.min.css",
+                "../node_modules/font-awesome/css/font-awesome.min.css",
+                "../node_modules/primeng/resources/themes/omega/theme.css",
+                "../node_modules/primeng/resources/primeng.min.css",
+                "../node_modules/angular-instantsearch/bundles/instantsearch.min.css",
+                "../node_modules/angular-instantsearch/bundles/instantsearch-theme-algolia.min.css",
                 "styles.css"
             ],
             "scripts": [

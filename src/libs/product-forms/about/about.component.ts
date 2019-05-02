@@ -168,6 +168,24 @@ export class AboutComponent implements OnInit {
         return this.ingredientsName.valueChanges.pipe(debounceTime(100));
     }
 
+    //get the fieldBindingName
+    get fieldIngredients() {
+        return this.productForm.controls.fieldbinding.get(
+            "ingeridents"
+        ) as FormControl;
+    }
+
+    get fieldRawMaterials() {
+        return this.productForm.controls.fieldbinding.get(
+            "rawMaterials"
+        ) as FormControl;
+    }
+    get fieldBulkcode(){
+        return this.productForm.controls.fieldbinding.get(
+            "product"
+        ) as FormControl;
+    }
+
     focusField(name) {
         this.focusedControl = name;
         this.activateFormTypes(name,productKeys,'');
@@ -318,6 +336,7 @@ export class AboutComponent implements OnInit {
     }
 
     addIngredient(indIndex) {
+        console.log(indIndex)
         let ingred = indIndex.ingredient;
         let concentration = parseFloat(indIndex.percentage);
         let ingredientFunction = indIndex.function;
@@ -328,7 +347,7 @@ export class AboutComponent implements OnInit {
                     "http://www.dupont.com/ontology/ontoPSR-product/CAS_7732-18-5_in_T00006_FRED",
                 name: ingred,
                 //productBulkCode: this.productForm.get('bulkCode').value,
-                cas: "7732-18-5",
+                cas: indIndex.select.cas,
                 concentration: concentration,
                 ingredientFunction: ingredientFunction
             })
@@ -384,6 +403,7 @@ export class AboutComponent implements OnInit {
             this.submitRequestBuild.bind(this),
             <Product>{}
         );
+        console.log('productFormRequest====>',productFormRequest)
         this.smartService
             .getSmartCompliance(productFormRequest)
             .subscribe(smartres => {
@@ -397,7 +417,7 @@ export class AboutComponent implements OnInit {
     }
 
     submitRequestBuild(responseBuild, currentProp) {
-        if (currentProp !== "formbinding") {
+        if (currentProp !== "formbinding" && currentProp!=="fieldbinding") {
             responseBuild[currentProp] = this.productForm.value[currentProp];
         }
         return responseBuild;
@@ -407,11 +427,15 @@ export class AboutComponent implements OnInit {
         if (!event.select) return;
         this.formUpdateValue = true;
         if (event.fieldName === "bulkCode") {
+            this.fieldBulkcode.setValue(event.select)
             this.productForm.get(event.fieldName).setValue(event.select.term);
             this.updateProductField(event);
         } else if (event.fieldName === "rawMaterials") {
+            this.fieldRawMaterials.setValue(event.select)
             this.rawMaterialName.setValue(event.select.term);
         } else if (event.fieldName === "ingred") {
+            console.log(event.select)
+            this.fieldIngredients.setValue(event.select)
             this.ingredientsName.setValue(event.select.term);
         }
         this.blurControl = true;
@@ -521,8 +545,17 @@ export class AboutComponent implements OnInit {
                 siteIndex: [""],
                 siteStep: [""],
                 enduses: [""]
+            }),
+            fieldbinding:this.fb.group({
+                product:[''],
+                productStrain:[''],
+                enzymeActivity:[''],
+                rawMaterials:[''],
+                ingeridents:[''],
+                manufacturingSites:[''],
+                endUse:['']
             })
-        });
+        },{validator:CustoumValidators.groupValidators});
     }
 
     activateFormTypes(type,{productBulkCode,productRawMaterials,productIngred},name){

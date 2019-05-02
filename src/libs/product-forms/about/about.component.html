@@ -81,12 +81,17 @@
       <!-- Raw Materials -->
       <div formGroupName="formbinding" class="form-group">
         <label for="selects_1">Raw Materials</label>
-        <div class="clr-input-wrapper form-position-set">
-          <input #rawChem type="tel" id="enzyme" class="clr-input" size="35" style="width:250px" placeholder="Search by Chemical name"
-            formControlName="rawChem" (focus)="focusField('rawMaterials')" (keydown)="keydownHandler($event,getrawMaterialListData.bind(this))">
-          <app-auto-complete *ngIf="focusedControl=='rawMaterials' && !blurControl" [formField]="'rawMaterials'"
-            (formUpdateEvent)="formUpdate($event)" [filteredUsersTerms]="( rawMaterialList$ | async )" [currentFocus]="currentFocusData"></app-auto-complete>
+        <div class="clr-control-container">
+          <div class="clr-input-wrapper form-position-set">
+            <input #rawChem type="tel" id="enzyme" class="clr-input" size="35" style="width:250px" placeholder="Search by Chemical name"
+              formControlName="rawChem" (focus)="focusField('rawMaterials')" (keydown)="keydownHandler($event,getrawMaterialListData.bind(this))">
+            <app-auto-complete *ngIf="focusedControl=='rawMaterials' && !blurControl" [formField]="'rawMaterials'"
+              (formUpdateEvent)="formUpdate($event)" [filteredUsersTerms]="( rawMaterialList$ | async )" [currentFocus]="currentFocusData"></app-auto-complete>
+              <clr-icon class="clr-validate-icon" shape="exclamation-circle"></clr-icon>
+            </div>
+          <span class="clr-subtext">Error message</span>
         </div>
+        
 
         <div class="select">
           <select #rawSup class="select-wide" formControlName="rawSup">
@@ -119,7 +124,7 @@
       <div formGroupName="formbinding" class="form-group">
         <label for="selects_1">Ingredients</label>
         <div class="clr-input-wrapper form-position-set">
-          <input #ingred type="tel" id="enzyme" class="clr-input" size="35" style="width:200px" placeholder="Search by Ingredient"
+          <input #ingred type="tel" id="enzyme"  class="clr-input" size="35" style="width:200px" placeholder="Search by Ingredient"
             formControlName="ingred" (focus)="focusField('ingred')" (keydown)="keydownHandler($event,getingredientsListData.bind(this))">
           <app-auto-complete *ngIf="focusedControl=='ingred' && !blurControl" [formField]="'ingred'" (formUpdateEvent)="formUpdate($event)"
             [filteredUsersTerms]="( ingredientsList$ | async )" [currentFocus]="currentFocusData"></app-auto-complete>
@@ -147,8 +152,8 @@
           </select>
         </div>
 
-        <button type="button" class="btn btn-icon"   [disabled]="ingredFunc.value==0 || ingredPct.value==0 || ingred.value.length==0">
-          <clr-icon class="icon" shape="plus" (click)="addIngredient({ingredient: ingred.value, percentage: ingredPct.value, function: ingredFunc.value})">
+        <button type="button" class="btn btn-icon"  (click)="addIngredient({ingredient: ingred.value, percentage: ingredPct.value, function: ingredFunc.value,select:fieldIngredients.value})"   [disabled]="ingredFunc.value==0 || ingredPct.value==0 || ingred.value.length==0">
+          <clr-icon class="icon" shape="plus">
           </clr-icon>
         </button>
       </div>

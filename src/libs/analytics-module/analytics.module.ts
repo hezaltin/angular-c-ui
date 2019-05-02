@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ClarityModule } from '@clr/angular';
 import { Routes, RouterModule } from '@angular/router';
 import {AnalyticsComponent} from './analytics/analytics.component'
+import {AssessmentTableComponent} from './assesment-table/assessment.table.component'
 
 export const ROUTES: Routes = [
   {
@@ -17,7 +18,8 @@ export const ROUTES: Routes = [
     RouterModule.forChild(ROUTES),
   ],
   declarations: [
-    AnalyticsComponent
+    AnalyticsComponent,
+    AssessmentTableComponent
 
   ]
 })

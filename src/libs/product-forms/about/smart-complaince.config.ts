@@ -1,4 +1,4 @@
-import { Validators, FormArray, FormControl } from "@angular/forms";
+import { Validators, FormArray, FormControl, FormGroup, AbstractControl } from "@angular/forms";
 
 export const productionStrainOptionsGe = [
     { text: 'GE', value: 'true' },
@@ -60,6 +60,7 @@ export const productKeys = {
 export class CustoumValidators extends Validators{
 
   static  customValidators(control:FormArray):Validators{
+   
     return control.controls.length > 0 ? null : true;
   }
 
@@ -67,5 +68,30 @@ export class CustoumValidators extends Validators{
     return control.value == 0  ? {country:true} : null;
   }
 
+  static groupValidators(control:FormGroup):Validators{
+    console.log('control===>',control)
+    return  null;
+  }
+  
 }
+
+
+// export class FormGroupvalidatae extends AbstractControl{
+
+//   static validateMealType(findForm : AbstractControl) : {[key: string]: boolean]} {
+  
+//     if (findForm.controls["categories"].value) 
+//     {
+//         if (!findForm.controls["mealTypes"].value) 
+//         {
+//             return {"invalidMealTypes": true}; 
+//         }
+//     }
+  
+//     return null;
+//   }
+  
+// }
+
+
 

@@ -12,9 +12,12 @@ export class AutoCompleteComponent implements OnInit, OnChanges {
   @Input() formField;
   @Input() currentFocus;
   @ViewChild('list') list: ElementRef
-  constructor(private elementref: ElementRef, private renderer: Renderer2) { }
+  displayedInstitutionColumns: string[] = ['institutionName', 'city', 'addressLine1', 'state','action'];
+  displayedropertyListColumns:any[] = ['isCurrent', 'address1', 'city', 'assessedTotalValue','marketTotalValue','action']
+   constructor(private elementref: ElementRef, private renderer: Renderer2) { }
 
   ngOnChanges(changes: SimpleChanges) {
+
     //console.log('changes====>', changes);
     if (changes.currentFocus) {
       this.setAutoListClass(changes.currentFocus['currentValue'])

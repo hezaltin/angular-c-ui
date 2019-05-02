@@ -1,22 +1,29 @@
 <clr-main-container>
-  <clr-header>
+  <clr-header >
     <div class="branding">
       <!-- <a
         href="#"
         class="nav-link"> -->
-        <clr-icon shape="bars" class="nav-btn collapse-shape" (click)="collapsiable()"></clr-icon>
+        <clr-icon *ngIf="loggedIn" shape="bars" class="nav-btn collapse-shape" (click)="collapsiable()"></clr-icon>
         <span class="clr-icon clr-clarity-logo"></span>
         <span class="title">Tech</span>
       <!-- </a> -->
     </div>
-    <div class="header-actions"></div>
+    <div class="header-actions">
+      <!-- <a href="..." class="nav-link nav-text">
+          Login
+      </a> -->
+      <a  *ngIf="!loggedIn"   (click)="login()" class="nav-link nav-text"><span class="glyphicon glyphicon-log-in"></span> Login</a>
+     <a  *ngIf="loggedIn" (click)="logout()" class="nav-link nav-text"><span class="glyphicon glyphicon-log-out"></span> Logout</a>
+  </div>
+    <!-- <div class="header-actions"></div> -->
   </clr-header>
 
   <div class="content-container">
     <div class="content-area">
       <router-outlet></router-outlet>
     </div>
-    <clr-vertical-nav
+    <clr-vertical-nav *ngIf="loggedIn"
     [clrVerticalNavCollapsible]="true"
       [(clrVerticalNavCollapsed)]="isCollapsed" class="vertical-nav-component"  [ngClass]="{'is-collapsed': isCollapsed === false }">
       <a
