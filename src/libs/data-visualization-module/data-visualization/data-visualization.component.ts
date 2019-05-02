@@ -7,6 +7,7 @@ import { debounceTime } from "rxjs/operators";
 import * as fromVisual from '../store';
 import { VisualStateReducer } from '../store'
 import { Store } from "@ngrx/store";
+import {ClrDatagridSortOrder} from '@clr/angular';
 
 const keyCodes = { keyup: 38, keydown: 40, enter: 13 }
 
@@ -34,8 +35,9 @@ export class DataVisualizationComponent {
     filterModels:any
     throttle:number = 300;
     scrollDistance:number = 1;
-    scrollContainerSelector: string = '.content-area';
+    scrollContainerSelector: string = '.hello';
     concatDataForScroll:any;
+    descSort:any
      
     constructor(
         private dataVisualService: DataVisualizationService,
@@ -45,6 +47,7 @@ export class DataVisualizationComponent {
 
     ngOnInit() {
         console.log("onInitEntry");
+        this.descSort = ClrDatagridSortOrder.DESC;
         this.visualForm = this.creatVisualforms();
         this.visualizationCodeList.subscribe(next => {
             this.store.dispatch(new fromVisual.LoadVisualChanges({ name: next }) )
@@ -262,8 +265,14 @@ export class DataVisualizationComponent {
         return (getProducts[type] || getProducts['default']) ();
     }
 
-    onScrollDown (ev) {
-        this.getVisualData = this.getVisualData.concat(this.concatDataForScroll);
-        console.log(this.getVisualData)
+    onScrollDown(ev){
+        console.log('scrol')
+        if(this.getVisualData.length>50){
+           
+        }else{
+            this.getVisualData = this.getVisualData.concat(this.concatDataForScroll);
+            console.log(this.getVisualData)
+        }
+     
     } 
 }

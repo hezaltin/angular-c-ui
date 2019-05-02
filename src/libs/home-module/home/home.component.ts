@@ -5,10 +5,27 @@
  */
 import { Component } from "@angular/core";
 
+import {TreeNode} from 'primeng/api';
+import { NodeService } from "./home.component.service";
+
 @Component({
     styleUrls: ['./home.component.scss'],
     templateUrl: './home.component.html',
 })
 export class HomeComponent {
+    filesTree:any
+    selectedFiles:any
+    constructor(private nodeService:NodeService){
+
+    }
+
+    ngOnInit(){
+        this.nodeService.getFiles().subscribe(files => {
+            console.log(files)
+            this.selectedFiles =[files[0]]
+            this.filesTree = files
+        
+        });
+    }
 
 }

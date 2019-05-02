@@ -1,3 +1,45 @@
 // Copyright (c) 2016 VMware, Inc. All Rights Reserved.
 // This software is released under MIT license.
 // The full license information can be found in LICENSE in the root directory of this project.
+
+
+.search-box-container{
+    display:flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+}
+
+.hits-flex{
+    display: flex;
+    flex-direction: row;
+    justify-content:flex-end;
+}
+.refresh{
+    width:100%;
+}
+.hits{
+    width:100%;
+}
+.hit-class{
+    margin: 10px;
+    padding: 2px 16px;
+    
+}
+.refresh-card{
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    transition: 0.3s;
+
+}
+.card {
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    transition: 0.3s;
+    cursor: pointer;
+  }
+  
+  .card:hover {
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+  }
+
+  .ais-SearchBox-input{
+    padding: 0.3rem 1.7rem !important;
+  }

@@ -18,3 +18,46 @@
         <a clrDropdownItem href="javascript://">Link 2</a>
     </clr-dropdown-menu>
 </clr-dropdown>
+
+
+<!-- <h3>Multiple Selection with Checkbox</h3>
+<p-tree [value]="filesTree" selectionMode="checkbox" [(selection)]="selectedFiles"></p-tree> -->
+<!-- <div>Selected Nodes: <span *ngFor="let file of selectedFiles">{{file.label}} </span></div> -->
+
+<h1>My first search app</h1>
+<ais-instantsearch
+  [config]="{
+    apiKey: '6be0576ff61c053d5f9a3225e2a90f76',
+    appId: 'latency',
+    indexName: 'instant_search',
+    routing: true
+  }"
+>
+<div class="search-box-container">
+    <div clss="search-box">
+            <ais-search-box></ais-search-box>
+    </div>
+   
+</div>
+<div class="hits-flex">
+    <div class="refresh">
+            <ais-refinement-list attribute="brand"></ais-refinement-list>
+    </div>
+    <div class="hits">
+            <ais-hits>
+                    <ng-template let-hits="hits">
+                        
+                                <div *ngFor="let hit of hits" class="card"> 
+                                    <div class="hit-class">
+                                        Hit {{hit.objectID}}: <ais-highlight attribute="name" [hit]="hit">
+                                      </ais-highlight>
+                                    </div>
+                                </div>
+                        
+                        
+                      </ng-template>
+                </ais-hits>
+    </div>
+</div>
+
+</ais-instantsearch>

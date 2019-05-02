@@ -1,0 +1,24 @@
+<div class="row">
+    <div class="col-xs-12 col-md-12 col-lg-6 col-xl-4">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th class="left">Product</th>
+                    <th>Complianed</th>
+                    <th>InComplained</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let list of getChanges.productsAssesments; let i=index">
+                    <td class="left">{{list.productName}}</td>
+                    <td>{{list.complaince}}</td>
+                    <td>{{list.undetermined}}</td>
+                   
+                </tr>
+                
+            </tbody>
+        </table>
+    </div>
+
+   
+</div>

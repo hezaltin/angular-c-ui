@@ -51,14 +51,16 @@
         <clr-icon shape="search"></clr-icon>
 Search</button>
 
-<div class="search-results" infinite-scroll
+<!-- <div class="search-results" infinite-scroll
 [infiniteScrollDistance]="scrollDistance"
 [infiniteScrollThrottle]="throttle"
 (scrolled)="onScrollDown()"
 [fromRoot]="true"
-[infiniteScrollContainer]="scrollContainerSelector">
+[infiniteScrollContainer]="scrollContainerSelector"
+[scrollWindow]="false"
+> 
 
-<div class="card" *ngFor="let visual of getVisualData">
+ <div class="card" *ngFor="let visual of getVisualData">
         <div class="card-block">
             <h4 class="card-title">{{visual?.fragment}}</h4>
             <p class="card-text">
@@ -67,6 +69,24 @@ Search</button>
                 <small class="mb-1">InternalProductName: <b>{{visual.internalProductName}}</b></small>
             </p>
         </div>   
+</div> 
+<div class="hello">
+<div *ngFor="let visual of getVisualData">
+        {{visual?.bulkCode}}
 </div>
+</div>
+<clr-datagrid class="hello"> 
+        <clr-dg-column [clrDgField]="'bulkCode'" [clrDgSortOrder]="descSort">Bulk Code</clr-dg-column>
+        <clr-dg-column>Product Description</clr-dg-column>
+        <clr-dg-column>Internal Product Name</clr-dg-column>
+    
+        <clr-dg-row *clrDgItems="let visual of getVisualData">
+            <clr-dg-cell>{{visual?.bulkCode}}</clr-dg-cell>
+            <clr-dg-cell>{{visual.externalProductName}}</clr-dg-cell>
+            <clr-dg-cell>{{visual.internalProductName}}</clr-dg-cell>
+        </clr-dg-row>
+    
+        <clr-dg-footer>{{getVisualData?.length}} users</clr-dg-footer>
+    </clr-datagrid> 
 
-</div>
+</div> -->
