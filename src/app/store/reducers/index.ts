@@ -3,6 +3,9 @@ import {Params, RouterStateSnapshot, ActivatedRouteSnapshot} from '@angular/rout
 import {ActionReducerMap, createFeatureSelector,createSelector} from '@ngrx/store';
 import * as fromRouter from '@ngrx/router-store';
 
+
+import * as fromUsers from '../reducers/users.reducers';
+
 // type check for the State Object
 export interface RouterStateUrl{
     url:string;
@@ -12,17 +15,19 @@ export interface RouterStateUrl{
 
 export interface State{
     routerReducer: fromRouter.RouterReducerState<RouterStateUrl>
+    appUser:fromUsers.UsersState
 }
 
 export const reducers :ActionReducerMap<State>= {
     routerReducer: fromRouter.routerReducer,
+    appUser:fromUsers.reducers
 }
 // Creat the rootReducer Object
 export const getRouterState = createFeatureSelector<
     fromRouter.RouterReducerState<RouterStateUrl>
 >('routerReducer');
 
-export const getCollectionNameState = createFeatureSelector<any>('collections');
+
 
 
 // create the custo serializer to get the Route parameters and form the new objec; this calss will call whenever the route changes
@@ -44,3 +49,6 @@ export class CustoumSerializer implements fromRouter.RouterStateSerializer<Route
     }
 
 }
+
+export const getCollectionNameState = createFeatureSelector<State>('appState');
+export const getAppUserState = createSelector(getCollectionNameState,(state:State)=>state.appUser);

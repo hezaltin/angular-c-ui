@@ -16,17 +16,18 @@ import { NgAisModule } from 'angular-instantsearch';
 // import {SmartComplainceService} from "./services/smart-complaince.service";
 // import { TechComplaintFlowComponent } from './tech-complaint-flow/tech-complaint-flow.component';
 // import { AutoCompleteComponent } from './auto-complete/auto-complete.component';
-import { reducers,CustoumSerializer } from './store';
+import { reducers,CustoumSerializer,effects } from './store';
 import { LoginComponent } from "./auth/login/login.component";
 import { AuthService } from "./services/auth.service";
 import { AuthguardGuard } from "./guard/authguard.guard";
 import {LogLevel} from "msal";
 import {MsalModule, MsalInterceptor} from "@azure/msal-angular";
+//import { httpInterceptorProviders } from "./http-interceptors";
 
 export function loggerCallback(logLevel, message, piiEnabled) {
     console.log("client logging" + message);
   }
-export const protectedResourceMap:[string, string[]][]=[ ['https://buildtodoservice.azurewebsites.net/api/todolist',['api://a88bb933-319c-41b5-9f04-eff36d985612/access_as_user']] , ['https://graph.microsoft.com/v1.0/me', ['user.read']] ];
+export const protectedResourceMap:[string, string[]][]=[['https://graph.microsoft.com/v1.0/me', ['user.read']] ];
 
 
 @NgModule({
@@ -39,13 +40,13 @@ export const protectedResourceMap:[string, string[]][]=[ ['https://buildtodoserv
         BrowserModule,
         FormsModule,
         // ReactiveFormsModule,
-        // HttpClientModule,
+         HttpClientModule,
         ClarityModule,
         ROUTING,
         NgAisModule,
         StoreRouterConnectingModule,
         StoreModule.forRoot(reducers),
-        EffectsModule.forRoot([]),
+        EffectsModule.forRoot(effects),
         StoreDevtoolsModule.instrument(),
         MsalModule.forRoot({
             clientID: '6226576d-37e9-49eb-b201-ec1eeb0029b6',
@@ -56,7 +57,7 @@ export const protectedResourceMap:[string, string[]][]=[ ['https://buildtodoserv
             postLogoutRedirectUri: "http://localhost:4200/",
             navigateToLoginRequestUrl: true,
             popUp: false,
-            consentScopes: [ "user.read", "api://a88bb933-319c-41b5-9f04-eff36d985612/access_as_user"],
+            consentScopes: [ "user.read"],
             unprotectedResources: ["https://www.microsoft.com/en-us/"],
             protectedResourceMap: protectedResourceMap,
             logger: loggerCallback,
@@ -66,7 +67,13 @@ export const protectedResourceMap:[string, string[]][]=[ ['https://buildtodoserv
           }
         ),
     ],
-    providers: [{provide:RouterStateSerializer, useClass:CustoumSerializer},AuthService,AuthguardGuard,{provide: HTTP_INTERCEPTORS, useClass: MsalInterceptor, multi: true}],
+    providers: [
+      {provide:RouterStateSerializer, useClass:CustoumSerializer},
+      AuthService,
+      AuthguardGuard,
+      // {provide: HTTP_INTERCEPTORS, useClass: MsalInterceptor, multi: true},
+     // httpInterceptorProviders
+    ],
     bootstrap: [AppComponent]
 })
 export class AppModule {

@@ -2,7 +2,7 @@
   <div class="product-form" *ngIf="!formSubmit"> 
     <form [formGroup]="productForm" class="clr-form  clr-form-horizontal" autocomplete="off">
       <div class="form-group">
-        <label for="example">Product</label>
+        <label for="product">Product</label>
 
         <div class="clr-input-wrapper flex-box-class">
           <input id="product" formControlName="bulkCode" placeholder="Search by Product Bulk Code..." class="clr-input"
@@ -14,14 +14,14 @@
       </div>
 
       <div class="form-group" formGroupName="formbinding">
-        <label for="selects_1">Production Strain</label>
+        <label for="productioStrain">Production Strain</label>
         <div class="clr-input-wrapper">
-          <input #strainGicc type="tel" id="productioStrain" class="clr-input" size="35" style="width:250px"
+          <input  #strainGicc type="tel" id="productioStrain" class="clr-input" size="35" style="width:250px"
             placeholder="Search by GICC# or genus/species" formControlName="strainGicc">
         </div>
 
         <div class="select">
-          <select #strainGe class="select-narrow" formControlName="strainGe">
+          <select id="productioStrain" #strainGe class="select-narrow" formControlName="strainGe">
             <option [value]="formSelectDefault.select" disabled="disabled">
               Select
             </option>

@@ -4,6 +4,9 @@ import { FindValueSubscriber } from 'rxjs/operators/find';
 import { AuthService } from './services/auth.service';
 import { MsalService, BroadcastService } from '@azure/msal-angular';
 import { Subscription } from 'rxjs';
+import { Store } from '@ngrx/store';
+import * as fromStore from "./store";
+import { State } from './store';
 
 
 @Component({
@@ -20,13 +23,17 @@ export class AppComponent {
     public userInfo: any = null;
     private subscription: Subscription;
     public isIframe: boolean;
-  
-    constructor(private router: Router,private elementRef:ElementRef,private authService:AuthService, private authServiceMsal : MsalService,private broadcastService: BroadcastService) {
+    public getToken ;
+    constructor(private router: Router,private elementRef:ElementRef,private authService:AuthService, private authServiceMsal : MsalService,private broadcastService: BroadcastService,private store: Store<State>) {
         this.isIframe = window !== window.parent && !window.opener;
+        console.log('this.authServiceMsal.getUser()==>',this.authServiceMsal.getUser())
    if(this.authServiceMsal.getUser())
     {
       this.loggedIn = true;
+      this.userInfo = this.authServiceMsal.getUser();
+      this.store.dispatch(new fromStore.LoadUsers());
       this.router.navigate(['/product']);
+
     }
    else {
      this.loggedIn = false;
@@ -35,7 +42,7 @@ export class AppComponent {
 
     login()
     {
-     this.authServiceMsal.loginPopup(["user.read" ,"api://a88bb933-319c-41b5-9f04-eff36d985612/access_as_user"]);
+     this.authServiceMsal.loginPopup(["user.read"]);
     }
   
     logout()
@@ -46,6 +53,10 @@ export class AppComponent {
 
     ngOnInit(){
         console.log(this.router)
+        this.authService.getSearchBooks('name').subscribe(name=>{
+          console.log('name==>',name)
+        })
+
         // this.router.events.subscribe((event: Event) => {
         //     console.log(event);
         //     if (event instanceof NavigationEnd ) {
@@ -54,8 +65,7 @@ export class AppComponent {
         //     }
         //   });
         //  this.authService.isAuthValid(false)
-
-
+        
           this.authService.getAuthValidation.subscribe(auth=>{
               console.log(auth)
               
@@ -74,11 +84,18 @@ export class AppComponent {
           this.broadcastService.subscribe("msal:loginSuccess", (payload) => {
             console.log("login success " + JSON.stringify(payload));
             this.loggedIn = true;
+            this.userInfo = this.authServiceMsal.getUser();
+            this.store.dispatch(new fromStore.LoadUsers());
             this.router.navigate(['/product']);
           });
 
+          setTimeout(()=>{
+              this.authServiceMsal.clearCacheForScope(this.getToken)
+          },10000)
+
           this.broadcastService.subscribe("msal:acquireTokenSuccess", (payload) => {
             console.log('payloadSuccess==>',payload)
+            this.getToken = payload;
        });
         
        this.broadcastService.subscribe("msal:acquireTokenFailure", (payload) => {
