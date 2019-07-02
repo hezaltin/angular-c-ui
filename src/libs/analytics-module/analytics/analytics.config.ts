@@ -170,3 +170,26 @@ export const AssessmentData = {
       "region": "NA"
     }
   }
+
+
+
+  export const barData = [{"jurisdiction":"Feed", "country":["Brazil", "Canada", "China", "European Union", "United States"], "count":[32, 33, 20, 35, 25]}, {"jurisdiction":"Food", "country":["Brazil", "Canada", "China", "European Union", "United States"], "count":[32, 26, 38, 26, 26]}, {"jurisdiction":"Tech", "country":["Brazil", "Canada", "China", "European Union", "United States"], "count":[30, 29, 35, 29, 33]}]
+
+
+  export const  labelOption = {
+    normal: {
+        show: true,
+        position: 'insideBottom',
+        distance: '15',
+        align: 'left',
+        verticalAlign:'middle',
+        rotate:90,
+        formatter: '{c}  {name|{a}}',
+        fontSize: 16,
+        rich: {
+            name: {
+                textBorderColor: '#fff'
+            }
+        }
+    }
+  };
