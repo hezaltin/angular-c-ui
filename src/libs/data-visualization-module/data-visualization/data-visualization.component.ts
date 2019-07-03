@@ -12,6 +12,7 @@ import {ClrDatagridSortOrder} from '@clr/angular';
 const keyCodes = { keyup: 38, keydown: 40, enter: 13 }
 
 @Component({
+    selector:'product-filter',
     styleUrls: ["./data-visualization.component.scss"],
     templateUrl: "./data-visualization.component.html",
     host: {
