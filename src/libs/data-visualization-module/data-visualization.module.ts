@@ -35,6 +35,9 @@ export const ROUTES: Routes = [
     
 
   ],
+  exports:[
+    DataVisualizationComponent
+  ],
   providers:[DataVisualizationService]
 })
 export class DataVisualizationModule { }

@@ -9,6 +9,7 @@ import { EffectsModule } from '@ngrx/effects';
 import { reducers } from './store/reducers/product-distribution.reducer';
 import { effects } from './store';
 import { AnalyticsService } from './services/analytics.service';
+import { DataVisualizationModule } from 'libs/data-visualization-module/data-visualization.module';
 
 export const ROUTES: Routes = [
   {
@@ -23,7 +24,9 @@ export const ROUTES: Routes = [
     RouterModule.forChild(ROUTES),
     StoreModule.forFeature('analytics',reducers),
     EffectsModule.forFeature(effects),
+    DataVisualizationModule
   ],
+
   declarations: [
     AnalyticsComponent,
     AssessmentTableComponent
