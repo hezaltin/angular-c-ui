@@ -1,7 +1,7 @@
 
 import { async, TestBed, ComponentFixture } from "@angular/core/testing";
 import { ClarityModule } from '@clr/angular';
-import { filterComponent } from './filter.component';
+import { filterComponent } from './filter-shared-ui.component';
 
 describe('filterComponent', () => {
 
