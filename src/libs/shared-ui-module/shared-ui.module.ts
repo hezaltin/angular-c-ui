@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ClarityModule } from '@clr/angular';
 import { FormsModule,ReactiveFormsModule } from '@angular/forms';
 import { Routes, RouterModule } from '@angular/router';
-import {filterComponent} from './components/filter/filter.component';
+import {filterComponent} from './components/filter-shared-ui/filter-shared-ui.component';
 import {DropdownComponentSharedUi} from './components/dropdown-shared-ui/dropdown-shared-ui.component';
 import {DataVisualizationSharedUiService} from './services/shared-ui.service';
 import { HttpClientModule } from '@angular/common/http';

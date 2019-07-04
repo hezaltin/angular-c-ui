@@ -13,8 +13,8 @@ const keyCodes = { keyup: 38, keydown: 40, enter: 13 }
 
 @Component({
     selector:'product-filter-shared',
-    styleUrls: ["./filter.component.scss"],
-    templateUrl: "./filter.component.html",
+    styleUrls: ["./filter-shared-ui.component.scss"],
+    templateUrl: "./filter-shared-ui.component.html",
     host: {
         "(document:click)": "onClick($event)"
     }
