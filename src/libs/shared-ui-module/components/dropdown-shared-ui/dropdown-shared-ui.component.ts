@@ -1,12 +1,12 @@
 import { Component, OnInit, Input, SimpleChanges, EventEmitter, Output, ElementRef, Renderer2, ViewChild } from "@angular/core";
 
 @Component({
-    selector: "app-data-visualization-dropdown",
-    styleUrls: ["./visualization-dropdown.component.scss"],
-    templateUrl: "./visualization-dropdown.component.html"
+    selector: "app-data-dropdown-shared-ui",
+    styleUrls: ["./dropdown-shared-ui.component.scss"],
+    templateUrl: "./dropdown-shared-ui.component.html"
 })
 
-export class VisualizationDropdownComponent {
+export class DropdownComponentSharedUi {
     @Input() filteredUsersTerms;
     @Output() formUpdateEvent = new EventEmitter();
     @Input() formField;

@@ -1,28 +1,28 @@
-import * as fromVisualChanges from '../actions/visualization-changes.action';
+import * as fromVisualChanges from '../actions/visualization-changes-shared-ui.action';
 //import {Products} from '../../models/product.model';
 
 
-export interface VisualChangesState{
+export interface VisualChangesSharedUiState{
     entites:any,
     loaded:boolean,
     loading:boolean
 }
 
-export const initialState:VisualChangesState ={
+export const initialState:VisualChangesSharedUiState ={
     entites:{},
     loaded:false,
     loading:false
 }
 
-export function reducers(state=initialState,action:fromVisualChanges.VisualChangesAction):VisualChangesState{
+export function reducers(state=initialState,action:fromVisualChanges.VisualChangesAction):VisualChangesSharedUiState{
     switch(action.type){
-        case fromVisualChanges.LOAD_VISUALCHANGES:{
+        case fromVisualChanges.LOAD_VISUALCHANGES_SHAREDUI:{
             return {
                 ...state,
                 loading:true
             }
         }
-        case fromVisualChanges.LOAD_VISUALCHANGES_SUCCESS:{
+        case fromVisualChanges.LOAD_VISUALCHANGES_SUCCESS_SHAREDUI:{
             console.log(action.payload)
             const product=action.payload
             const entites= Object.keys({...action.payload}).reduce((entites,productkey:any)=>{
@@ -35,7 +35,7 @@ export function reducers(state=initialState,action:fromVisualChanges.VisualChang
                 entites
             }
         }
-        case fromVisualChanges.LOAD_VISUALCHANGES_FAIL:{
+        case fromVisualChanges.LOAD_VISUALCHANGES_FAIL_SHAREDUI:{
             return{
                 ...state,
                 loading:false
@@ -45,6 +45,6 @@ export function reducers(state=initialState,action:fromVisualChanges.VisualChang
     return state;
 }
 
-export const getVisualChangesEntites = (state:VisualChangesState) => state.entites.terms;
-export const getVisualChangesLoading = (state:VisualChangesState) => state.loading;
-export const getVisualChangesLoaded = (state:VisualChangesState) => state.loaded;
+export const getVisualChangesSharedUiEntites = (state:VisualChangesSharedUiState) => state.entites.terms;
+export const getVisualChangesSharedUiLoading = (state:VisualChangesSharedUiState) => state.loading;
+export const getVisualChangesSharedUiLoaded = (state:VisualChangesSharedUiState) => state.loaded;

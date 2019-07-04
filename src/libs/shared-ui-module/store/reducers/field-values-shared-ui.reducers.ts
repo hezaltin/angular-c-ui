@@ -1,28 +1,28 @@
-import * as fromVisual from '../actions/visualization-default.action';
+import * as fromFieldValues from '../actions/field-values-shared-ui.action';
 //import {Products} from '../../models/product.model';
 
 
-export interface VisualState{
+export interface FieldValuesSharedUiState{
     entites:any,
     loaded:boolean,
     loading:boolean
 }
 
-export const initialState:VisualState ={
+export const initialState:FieldValuesSharedUiState ={
     entites:{},
     loaded:false,
     loading:false
 }
 
-export function reducers(state=initialState,action:fromVisual.VisualAction):VisualState{
+export function reducers(state=initialState,action:fromFieldValues.FieldValuesAction):FieldValuesSharedUiState{
     switch(action.type){
-        case fromVisual.LOAD_VISUAL:{
+        case fromFieldValues.LOAD_FIELDVALUES_SHAREDUI:{
             return {
                 ...state,
                 loading:true
             }
         }
-        case fromVisual.LOAD_VISUAL_SUCCESS:{
+        case fromFieldValues.LOAD_FIELDVALUES_SUCCESS_SHAREDUI:{
             console.log(action.payload)
             const product=action.payload
             const entites= Object.keys({...action.payload}).reduce((entites,productkey:any)=>{
@@ -35,7 +35,7 @@ export function reducers(state=initialState,action:fromVisual.VisualAction):Visu
                 entites
             }
         }
-        case fromVisual.LOAD_VISUAL_FAIL:{
+        case fromFieldValues.LOAD_FIELDVALUES_FAIL_SHAREDUI:{
             return{
                 ...state,
                 loading:false
@@ -45,6 +45,6 @@ export function reducers(state=initialState,action:fromVisual.VisualAction):Visu
     return state;
 }
 
-export const getVisualEntites = (state:VisualState) => state.entites.terms;
-export const getVisualLoading = (state:VisualState) => state.loading;
-export const getVisualLoaded = (state:VisualState) => state.loaded;
+export const getFieldValuesSharedUiEntites = (state:FieldValuesSharedUiState) => state.entites.terms;
+export const getFieldValuesSharedUiLoading = (state:FieldValuesSharedUiState) => state.loading;
+export const getFieldValuesSharedUiLoaded = (state:FieldValuesSharedUiState) => state.loaded;

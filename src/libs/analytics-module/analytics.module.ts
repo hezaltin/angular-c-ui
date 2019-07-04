@@ -10,6 +10,7 @@ import { reducers } from './store/reducers/product-distribution.reducer';
 import { effects } from './store';
 import { AnalyticsService } from './services/analytics.service';
 import { DataVisualizationModule } from 'libs/data-visualization-module/data-visualization.module';
+import { SharedUiModule } from 'libs/shared-ui-module/shared-ui.module';
 
 export const ROUTES: Routes = [
   {
@@ -22,6 +23,7 @@ export const ROUTES: Routes = [
     CommonModule,
     ClarityModule,
     RouterModule.forChild(ROUTES),
+    SharedUiModule,
     StoreModule.forFeature('analytics',reducers),
     EffectsModule.forFeature(effects),
     DataVisualizationModule
