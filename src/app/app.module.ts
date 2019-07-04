@@ -22,7 +22,7 @@ import { AuthService } from "./services/auth.service";
 import { AuthguardGuard } from "./guard/authguard.guard";
 import {LogLevel} from "msal";
 import {MsalModule, MsalInterceptor} from "@azure/msal-angular";
-import { SharedUiModule } from "libs/shared-ui-module/data-visualization.module";
+import { SharedUiModule } from "libs/shared-ui-module/shared-ui.module";
 //import { httpInterceptorProviders } from "./http-interceptors";
 
 export function loggerCallback(logLevel, message, piiEnabled) {

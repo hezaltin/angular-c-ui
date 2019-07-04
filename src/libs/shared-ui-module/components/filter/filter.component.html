@@ -26,7 +26,7 @@
                                 <input id="vizualizationProductId" formControlName="productId" placeholder="{{productDropdown.value.fieldId}}" class="clr-input"
                                 name="vizualizationProductId" (focus)="focusField(dropdownndex,'productId')" (keydown)="keydownHandler($event,getProductIdListData.bind(this))">
                                 
-                                <app-data-visualization-dropdown *ngIf="focusedControl=='productId' && focusControlIndex ==dropdownndex && !blurControl" [formField]="'productId'" (formUpdateEvent)="formUpdate($event)" [filteredUsersTerms]="( fieldValueList$ | async )" [currentFocus]="currentFocusData"></app-data-visualization-dropdown>
+                                <app-data-dropdown-shared-ui *ngIf="focusedControl=='productId' && focusControlIndex ==dropdownndex && !blurControl" [formField]="'productId'" (formUpdateEvent)="formUpdate($event)" [filteredUsersTerms]="( fieldValueList$ | async )" [currentFocus]="currentFocusData"></app-data-dropdown-shared-ui>
                         </div>
                 </div>
                 <div class="form-group-visual">

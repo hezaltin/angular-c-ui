@@ -1,27 +1,27 @@
 import {ActionReducerMap, createFeatureSelector,createSelector} from '@ngrx/store';
 
-import * as fromVisuals from '../reducers/visualization-default.reducers';
-import * as fromVisualsChanges from '../reducers/visualization-changes.reducers';
-import * as fieldValues from '../reducers/field-values.reducers';
+import * as fromVisuals from './visualization-default-shared-ui.reducers';
+import * as fromVisualsChanges from './visualization-changes-shared-ui.reducers';
+import * as fieldValues from './field-values-shared-ui.reducers';
 
 
-export interface VisualStateReducer{
-    visual:fromVisuals.VisualState,
-    visualChanges : fromVisualsChanges.VisualChangesState,
-    fieldValues : fieldValues.FieldValuesState
+export interface VisualStateSharedUiReducer{
+    visualSharedUi:fromVisuals.VisualSharedUiState,
+    visualChangesSharedUi : fromVisualsChanges.VisualChangesSharedUiState,
+    fieldValuesSharedUi : fieldValues.FieldValuesSharedUiState
    
 }
 
 
-export const reducers:ActionReducerMap<VisualStateReducer> = {
-    visual: fromVisuals.reducers,
-    visualChanges: fromVisualsChanges.reducers,
-    fieldValues : fieldValues.reducers
+export const reducers:ActionReducerMap<VisualStateSharedUiReducer> = {
+    visualSharedUi: fromVisuals.reducers,
+    visualChangesSharedUi: fromVisualsChanges.reducers,
+    fieldValuesSharedUi : fieldValues.reducers
 }
 
-export const getVisualStateReducerFeature = createFeatureSelector<VisualStateReducer>('sharedui');
+export const getVisualStateReducerFeature = createFeatureSelector<VisualStateSharedUiReducer>('sharedui');
 
-export const getVisualStateReducer = createSelector(getVisualStateReducerFeature,(state:VisualStateReducer)=>state.visual);
-export const getVisualChangesStateReducer = createSelector(getVisualStateReducerFeature,(state:VisualStateReducer)=>state.visualChanges);
+export const getVisualStateReducer = createSelector(getVisualStateReducerFeature,(state:VisualStateSharedUiReducer)=>state.visualSharedUi);
+export const getVisualChangesStateReducer = createSelector(getVisualStateReducerFeature,(state:VisualStateSharedUiReducer)=>state.visualChangesSharedUi);
 
-export const getFieldValues = createSelector(getVisualStateReducerFeature,(state:VisualStateReducer)=>state.fieldValues);
+export const getFieldValues = createSelector(getVisualStateReducerFeature,(state:VisualStateSharedUiReducer)=>state.fieldValuesSharedUi);

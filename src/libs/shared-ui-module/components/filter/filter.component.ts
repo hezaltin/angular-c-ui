@@ -1,11 +1,11 @@
 import { Component } from "@angular/core";
-import { DataVisualizationService } from "../../services/data-visualization.service";
+import { DataVisualizationSharedUiService } from "../../services/shared-ui.service";
 import { Observable } from "rxjs";
-import { productList,PRODUCTKEYS,filterModel } from '../../config/data-visualization.config';
+import { productList,PRODUCTKEYS,filterModel } from '../../config/shared-ui.config';
 import { FormBuilder, FormArray, FormControl, Validators } from "@angular/forms";
 import { debounceTime } from "rxjs/operators";
 import * as fromVisual from '../../store';
-import { VisualStateReducer } from '../../store'
+import { VisualStateSharedUiReducer } from '../../store'
 import { Store } from "@ngrx/store";
 import {ClrDatagridSortOrder} from '@clr/angular';
 
@@ -41,9 +41,9 @@ export class filterComponent {
     descSort:any
      
     constructor(
-        private dataVisualService: DataVisualizationService,
+        private dataVisualService: DataVisualizationSharedUiService,
         private fb: FormBuilder,
-        private store :Store<VisualStateReducer>
+        private store :Store<VisualStateSharedUiReducer>
     ) {}
 
     ngOnInit() {
@@ -51,17 +51,17 @@ export class filterComponent {
         this.descSort = ClrDatagridSortOrder.DESC;
         this.visualForm = this.creatVisualforms();
         this.visualizationCodeList.subscribe(next => {
-            this.store.dispatch(new fromVisual.LoadVisualChanges({ name: next }) )
+            this.store.dispatch(new fromVisual.LoadVisualChangesSharedUi({ name: next }) )
         });
-        this.store.select(fromVisual.getVisualChangesEntites).subscribe(next=>this.getVisualData = next)
-        this.store.dispatch(new fromVisual.LoadVisual());
-        this.store.select(fromVisual.getVisualEntites).subscribe(next=>{
+        this.store.select(fromVisual.getVisualChangesSharedUiSelectorEntites).subscribe(next=>this.getVisualData = next)
+        this.store.dispatch(new fromVisual.LoadVisualSharedUi());
+        this.store.select(fromVisual.getVisualSharedUiSelectorEntites).subscribe(next=>{
             this.getVisualData = next;
             this.concatDataForScroll = next;
         }) ;
         this.productList = productList;
         this.filterModels = filterModel;
-        this.fieldValueList$ = this.store.select(fromVisual.getFieldValuesEntites);
+        this.fieldValueList$ = this.store.select(fromVisual.getFieldValuesSharedUiSelectorEntites);
         console.log(this.fieldValueList$ );
         
     }
@@ -113,9 +113,10 @@ export class filterComponent {
            // this.setValueChanges()
         })
         filterCOntrolFields.get('productId').valueChanges.subscribe(next=>{
+            console.log('next-productId==>',next)
             if(this.focusedControl==='productId'){
                 let getFieldDetails = this.getProductDetails(filterCOntrolFields);
-                this.store.dispatch(new fromVisual.LoadFieldValues({fieldId:getFieldDetails.value,urlParams:PRODUCTKEYS[getFieldDetails.value],name:next}));
+                this.store.dispatch(new fromVisual.LoadFieldValuesSharedUi({fieldId:getFieldDetails.value,urlParams:PRODUCTKEYS[getFieldDetails.value],name:next}));
                 this.setValueChanges();
             }
           

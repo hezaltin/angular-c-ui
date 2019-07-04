@@ -1,3 +1,3 @@
-export * from './visualization-default.selectors';
-export * from './visualization-changes.selectors';
-export * from './field-values.selectors';
+export * from './visualization-default-shared-ui.selectors';
+export * from './visualization-changes-shared-ui.selectors';
+export * from './field-values-shared-ui.selectors';

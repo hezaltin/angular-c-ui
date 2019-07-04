@@ -1,10 +1,10 @@
 
 import { async, TestBed, ComponentFixture } from "@angular/core/testing";
 import { ClarityModule } from '@clr/angular';
-import { VisualizationDropdownComponent } from './visualization-dropdown.component';
+import { DropdownComponentSharedUi } from './dropdown-shared-ui.component';
 
 
-describe('VisualizationDropdownComponent', () => {
+describe('DropdownComponentSharedUi', () => {
 
     let expectedMsg: string = 'This is a Clarity seed application. This is the default page that loads for the application.';
 
@@ -14,14 +14,14 @@ describe('VisualizationDropdownComponent', () => {
     beforeEach(() => {
         TestBed.configureTestingModule({
             declarations: [
-                VisualizationDropdownComponent
+                DropdownComponentSharedUi
             ],
             imports: [
                 ClarityModule.forRoot()
             ]
         });
 
-        fixture = TestBed.createComponent(VisualizationDropdownComponent);
+        fixture = TestBed.createComponent(DropdownComponentSharedUi);
         fixture.detectChanges();
         compiled = fixture.nativeElement;
 

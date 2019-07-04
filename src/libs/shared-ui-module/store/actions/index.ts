@@ -1,3 +1,3 @@
-export * from './visualization-default.action';
-export * from './visualization-changes.action';
-export * from './field-values.action';
+export * from './visualization-default-shared-ui.action';
+export * from './visualization-changes-shared-ui.action';
+export * from './field-values-shared-ui.action';

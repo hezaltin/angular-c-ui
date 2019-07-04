@@ -34,11 +34,10 @@
 
   <div class="content-container">
     <div class="content-area">
-      <div>
-          <product-filter-shared></product-filter-shared>
-      </div>
-        
-
+      <div [hidden]="!isFilterEnabled">
+        <product-filter-shared></product-filter-shared>
+    </div>
+    
       <router-outlet>
         
       </router-outlet>

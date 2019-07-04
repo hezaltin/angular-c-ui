@@ -6,11 +6,11 @@ import { catchError } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 //import { of } from 'rxjs';
 import 'rxjs/add/observable/of';
-import { DataVisualizationSearchResponse,DataVisualizationDefaultResponse } from '../config/data-visualization.config'
+import { DataVisualizationSearchResponse,DataVisualizationDefaultResponse } from '../config/shared-ui.config'
 
 
 @Injectable()
-export class DataVisualizationService {
+export class DataVisualizationSharedUiService {
 
   constructor(private http:HttpClient) { }
 
@@ -48,8 +48,9 @@ export class DataVisualizationService {
    console.log(res.terms)
     return Observable.of(res.terms).pipe(delay(0));
   }
+
   filterSearchDetails(payload){
-    console.log('payload===>',payload)
+    console.log('payload-filterSearchDetails===>',payload)
     const res=Object.assign({},DataVisualizationSearchResponse)
     let headers = new HttpHeaders().set('Content-Type', 'application/json');
     let url =`http://esanalyticsdv.es.dupont.com:7070/suggest/${payload.urlParams}?query=${payload.name}`;

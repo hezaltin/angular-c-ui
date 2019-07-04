@@ -1,28 +1,28 @@
-import * as fromFieldValues from '../actions/field-values.action';
+import * as fromVisual from '../actions/visualization-default-shared-ui.action';
 //import {Products} from '../../models/product.model';
 
 
-export interface FieldValuesState{
+export interface VisualSharedUiState{
     entites:any,
     loaded:boolean,
     loading:boolean
 }
 
-export const initialState:FieldValuesState ={
+export const initialState:VisualSharedUiState ={
     entites:{},
     loaded:false,
     loading:false
 }
 
-export function reducers(state=initialState,action:fromFieldValues.FieldValuesAction):FieldValuesState{
+export function reducers(state=initialState,action:fromVisual.VisualAction):VisualSharedUiState{
     switch(action.type){
-        case fromFieldValues.LOAD_FIELDVALUES:{
+        case fromVisual.LOAD_VISUAL_SHAREDUI:{
             return {
                 ...state,
                 loading:true
             }
         }
-        case fromFieldValues.LOAD_FIELDVALUES_SUCCESS:{
+        case fromVisual.LOAD_VISUAL_SUCCESS_SHAREDUI:{
             console.log(action.payload)
             const product=action.payload
             const entites= Object.keys({...action.payload}).reduce((entites,productkey:any)=>{
@@ -35,7 +35,7 @@ export function reducers(state=initialState,action:fromFieldValues.FieldValuesAc
                 entites
             }
         }
-        case fromFieldValues.LOAD_FIELDVALUES_FAIL:{
+        case fromVisual.LOAD_VISUAL_FAIL_SHAREDUI:{
             return{
                 ...state,
                 loading:false
@@ -45,6 +45,6 @@ export function reducers(state=initialState,action:fromFieldValues.FieldValuesAc
     return state;
 }
 
-export const getFieldValuesEntites = (state:FieldValuesState) => state.entites.terms;
-export const getFieldValuesLoading = (state:FieldValuesState) => state.loading;
-export const getFieldValuesLoaded = (state:FieldValuesState) => state.loaded;
+export const getVisualSharedUiEntites = (state:VisualSharedUiState) => state.entites.terms;
+export const getVisualSharedUiLoading = (state:VisualSharedUiState) => state.loading;
+export const getVisualSharedUiLoaded = (state:VisualSharedUiState) => state.loaded;

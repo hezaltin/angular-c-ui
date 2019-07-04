@@ -24,6 +24,7 @@ export class AppComponent {
     private subscription: Subscription;
     public isIframe: boolean;
     public getToken ;
+    public isFilterEnabled:boolean = false;
     constructor(private router: Router,private elementRef:ElementRef,private authService:AuthService, private authServiceMsal : MsalService,private broadcastService: BroadcastService,private store: Store<State>) {
         this.isIframe = window !== window.parent && !window.opener;
         console.log('this.authServiceMsal.getUser()==>',this.authServiceMsal.getUser())
@@ -55,6 +56,17 @@ export class AppComponent {
         console.log(this.router)
         this.authService.getSearchBooks('name').subscribe(name=>{
           console.log('name==>',name)
+        })
+
+        this.store.select(fromStore.getRouterState).subscribe(next=>{
+          console.log('routerSTate==>',next)
+          if(!next){
+            return
+          }
+
+          const urlEnabledFIlter = ["/analytics",'/datavisualization']
+            this.isFilterEnabled = urlEnabledFIlter.some(item=>item === next.state.url)
+
         })
 
 
