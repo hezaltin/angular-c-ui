@@ -1,5 +1,5 @@
 
-<!-- <form [formGroup]="visualForm" class="clr-form clr-form-horizontal visual-filter-form" autocomplete="off">
+<form [formGroup]="visualForm" class="clr-form clr-form-horizontal visual-filter-form" autocomplete="off">
         <div class="filter-container"  formGroupName="filterControl" *ngFor="let productDropdown of filterControl.controls let dropdownndex=index">
         <div class="filter-field-control" [formGroup]="filterControl.controls[dropdownndex]">
                 <div class="select" >
@@ -14,7 +14,6 @@
                 </div>
 
                 <div class="select" *ngIf="productDropdown.value.fieldId!=='select'">
-                      
                         <select  class="select-wide" (change)="changeFilterModel($event,dropdownndex)"  formControlName="fieldValues">
                                 <option *ngFor="let filtermodel of filterModels let proIndex=index" [value]="filtermodel">
                                         {{filtermodel}}
@@ -46,44 +45,4 @@
 
 <button class="btn btn-icon btn-sm" (click)="searchProductComponent($event)" [disabled]="addFilterDisabled">
         <clr-icon shape="search"></clr-icon>
-Search</button> -->
-
-<!-- <div class="search-results" infinite-scroll
-[infiniteScrollDistance]="scrollDistance"
-[infiniteScrollThrottle]="throttle"
-(scrolled)="onScrollDown()"
-[fromRoot]="true"
-[infiniteScrollContainer]="scrollContainerSelector"
-[scrollWindow]="false"
-> 
-
- <div class="card" *ngFor="let visual of getVisualData">
-        <div class="card-block">
-            <h4 class="card-title">{{visual?.fragment}}</h4>
-            <p class="card-text">
-                <small>ExternalProductName: <b>{{visual.externalProductName}}</b></small>
-                <b>|</b>
-                <small class="mb-1">InternalProductName: <b>{{visual.internalProductName}}</b></small>
-            </p>
-        </div>   
-</div> 
-<div class="hello">
-<div *ngFor="let visual of getVisualData">
-        {{visual?.bulkCode}}
-</div>
-</div>
-<clr-datagrid class="hello"> 
-        <clr-dg-column [clrDgField]="'bulkCode'" [clrDgSortOrder]="descSort">Bulk Code</clr-dg-column>
-        <clr-dg-column>Product Description</clr-dg-column>
-        <clr-dg-column>Internal Product Name</clr-dg-column>
-    
-        <clr-dg-row *clrDgItems="let visual of getVisualData">
-            <clr-dg-cell>{{visual?.bulkCode}}</clr-dg-cell>
-            <clr-dg-cell>{{visual.externalProductName}}</clr-dg-cell>
-            <clr-dg-cell>{{visual.internalProductName}}</clr-dg-cell>
-        </clr-dg-row>
-    
-        <clr-dg-footer>{{getVisualData?.length}} users</clr-dg-footer>
-    </clr-datagrid> 
-
-</div> -->
+Search</button>

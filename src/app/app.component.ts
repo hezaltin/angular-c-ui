@@ -57,6 +57,7 @@ export class AppComponent {
           console.log('name==>',name)
         })
 
+
         // this.router.events.subscribe((event: Event) => {
         //     console.log(event);
         //     if (event instanceof NavigationEnd ) {
