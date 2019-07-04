@@ -22,6 +22,7 @@ import { AuthService } from "./services/auth.service";
 import { AuthguardGuard } from "./guard/authguard.guard";
 import {LogLevel} from "msal";
 import {MsalModule, MsalInterceptor} from "@azure/msal-angular";
+import { SharedUiModule } from "libs/shared-ui-module/data-visualization.module";
 //import { httpInterceptorProviders } from "./http-interceptors";
 
 export function loggerCallback(logLevel, message, piiEnabled) {
@@ -40,6 +41,7 @@ export const protectedResourceMap:[string, string[]][]=[['https://graph.microsof
         BrowserModule,
         FormsModule,
         // ReactiveFormsModule,
+        SharedUiModule,
          HttpClientModule,
         ClarityModule,
         ROUTING,

@@ -34,7 +34,14 @@
 
   <div class="content-container">
     <div class="content-area">
-      <router-outlet></router-outlet>
+      <div>
+          <product-filter-shared></product-filter-shared>
+      </div>
+        
+
+      <router-outlet>
+        
+      </router-outlet>
     </div>
     <clr-vertical-nav *ngIf="loggedIn"
     [clrVerticalNavCollapsible]="true"
